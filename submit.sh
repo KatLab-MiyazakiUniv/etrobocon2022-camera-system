@@ -18,11 +18,10 @@ fi
 
 # 送信データディレクトリ
 DATA_DIRECTORY="transfer_data"
-SSH_KEY_PATH="~/.ssh/id_etrobocon2022"
 
 if [ -d ${DATA_DIRECTORY} ]; then
     # 送信データディレクトリを機体に送信
-    scp -i ${SSH_KEY_PATH} -r ${DATA_DIRECTORY} ${SSH_TARGET}:~/work/RasPike/sdk/workspace/etrobocon2022/
+    scp -r ${DATA_DIRECTORY} ${SSH_TARGET}:~/work/RasPike/sdk/workspace/etrobocon2022/
     echo "Completed ${DATA_DIRECTORY} submission."
 else
     echo "\"${DATA_DIRECTORY}\" does not exist."
