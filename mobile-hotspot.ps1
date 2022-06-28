@@ -1,3 +1,7 @@
+# WARNING: モバイルホットスポットを有効化するには、外部のネットワークに接続した状態である必要がある。
+#          そのため、競技会場ではスマホのテザリング機能を利用してPCを外部ネットワークに接続したうえで実行する必要がある。
+#          外部のネットワークに接続しなくても、アクセスポイント化(ルータ化?)する方法もあるようだが、未検証。
+
 Add-Type -AssemblyName System.Runtime.WindowsRuntime
 $asTaskGeneric = ([System.WindowsRuntimeSystemExtensions].GetMethods() | ? { $_.Name -eq 'AsTask' -and $_.GetParameters().Count -eq 1 -and $_.GetParameters()[0].ParameterType.Name -eq 'IAsyncOperation`1' })[0]
 Function Await($WinRtTask, $ResultType) {
