@@ -22,7 +22,6 @@ def checkCameraConnection():
         if successed:
             trueCameras.append(cameraNumber)
             print("カメラ番号->", cameraNumber, "接続済")
-
         else:
             print("カメラ番号->", cameraNumber, "未接続")
     print("接続されているカメラは", len(trueCameras), "台です。")
