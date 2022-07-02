@@ -2,8 +2,10 @@
 # @file CameraInterface.py
 # @brief カメラから画像を取得、保存を行う
 # @author kawano
+# 実行コマンド PowerShell.exe -ExecutionPolicy RemoteSigned -File captureCameraInterface.ps1 hoge
 import os
-# cv2.VideoCaptureの処理時間短縮
+# cv2.VideoCaptureの処理時間短縮(import cv2の前に書く必要あり)
+# @see https://qiita.com/youichi_io/items/b894b85d790720ea2346
 os.environ["OPENCV_VIDEOIO_MSMF_ENABLE_HW_TRANSFORMS"] = "0"
 import cv2
 import sys
@@ -34,8 +36,7 @@ class CameraInterface:
 if __name__ == "__main__":
     args = sys.argv
     if len(args) == 2:
-        cameraInterface = CameraInterface(int(args[1])) 
+        cameraInterface = CameraInterface(int(args[1]))
         cameraInterface.getFrame()
     else:
-        print("Warning:コマンドライン引数にカメラIDを入力してください") 
-    
+        print("Warning:コマンドライン引数にカメラIDを入力してください")
