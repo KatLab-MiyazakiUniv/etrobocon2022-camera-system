@@ -2,9 +2,11 @@
 # @file CameraInterface.py
 # @brief カメラから画像を取得、保存を行う
 # @author kawano
-
-import sys
+import os
+# cv2.VideoCaptureの処理時間短縮
+os.environ["OPENCV_VIDEOIO_MSMF_ENABLE_HW_TRANSFORMS"] = "0"
 import cv2
+import sys
 
 # カメラ仲介クラス
 class CameraInterface:
@@ -34,7 +36,6 @@ if __name__ == "__main__":
     if len(args) == 2:
         cameraInterface = CameraInterface(int(args[1])) 
         cameraInterface.getFrame()
-
     else:
         print("Warning:コマンドライン引数にカメラIDを入力してください") 
     
