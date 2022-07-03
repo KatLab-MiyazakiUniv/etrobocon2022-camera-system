@@ -1,4 +1,4 @@
-# etrobocon2022_camera_system
+# etrobocon2022-camera-system
 宮崎大学片山徹郎研究室チームKatLabが作成するETロボコン2022アドバンストクラスのカメラシステム用のプログラムです。
 
 走行システムのプログラムは[こちら](https://github.com/KatLab-MiyazakiUniv/etrobocon2022)を参照。
