@@ -1,7 +1,7 @@
 [tool.poetry]
 name = "etrobocon2022-camera-system"
 version = "0.1.0"
-description = "宮崎大学片山徹郎研究室チームKatLabが作成するETロボコン2022アドバンストクラスのカメラシステム用のプログラムで."
+description = "宮崎大学片山徹郎研究室チームKatLabが作成するETロボコン2022アドバンストクラスのカメラシステム用のプログラムです."
 authors = ["KatLab-MiyazakiUniv"]
 
 [tool.poetry.dependencies]
