@@ -6,7 +6,7 @@ StrToBoolクラスのテストコード.
 
 import unittest
 
-from camera.str_to_bool import StrToBool
+from camera_system.str_to_bool import StrToBool
 
 
 class TestStrToBool(unittest.TestCase):

@@ -2,7 +2,7 @@
 プロジェクトルートで、以下のコマンドを実行すると最初に呼び出されるファイル.
 
 ```
-poetry run python camera
+poetry run python camera_system
 ```
 @author: Takahiro55555
 """

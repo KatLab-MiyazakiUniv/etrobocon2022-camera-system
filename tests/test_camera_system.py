@@ -6,7 +6,7 @@ CameraSystemクラスのテストコード.
 
 import unittest
 
-from camera.camera_system import CameraSystem
+from camera_system.camera_system import CameraSystem
 
 
 class TestCameraSystem(unittest.TestCase):
