@@ -2,7 +2,7 @@
 # @file CheckConnectCamera.py
 # @brief 接続されているカメラ番号の確認
 # @author kawano
-# 実行コマンド PowerShell.exe -ExecutionPolicy RemoteSigned -File captureCheckConnectCamera.ps1 hoge
+# 実行コマンド PowerShell.exe -ExecutionPolicy RemoteSigned -File captureCheckConnectCamera.ps1
 import os
 # cv2.VideoCaptureの処理時間短縮(import cv2の前に書く必要あり)
 # @see https://qiita.com/youichi_io/items/b894b85d790720ea2346
