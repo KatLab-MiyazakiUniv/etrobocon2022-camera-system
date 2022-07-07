@@ -17,7 +17,8 @@ if __name__ == '__main__':
 
     # NOTE: argparseでtype=boolに設定すると、空文字以外Trueになってしまう模様
     #   参考資料: https://note.nkmk.me/python-argparse-bool/
-    parser.add_argument('--is-left', type=str, choices=(StrToBool.true_str_list() + StrToBool.false_str_list()),
+    parser.add_argument('--is-left', type=str,
+                        choices=(StrToBool.true_str_list() + StrToBool.false_str_list()),
                         required=True, help='Lコースの場合Trueに、Rコースの場合Falseを設定する')
     args = parser.parse_args()
     cs = CameraSystem(is_left_course=StrToBool.convert(args.is_left))
