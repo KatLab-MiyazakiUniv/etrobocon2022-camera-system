@@ -33,13 +33,10 @@ coverage:
 coverage-html: coverage
 	poetry run python -m coverage html
 
-coverage-json: coverage
-	poetry run python -m coverage json
-	# echo "coverage: $(cat coverage.json | jq -r .totals.percent_covered_display)%"
-
+# NOTE: 下記のコマンドは、2行に分けると何故かRemove-Itemコマンドが実行できずにエラーが発生した。
+#		poetry run python -m coverage erase; Remove-Item -Force -Recurse .\htmlcov
 coverage-clean:
-	poetry run python -m coverage erase
-	rm -rf ./htmlcov coverage.json
+	poetry run python -m coverage erase; Remove-Item -Force -Recurse htmlcov
 
 # NOTE: tox.ini ファイルの設定に従って、全てのソースコードをフォーマットする
 format:
