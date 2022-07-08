@@ -1,5 +1,4 @@
-"""
-CameraSystemクラスのテストコード.
+"""CameraSystemクラスのテストコードを記述するモジュール.
 
 @author: Takahiro55555
 """

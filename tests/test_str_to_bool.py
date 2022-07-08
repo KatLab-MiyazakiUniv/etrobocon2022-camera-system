@@ -1,5 +1,4 @@
-"""
-StrToBoolクラスのテストコード.
+"""StrToBoolクラスのテストコードを記述するモジュール.
 
 @author: Takahiro55555
 """
