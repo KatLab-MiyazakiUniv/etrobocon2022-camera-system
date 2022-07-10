@@ -1,12 +1,9 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 color_changer.py
 カメラから取得した画像を6色画像に変換する
 @author kodama0720
 """
 
-from turtle import color
 import cv2 as cv
 import numpy as np
 
@@ -21,18 +18,18 @@ class ColorChanger:
     # HSVの閾値（赤1、赤2、黄色、緑、青、白）
     __LOWER = np.array([[0, 90, 0], [151, 90, 0], [16, 130, 0],
                         [41, 70, 0], [104, 100, 0], [0, 0, 128]])
-    __UPPER = np.array([[13, 255, 255], [179, 255, 255], [40, 255, 255],
+    __UPPER = np.array([[15, 255, 255], [179, 255, 255], [40, 255, 255],
                         [103, 255, 255], [150, 255, 255], [179, 70, 255]])
 
-    def change_color(self, filename="course.png"):
+    def change_color(self, path="course.png"):
         """画像を6色画像に変換する関数"""
 
         frame_mask = []
         # 画像データの読み込み
-        img = cv.imread(filename)
+        img = cv.imread(path)
         # BGR色空間からHSV色空間への変換
         hsv = cv.cvtColor(img, cv.COLOR_BGR2HSV)
-        # 元画像と同じ大きさの黒色画像を作成
+        # 元画像と同じサイズの黒色画像を作成
         result = np.zeros(
             (img.shape[0], img.shape[1], img.shape[2]), np.uint8)
 
@@ -50,7 +47,8 @@ class ColorChanger:
             # 論理演算で色検出（検出しなかった部分は黒）
             frame_mask[i] = cv.bitwise_and(img, img, mask=frame_mask[i])
             # 色の置換
-            result[np.where((frame_mask[i] != self.__BLACK).all(axis=2))] = self.__BGR_COLOR[i]
+            result[np.where((frame_mask[i] != self.__BLACK).all(
+                axis=2))] = self.__BGR_COLOR[i]
 
         # 6色画像を保存する
         cv.imwrite("sixColor.png", result)
