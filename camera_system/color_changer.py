@@ -56,10 +56,8 @@ class ColorChanger:
             # 論理演算で色検出（検出しなかった部分は黒）
             frame_mask[i] = cv.bitwise_and(img, img, mask=frame_mask[i])
             # 色の置換
-            result[np.where((frame_mask[i] != ColorChanger.__BLACK).all(axis=2))] = ColorChanger.__BGR_COLOR[i]
+            result[np.where((frame_mask[i] != ColorChanger.__BLACK).all(axis=2))
+                   ] = ColorChanger.__BGR_COLOR[i]
 
         # 6色画像を保存する
         cv.imwrite("sixColor.png", result)
-
-a=ColorChanger()
-a.change_color("hsv.png")
