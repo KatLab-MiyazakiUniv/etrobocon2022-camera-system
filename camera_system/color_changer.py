@@ -41,7 +41,7 @@ class ColorChanger:
         # BGR色空間からHSV色空間への変換
         hsv = cv.cvtColor(img, cv.COLOR_BGR2HSV)
         # 元画像と同じサイズの黒色画像を作成
-        result = np.zeros((img.shape[0], img.shape[1], img.shape[2]), np.uint8)
+        result = np.zeros(img.shape, np.uint8)
 
         # 赤抽出
         mask1 = cv.inRange(hsv, ColorChanger.__LOWER[0], ColorChanger.__UPPER[0])
@@ -59,5 +59,5 @@ class ColorChanger:
             result[np.where((frame_mask[i] != ColorChanger.__BLACK).all(axis=2))
                    ] = ColorChanger.__BGR_COLOR[i]
 
-        # 6色画像を保存する
+        # 6色画像を保存
         cv.imwrite("sixColor.png", result)
