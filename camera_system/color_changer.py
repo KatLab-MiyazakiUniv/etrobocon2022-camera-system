@@ -14,9 +14,9 @@ class ColorChanger:
 
     Attributes:
         __BLACK(ndarray): RGB値(黒)
-        __BGR_COLOR(ndarray): RGB値(赤、黄色、緑、青、白)
-        __LOWER(ndarray): HSV閾値下限(赤1、赤2、黄色、緑、青、白)
-        __UPPER(ndarray): HSV閾値上限(赤1、赤2、黄色、緑、青、白)
+        __BGR_COLOR(ndarray): RGB値(赤、黄、緑、青、白)
+        __LOWER(ndarray): HSV閾値下限(赤1、赤2、黄、緑、青、白)
+        __UPPER(ndarray): HSV閾値上限(赤1、赤2、黄、緑、青、白)
 
     """
 
@@ -41,25 +41,25 @@ class ColorChanger:
         # BGR色空間からHSV色空間への変換
         hsv = cv.cvtColor(img, cv.COLOR_BGR2HSV)
         # 元画像と同じサイズの黒色画像を作成
-        result = np.zeros(
-            (img.shape[0], img.shape[1], img.shape[2]), np.uint8)
+        result = np.zeros((img.shape[0], img.shape[1], img.shape[2]), np.uint8)
 
         # 赤抽出
-        mask1 = cv.inRange(hsv, self.__LOWER[0], self.__UPPER[0])
-        mask2 = cv.inRange(hsv, self.__LOWER[1], self.__UPPER[1])
+        mask1 = cv.inRange(hsv, ColorChanger.__LOWER[0], ColorChanger.__UPPER[0])
+        mask2 = cv.inRange(hsv, ColorChanger.__LOWER[1], ColorChanger.__UPPER[1])
         frame_mask.append(mask1 + mask2)
 
-        # 黄色、緑、青、白抽出
+        # 黄、緑、青、白抽出
         for i in range(2, 6):
-            frame_mask.append(cv.inRange(
-                hsv, self.__LOWER[i], self.__UPPER[i]))
+            frame_mask.append(cv.inRange(hsv, ColorChanger.__LOWER[i], ColorChanger.__UPPER[i]))
 
-        for i in range(5):
+        for i in range(len(frame_mask)):
             # 論理演算で色検出（検出しなかった部分は黒）
             frame_mask[i] = cv.bitwise_and(img, img, mask=frame_mask[i])
             # 色の置換
-            result[np.where((frame_mask[i] != self.__BLACK).all(
-                axis=2))] = self.__BGR_COLOR[i]
+            result[np.where((frame_mask[i] != ColorChanger.__BLACK).all(axis=2))] = ColorChanger.__BGR_COLOR[i]
 
         # 6色画像を保存する
         cv.imwrite("sixColor.png", result)
+
+a=ColorChanger()
+a.change_color("hsv.png")
