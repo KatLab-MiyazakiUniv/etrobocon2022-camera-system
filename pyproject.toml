@@ -1,0 +1,19 @@
+[tool.poetry]
+name = "etrobocon2022-camera-system"
+version = "0.1.0"
+description = "宮崎大学片山徹郎研究室チームKatLabが作成するETロボコン2022アドバンストクラスのカメラシステム用のプログラムです."
+authors = ["KatLab-MiyazakiUniv"]
+
+[tool.poetry.dependencies]
+python = "^3.8"
+opencv-contrib-python = "^4.6.0"
+
+[tool.poetry.dev-dependencies]
+autopep8 = "^1.6.0"
+pycodestyle = "^2.8.0"
+pydocstyle = "^6.1.1"
+coverage = "^6.4.1"
+
+[build-system]
+requires = ["poetry>=0.12"]
+build-backend = "poetry.masonry.api"
