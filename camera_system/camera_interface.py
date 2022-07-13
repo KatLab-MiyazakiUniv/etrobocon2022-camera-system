@@ -15,6 +15,7 @@ os.environ["OPENCV_VIDEOIO_MSMF_ENABLE_HW_TRANSFORMS"] = "0"
 import cv2
 import argparse
 
+
 class CameraInterface:
     """カメラ仲介クラス."""
     def __init__(self, camera_id: int) -> None:
@@ -58,6 +59,7 @@ class CameraInterface:
         
         print("\n接続されているカメラは", len(true_cameras), "台です。")
         print("カメラ番号を調べ終わりました。")
+
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description = "使用例\n" 
