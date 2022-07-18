@@ -1,0 +1,54 @@
+name: CI-Python
+
+on: [push, pull_request]
+
+jobs:
+  CI-Python:
+    runs-on: ubuntu-latest
+    outputs:
+      artifact_name: ${{ steps.generate_coverage_report.outputs.artifact_name }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Install poetry
+        run: pipx install poetry
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.8'
+      - run: poetry install
+
+      - name: Install dependencies
+        run: poetry install --no-interaction --no-root
+
+      - name: Test
+        run: poetry run python -m unittest
+
+      - name: Generage coverage report
+        id: generate_coverage_report
+        run: |
+          poetry run python -m coverage run --source=camera_system/ -m unittest discover -s tests/
+          
+          # Job Summaries にカバレッジの概要を設定する
+          echo '## Coverage'                   >> ${GITHUB_STEP_SUMMARY}
+          echo '```'                           >> ${GITHUB_STEP_SUMMARY}
+          poetry run python -m coverage report >> ${GITHUB_STEP_SUMMARY}
+          echo '```'                           >> ${GITHUB_STEP_SUMMARY}
+
+          poetry run python -m coverage xml
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v3
+        with:
+          fail_ci_if_error: true
+
+      - name: Set Codecov link to Job Summaries
+        run: |
+          echo "## Coverage report on Codecov"                                           >> ${GITHUB_STEP_SUMMARY}
+          echo "以下のリンクから詳細を確認できます。  "                                  >> ${GITHUB_STEP_SUMMARY}
+          echo "https://codecov.io/gh/${GITHUB_REPOSITORY}/commit/$(git rev-parse HEAD)" >> ${GITHUB_STEP_SUMMARY}
+
+      - name: Format check
+        run: |
+          poetry run python -m pycodestyle camera_system/ tests/
+          poetry run python -m pydocstyle camera_system/ tests/
