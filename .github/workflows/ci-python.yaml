@@ -42,8 +42,8 @@ jobs:
 
       - name: Set Codecov link to Job Summaries
         run: |
-          echo "## Coverage report on Codecov"                                           >> ${GITHUB_STEP_SUMMARY}
-          echo "以下のリンクから詳細を確認できます。  "                                  >> ${GITHUB_STEP_SUMMARY}
+          echo "## Coverage report on Codecov" >> ${GITHUB_STEP_SUMMARY}
+          echo "以下のリンクから詳細を確認できます。  " >> ${GITHUB_STEP_SUMMARY}
           echo "https://codecov.io/gh/${GITHUB_REPOSITORY}/commit/$(git rev-parse HEAD)" >> ${GITHUB_STEP_SUMMARY}
 
       - name: Format check
