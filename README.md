@@ -1,3 +1,6 @@
+[![CI-Python](https://github.com/KatLab-MiyazakiUniv/etrobocon2022-camera-system/actions/workflows/ci-python.yaml/badge.svg)](https://github.com/KatLab-MiyazakiUniv/etrobocon2022-camera-system/actions/workflows/ci-python.yaml)
+[![codecov](https://codecov.io/gh/KatLab-MiyazakiUniv/etrobocon2022-camera-system/branch/main/graph/badge.svg?token=VB4K03UTAR)](https://codecov.io/gh/KatLab-MiyazakiUniv/etrobocon2022-camera-system)
+
 # etrobocon2022-camera-system
 宮崎大学片山徹郎研究室チームKatLabが作成するETロボコン2022アドバンストクラスのカメラシステム用のプログラムです。
 
