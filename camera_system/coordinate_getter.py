@@ -1,7 +1,7 @@
 """座標取得GUIツール
 
 画像を表示し、クリックした座標を保持する
-@author miyashita
+@author miyashita64
 @note 参考:https://techacademy.jp/magazine/51035
 """
 
@@ -29,7 +29,7 @@ class CoordinateGetter:
 def main():
     # 画像を取得する.
     img = cv2.imread('course.png')
-    DemoTool(img)
+    CoordinateGetter(img)
 
 if __name__ == "__main__":
     main()
