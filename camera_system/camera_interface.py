@@ -4,9 +4,9 @@
 @author kawano
 実行コマンド
     接続されているカメラIDを表示する
-    $ python camera_insterface.py
+    $ python camera_interface.py
     カメラから画像を取得し、保存する
-    $ python camera_insterface.py -id <カメラID>
+    $ python camera_interface.py -id <カメラID>
 """
 import argparse
 import os
@@ -65,11 +65,9 @@ class CameraInterface:
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="使用例\n"
                                                  " 接続されているカメラIDを表示する\n"
-                                                 " $ python camera_insterface.py\n"
+                                                 " $ python camera_interface.py\n"
                                                  " カメラから画像を取得し、保存する\n"
-                                                 " カメラから画像を取得し、保存する\n"
-                                                 " カメラから画像を取得し、保存する\n"
-                                                 " $ python camera_insterface.py -id 0 (0はカメラID)",
+                                                 " $ python camera_interface.py -id 0 (0はカメラID)",
                                      formatter_class=argparse.RawTextHelpFormatter)
 
     parser.add_argument("-id", "--camera-id", type=int, help="カメラから画像を取得し、保存する")
@@ -80,6 +78,6 @@ if __name__ == "__main__":
         CameraInterface.check_camera_connection()
         exit(0)
 
-    # カメラから画像を取得し、保存
+    # カメラから画像を取得し、保存する
     camera_interface = CameraInterface(args.camera_id)
     camera_interface.capture_frame()
