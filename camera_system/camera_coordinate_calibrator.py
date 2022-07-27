@@ -29,6 +29,7 @@ class CameraCoordinateCalibrator:
         # メンバを初期化する.
         self.__block_point = []  # ブロック置き場の座標リスト
         self.__base_circle = []  # ベースサークルの座標リスト
+        self.__end_point = []  # 端点サークルの座標リスト
         self.__img = img
 
     def show_window(self) -> None:
@@ -91,9 +92,13 @@ class CameraCoordinateCalibrator:
             self.__message["text"] += "ベースサークル%d:(%d,%d)\n" % (
                 len(self.__base_circle)+1, event.x, event.y)
             self.__base_circle.append((event.x, event.y))
+        # 最後の1クリックは端点サークルの座標を取得する
+        elif len(self.__end_point) < 1:
+            # Messageを更新.
+            self.__message["text"] += "端点サークル:(%d,%d)\n" % (
+                event.x, event.y)
+            self.__end_point.append((event.x, event.y))
 
-        # ブロック置き場とベースサークルの座標を取得したら終了する
-        if len(self.__block_point) == 8 and len(self.__base_circle) == 4:
             # 取得した座標をターミナルに表示する
             print(self.__message["text"])
 
@@ -131,6 +136,15 @@ class CameraCoordinateCalibrator:
         """
         return self.__base_circle
 
+    @property
+    def end_point(self) -> List[Tuple[int, int]]:
+        """Getter.
+
+        Returns:
+            List[int]: 端点サークルの座標リスト ([x座標, y座標]の形で格納)
+        """
+        return self.__end_point
+
 
 if __name__ == "__main__":
     img = cv2.imread("course.png")
@@ -138,3 +152,4 @@ if __name__ == "__main__":
     coord.show_window()
     print("ブロック置き場: %s" % coord.block_point)
     print("ベースサークル: %s" % coord.base_circle)
+    print("ベースサークル: %s" % coord.end_point)
