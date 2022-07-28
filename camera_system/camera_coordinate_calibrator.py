@@ -117,13 +117,14 @@ class CameraCoordinateCalibrator:
         # リストをリセットする
         self.__block_point = []
         self.__base_circle = []
+        self.__end_point = []
 
     @property
     def block_point(self) -> List[Tuple[int, int]]:
         """Getter.
 
         Returns:
-            List[int]: ブロック置き場の座標リスト ([x座標, y座標]の形で格納)
+            List[Tuple[int, int]]: ブロック置き場の座標リスト ([x座標, y座標]の形で格納)
         """
         return self.__block_point
 
@@ -132,7 +133,7 @@ class CameraCoordinateCalibrator:
         """Getter.
 
         Returns:
-            List[int]: ベースサークルの座標リスト ([x座標, y座標]の形で格納)
+            List[Tuple[int, int]]: ベースサークルの座標リスト ([x座標, y座標]の形で格納)
         """
         return self.__base_circle
 
@@ -141,7 +142,7 @@ class CameraCoordinateCalibrator:
         """Getter.
 
         Returns:
-            List[int]: 端点サークルの座標リスト ([x座標, y座標]の形で格納)
+            List[Tuple[int, int]: 端点サークルの座標リスト ([x座標, y座標]の形で格納)
         """
         return self.__end_point
 
