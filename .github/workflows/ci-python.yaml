@@ -19,6 +19,9 @@ jobs:
       - name: Install dependencies
         run: poetry install --no-interaction --no-root
 
+      - name: Install Tkinter
+        run: sudo apt-get install python3-tk
+
       - name: Test
         run: poetry run python -m unittest
 
