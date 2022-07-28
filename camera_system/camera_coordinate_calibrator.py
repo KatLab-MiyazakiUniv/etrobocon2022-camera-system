@@ -142,7 +142,7 @@ class CameraCoordinateCalibrator:
         """Getter.
 
         Returns:
-            List[Tuple[int, int]: 端点サークルの座標リスト ([x座標, y座標]の形で格納)
+            List[Tuple[int, int]]: 端点サークルの座標リスト ([x座標, y座標]の形で格納)
         """
         return self.__end_point
 
