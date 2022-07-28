@@ -78,7 +78,7 @@ class CameraCoordinateCalibrator:
         """マウス操作で取得した座標を各座標リストにセットするコールバック関数.
 
         Args:
-            event: イベント
+            event: マウスイベント
         """
         # 最初の8クリックはブロック置き場の座標を取得する
         if len(self.__block_point) < 8:
@@ -109,7 +109,7 @@ class CameraCoordinateCalibrator:
         """リセットボタンで各座標リストをリセットするコールバック関数.
 
         Args:
-            event: イベント
+            event: リセットボタンのクリックイベント
         """
         # Messageを更新
         self.__message["text"] = ""
