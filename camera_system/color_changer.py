@@ -1,7 +1,7 @@
 """画像変換モジュール.
 
 カメラから取得した画像を6色画像に変換する。
-@author kodama0720 kawaichi
+@author kodama0720 kawanoichi
 
 """
 
