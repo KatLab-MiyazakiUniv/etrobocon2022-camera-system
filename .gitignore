@@ -1,6 +1,7 @@
 #### general ####
 transfer_data/*
 *.png
+*.jpg
 !tests/*.png
 
 #### macOS ####
