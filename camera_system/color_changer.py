@@ -8,6 +8,7 @@
 import cv2
 import numpy as np
 
+
 class ColorChanger:
     """画像の色変換クラス.
 
@@ -26,11 +27,11 @@ class ColorChanger:
 
     def change_color(self, read_path: str, save_path: str) -> None:
         """画像を6色画像に変換する関数.
+
         Args:
-            read_path : 入力画像ファイルのパス.
+            read_path : 入力画像ファイルのパス
             save_path : 出力画像ファイルの保存パス
         """
-
         # 画像データの読み込み
         img = cv2.imread(read_path)
         # BGR色空間からHSV色空間への変換
