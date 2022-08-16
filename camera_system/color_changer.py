@@ -24,25 +24,33 @@ class ColorChanger:
     __UPPER = np.array([[15, 255, 255], [180, 255, 255], [40, 255, 255],
                         [103, 255, 255], [150, 255, 255], [180, 70, 255]])
 
-    def change_color(self, path: str, save_path: str) -> None:
+    def change_color(self, read_path: str, save_path: str) -> None:
+        """画像を6色画像に変換する関数.
+        Args:
+            read_path : 入力画像ファイルのパス.
+            save_path : 出力画像ファイルの保存パス
+        """
+
         # 画像データの読み込み
-        img = cv2.imread(path)
+        img = cv2.imread(read_path)
         # BGR色空間からHSV色空間への変換
         hsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
         # 処理結果を保持する配列を宣言(色を黒で初期化)
         result = np.zeros((img.shape[0]*img.shape[1], img.shape[2]), np.uint8)
 
-        color_ids = [0,0,1,2,3,4]
+        # 色ID(赤1、赤2、黄、緑、青、白)
+        color_ids = [0, 0, 1, 2, 3, 4]
 
         # 元画像を一次元の配列に変形
         hsv = hsv.reshape(result.shape)
 
         for i in range(len(color_ids)):
             # 条件に対するbool値を代入
-            mask = [all(ColorChanger.__LOWER[i] <= cell) and all(cell <= ColorChanger.__UPPER[i]) for cell in hsv]
-            # TrueなindexにBGRを代入
+            mask = [all(ColorChanger.__LOWER[i] <= cell) and
+                    all(cell <= ColorChanger.__UPPER[i]) for cell in hsv]
+            # Trueなindexの値をBGRに置換
             result[np.where(mask)] = ColorChanger.__BGR_COLOR[color_ids[i]]
-        
+
         # 元の形状に変形
         result = result.reshape(img.shape)
 
