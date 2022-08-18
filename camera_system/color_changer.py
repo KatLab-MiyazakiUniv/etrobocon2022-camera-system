@@ -32,10 +32,10 @@ class ColorChanger:
             read_path : 入力画像ファイルのパス
             save_path : 出力画像ファイルの保存パス
         """
-        # 画像データの読み込み
+        # 入力画像データの読み込み
         img = cv2.imread(read_path)
-        y_size = img.shape[0]     # 画像の縦サイズ
-        x_size = img.shape[1]     # 画像の横サイズ
+        y_size = img.shape[0]     # 入力画像の縦サイズ
+        x_size = img.shape[1]     # 入力画像の横サイズ
         color_size = img.shape[2]  # RGBの3次元
         # BGR色空間からHSV色空間への変換
         hsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
@@ -52,7 +52,7 @@ class ColorChanger:
             # 条件を満たすindexを取得
             index = np.where(np.all(ColorChanger.__LOWER[i] <= hsv, axis=1)
                              & np.all(hsv <= ColorChanger.__UPPER[i], axis=1))
-            # BGRに変換
+            # 6色画像(BGR)に変換
             result[index] = ColorChanger.__BGR_COLOR[color_ids[i]]
 
         # 元の形状に変形
