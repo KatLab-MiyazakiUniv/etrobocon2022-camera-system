@@ -46,11 +46,11 @@ class ColorChanger:
         hsv = hsv.reshape(result.shape)
 
         for i in range(len(color_ids)):
-            # 条件に対するbool値を代入
-            mask = [all(ColorChanger.__LOWER[i] <= cell) and
-                    all(cell <= ColorChanger.__UPPER[i]) for cell in hsv]
-            # Trueなindexの値をBGRに置換
-            result[np.where(mask)] = ColorChanger.__BGR_COLOR[color_ids[i]]
+            # 条件を満たすindexを取得
+            index = np.where(np.all(ColorChanger.__LOWER[i] <= hsv, axis=1)
+                             & np.all(hsv <= ColorChanger.__UPPER[i], axis=1))
+            # BGRに変換
+            result[index] = ColorChanger.__BGR_COLOR[color_ids[i]]
 
         # 元の形状に変形
         result = result.reshape(img.shape)
