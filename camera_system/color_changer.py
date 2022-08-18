@@ -34,10 +34,13 @@ class ColorChanger:
         """
         # 画像データの読み込み
         img = cv2.imread(read_path)
+        y_size = img.shape[0]     # 画像の縦サイズ
+        x_size = img.shape[1]     # 画像の横サイズ
+        color_size = img.shape[2]  # RGBの3次元
         # BGR色空間からHSV色空間への変換
         hsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
         # 処理結果を保持する配列を宣言(色を黒で初期化)
-        result = np.zeros((img.shape[0]*img.shape[1], img.shape[2]), np.uint8)
+        result = np.zeros((x_size*y_size, color_size), np.uint8)
 
         # 色ID(赤1、赤2、黄、緑、青、白)
         color_ids = [0, 0, 1, 2, 3, 4]
