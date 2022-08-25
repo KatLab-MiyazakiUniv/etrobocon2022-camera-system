@@ -9,6 +9,10 @@ from camera_system.camera_system import CameraSystem
 
 
 class TestCameraSystem(unittest.TestCase):
+    def test_start(self):
+        cs = CameraSystem()
+        cs.start()
+
     def test_is_left_course_default_value(self):
         cs = CameraSystem()
         expected = True
