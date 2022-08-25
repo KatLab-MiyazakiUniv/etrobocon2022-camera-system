@@ -16,6 +16,25 @@ class CameraSystem:
         """
         self.__set_is_left_course(is_left_course)
 
+    def start(self):
+        """
+        ゲーム攻略を計画する.
+        """
+        # 通信を確立する
+
+        # キャリブレーション
+
+        # 開始合図を受け取るまで待機
+
+        # ゲームエリア情報を生成する
+
+        # 計画する
+
+        # コマンドファイルを生成
+        
+        # コマンドファイルを送信(システム外)
+        pass
+
     @property
     def is_left_course(self) -> bool:
         """Getter.

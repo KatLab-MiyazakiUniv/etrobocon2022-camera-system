@@ -22,4 +22,6 @@ if __name__ == '__main__':
                         required=True, help='Lコースの場合Trueに、Rコースの場合Falseを設定する')
     args = parser.parse_args()
     cs = CameraSystem(is_left_course=StrToBool.convert(args.is_left))
-    print('is_left_course: %s' % StrToBool.convert(args.is_left))
+    print('Will Run on the %s Course.' % "Left" if args.is_left else "Right")
+    # 計画を開始する
+    cs.start()
