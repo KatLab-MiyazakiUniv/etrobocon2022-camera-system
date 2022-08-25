@@ -1,7 +1,7 @@
 """カメラインターフェースモジュール.
 
 カメラから画像を取得、保存を行う
-@author kawano
+@author kawanoichi
 実行コマンド
     接続されているカメラIDを表示する
     $ python camera_interface.py
