@@ -1,7 +1,7 @@
 """カメラシステムモジュール.
 
 カメラシステムにおいて、一番最初に呼ばれるクラスを定義している
-@author: Takahiro55555
+@author: Takahiro55555 miyashita64
 """
 
 
@@ -17,9 +17,7 @@ class CameraSystem:
         self.__set_is_left_course(is_left_course)
 
     def start(self):
-        """
-        ゲーム攻略を計画する.
-        """
+        """ゲーム攻略を計画する."""
         # 通信を確立する
 
         # キャリブレーション
@@ -31,7 +29,7 @@ class CameraSystem:
         # 計画する
 
         # コマンドファイルを生成
-        
+
         # コマンドファイルを送信(システム外)
         pass
 

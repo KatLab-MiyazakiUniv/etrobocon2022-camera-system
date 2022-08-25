@@ -4,7 +4,7 @@
 > poetry run python camera_system
 
 必要最低限のコードのみを記述するようにする
-@author: Takahiro55555
+@author: Takahiro55555 miyashita64
 """
 
 import argparse
@@ -23,5 +23,6 @@ if __name__ == '__main__':
     args = parser.parse_args()
     cs = CameraSystem(is_left_course=StrToBool.convert(args.is_left))
     print('Will Run on the %s Course.' % "Left" if args.is_left else "Right")
+
     # 計画を開始する
     cs.start()
