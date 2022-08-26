@@ -15,12 +15,13 @@ import cv2
 import tkinter as tk
 from PIL import Image, ImageTk
 from typing import List, Tuple
+import global_value as g
 
 
 class CameraCoordinateCalibrator:
     """カメラ画像から座標を取得するクラス."""
-
-    def __init__(self, img: cv2.Mat) -> None:
+    # def __init__(self, img: cv2.Mat) -> None:
+    def __init__(self) -> None:
         """CameraCoordinateCalibratorのコンストラクタ.
 
         Args:
@@ -30,13 +31,13 @@ class CameraCoordinateCalibrator:
         self.__block_point = []  # ブロック置き場の座標リスト
         self.__base_circle = []  # ベースサークルの座標リスト
         self.__end_point = []  # 端点サークルの座標リスト
-        self.__img = img
+        # self.img = img
 
     def show_window(self) -> None:
         """画像取得ツールを起動する関数."""
         # 画像情報を取得する
-        img_height = self.__img.shape[0]  # 画像の高さ
-        img_width = self.__img.shape[1]  # 画像の横幅
+        img_height = g.img.shape[0]  # 画像の高さ
+        img_width = g.img.shape[1]  # 画像の横幅
 
         # ウィンドウを定義する
         self.__window = tk.Tk()
@@ -50,7 +51,7 @@ class CameraCoordinateCalibrator:
         self.__message.place(x=img_width+10, y=80, width=180)
 
         # OpenCVで取得した画像を変換する
-        img_rgb = cv2.cvtColor(self.__img, cv2.COLOR_BGR2RGB)  # imreadはBGRなのでRGBに変換
+        img_rgb = cv2.cvtColor(g.img, cv2.COLOR_BGR2RGB)  # imreadはBGRなのでRGBに変換
         img_pil = Image.fromarray(img_rgb)    # RGBからPILフォーマットへ変換
         img_tk = ImageTk.PhotoImage(img_pil)  # ImageTkフォーマットへ変換
 
@@ -73,6 +74,8 @@ class CameraCoordinateCalibrator:
 
         # ウィンドウを表示する
         self.__window.mainloop()
+
+        return self.__block_point, self.__base_circle, self.__end_point
 
     def __set_coordinate(self, event) -> None:
         """マウス操作で取得した座標を各座標リストにセットするコールバック関数.
@@ -118,6 +121,7 @@ class CameraCoordinateCalibrator:
         self.__block_point = []
         self.__base_circle = []
         self.__end_point = []
+        print("3")
 
     @property
     def block_point(self) -> List[Tuple[int, int]]:
@@ -148,8 +152,9 @@ class CameraCoordinateCalibrator:
 
 
 if __name__ == "__main__":
-    img = cv2.imread("course.png")
-    coord = CameraCoordinateCalibrator(img)
+    read_path = "course.png"
+    g.img = cv2.imread(read_path)
+    coord = CameraCoordinateCalibrator()
     coord.show_window()
     print("ブロック置き場: %s" % coord.block_point)
     print("ベースサークル: %s" % coord.base_circle)
