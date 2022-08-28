@@ -4,12 +4,9 @@
 @author kodama0720 kawanoichi
 
 """
-
 import cv2
 import numpy as np
-import statistics
-import global_value as g
-
+import scipy
 
 class ColorChanger:
     """画像の色変換クラス.
@@ -29,21 +26,18 @@ class ColorChanger:
         # カラーIDを格納する配列を宣言
         self.color_id_img = []
 
-    def change_color(self) -> None:
+    def change_color(self, img, save_path) -> None:
         """画像を6色画像に変換する関数.
 
         Args:
             read_path : 入力画像ファイルのパス
             save_path : 出力画像ファイルの保存パス
         """
-        # 入力画像データの読み込み
-        # g.img = cv2.imread(ColorChanger.READ_PATH)
-        print("入力サイズ", g.img.shape)
-        y_size = g.img.shape[0]     # 入力画像の縦サイズ
-        x_size = g.img.shape[1]     # 入力画像の横サイズ
-        color_size = g.img.shape[2]  # RGBの3次元
+        y_size = img.shape[0]  # 入力画像の縦サイズ
+        x_size = img.shape[1]  # 入力画像の横サイズ
+        color_size = img.shape[2]  # RGBの3次元
         # BGR色空間からHSV色空間への変換
-        hsv = cv2.cvtColor(g.img, cv2.COLOR_BGR2HSV)
+        hsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
         # 処理結果を保持する配列を宣言(色を黒で初期化)
         self.result = np.zeros((x_size*y_size, color_size), np.uint8)
         self.color_id_img = np.zeros(x_size*y_size)
@@ -53,7 +47,6 @@ class ColorChanger:
 
         # 元画像を一次元の配列に変形
         hsv = hsv.reshape(self.result.shape)
-
         for i in range(len(color_ids)):
             # 条件を満たすindexを取得
             index = np.where(np.all(ColorChanger.__LOWER[i] <= hsv, axis=1)
@@ -64,26 +57,30 @@ class ColorChanger:
             self.result[index] = ColorChanger.__BGR_COLOR[color_ids[i]]
 
         # 元の形状に変形
-        self.result = self.result.reshape(g.img.shape)
+        self.result = self.result.reshape(img.shape)
         self.color_id_img = self.color_id_img.reshape(y_size, x_size)
 
         # 6色画像を保存
-        cv2.imwrite(g.save_path, self.result)
+        cv2.imwrite(save_path, self.result)
 
-    def mode_color(self, coord_x:int, coord_y:int, temp_xsize:int, temp_ysize:int)->int:
+    def mode_color(self, coord_x:int, coord_y:int, temp_xsize:int, temp_ysize:int) -> int:
         """ ブロック周辺の色の最頻値を求める """
         # 座標周辺を取り出す
         temp = self.color_id_img[coord_y-(temp_ysize//2):coord_y+(temp_ysize//2)+1,
                                  coord_x-(temp_xsize//2):coord_x+(temp_xsize//2)+1]
         # 画像周辺の最頻値を求める(カラーID)
-        return int(statistics.mode(temp.reshape(temp_ysize*temp_xsize)))
+        mode, _ = scipy.stats.mode(temp.reshape(temp_ysize*temp_xsize),  keepdims=True)
+        return int(mode[0])
 
 if __name__ == "__main__":
     read_path = "course.png"
-    g.save_path = "result_" + read_path
-    g.img = cv2.imread(read_path)
-
+    save_path = "result_" + read_path
+    img = cv2.imread(read_path)
+    # インスタンス化
     color_changer = ColorChanger()
-    color_changer.change_color()
-    color_changer.mode_color()
+    # 6色変換
+    color_changer.change_color(img, save_path)
+    # 最頻値取得　ボーナスブロック(211,432)
+    mode = color_changer.mode_color(211, 432, 5, 5)
+    print("mode", mode)
     print("color_changer 終了")
