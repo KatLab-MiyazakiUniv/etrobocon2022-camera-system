@@ -5,7 +5,8 @@
 """
 
 from typing import List, Tuple, Dict
-import robot
+from robot import Robot, Direction
+from color_changer import Color
 
 
 class GameInfo:
@@ -35,7 +36,8 @@ class GameInfo:
         (5, 0): -1, (5, 1): 5,  (5, 2): -1, (5, 3): 6,  (5, 4): -1, (5, 5): 7,  (5, 6): -1,
         (6, 0): -1, (6, 1): -1, (6, 2): -1, (6, 3): -1, (6, 4): -1, (6, 5): -1, (6, 6): -1,
     }
-    base_color_dict = {0: "東", 1: "南", 2: "西", 3: "北"}
+    base_color_dict = {Color.RED.value: "東", Color.YELLOW.value: "南",
+                       Color.GREEN.value: "西", Color.BLUE.value: "北"}
     __east_cand_list = [(6, 2), (6, 3), (6, 4)]  # 東の候補ノードになりうる座標リスト
     __south_cand_list = [(2, 6), (3, 6), (4, 6)]  # 南の候補ノードになりうる座標リスト
     __west_cand_list = [(0, 2), (0, 3), (0, 4)]  # 西の候補ノードになりうる座標リスト
@@ -174,21 +176,21 @@ class GameInfo:
 if __name__ == "__main__":
     # インスタンス化
     info = GameInfo()
-    robo = robot.Robot()
-    robo.coord = [2, 1]
-    robo.direct = 4
-    color = 0  # 赤
-    block = [0, 0, 1, 1, 2, 2, 3, 3]
-    base = [0, 1, 2, 3]
-    end = 0
+    robo = Robot()
 
-    info.block_id_list = block
-    info.base_id_list = base
-    info.end_id = end
+    robo.coord = [2, 1]
+    robo.direct = Direction.S.value
+    color = Color.RED.value
+
+    info.block_id_list = [Color.RED.value, Color.RED.value, Color.YELLOW.value, Color.YELLOW.value,
+                          Color.GREEN.value, Color.GREEN.value, Color.BLUE.value, Color.BLUE.value]
+    info.base_id_list = [Color.RED.value, Color.YELLOW.value, Color.GREEN.value, Color.BLUE.value]
+    info.end_id = Color.RED.value
     print(info.block_id_list)
     print(info.base_id_list)
     print(info.end_id)
-    print("候補ノード取得")
+
+    print("候補ノード")
     print(info.get_candidate_node(color))
     print("未運搬のブロックがあるブロック置き場")
     print(info.get_no_transported_block())
