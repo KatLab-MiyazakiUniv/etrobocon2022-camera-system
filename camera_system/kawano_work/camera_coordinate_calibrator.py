@@ -21,6 +21,7 @@ from typing import List, Tuple
 class CameraCoordinateCalibrator:
     """カメラ画像から座標を取得するクラス."""
     # def __init__(self, img: cv2.Mat) -> None:
+
     def __init__(self) -> None:
         """CameraCoordinateCalibratorのコンストラクタ.
 

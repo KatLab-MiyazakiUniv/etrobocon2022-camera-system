@@ -25,9 +25,9 @@ class CameraCalibration:
         # 他のファイルクラスのインスタンス化
         self.coord = camera_coordinate_calibrator.CameraCoordinateCalibrator()
         self.color_changer = color_changer.ColorChanger()
-        
+
         # カラーid
-        self.color_id_dic = {"0":"赤", "1":"黄", "2":"緑", "3":"青", "4":"白"}
+        self.color_id_dic = {"0": "赤", "1": "黄", "2": "緑", "3": "青", "4": "白"}
 
         # 座標
         self.__block_point = []
@@ -38,7 +38,8 @@ class CameraCalibration:
         """ カメラキャリブレーションを行う関数 """
         # GUIから座標取得
         print("\n座標取得")
-        self.__block_point, self.__base_circle, self.__end_point= self.coord.show_window(self.__img)
+        self.__block_point, self.__base_circle, self.__end_point = self.coord.show_window(
+            self.__img)
 
     def make_game_info(self):
         # 6色変換
@@ -48,23 +49,23 @@ class CameraCalibration:
         base_id_list = []
         end_id_list = []
 
-        # ブロック置き場 
+        # ブロック置き場
         for i in range(len(self.__block_point)):
             color_id = self.color_changer.mode_color(
                 self.__block_point[i][0], self.__block_point[i][1], CameraCalibration.TEMP_XSIZE, CameraCalibration.TEMP_YSIZE)
             block_id_list.append(color_id)
-            print("ブロック置き場%d:%s" % (i,self.color_id_dic[str(color_id)]))
+            print("ブロック置き場%d:%s" % (i, self.color_id_dic[str(color_id)]))
         # ベースサークル置き場
         for i in range(len(self.__base_circle)):
             color_id = self.color_changer.mode_color(
                 self.__base_circle[i][0], self.__base_circle[i][1], CameraCalibration.TEMP_XSIZE, CameraCalibration.TEMP_YSIZE)
             base_id_list.append(color_id)
-            print("ベースサークル置き場%d:%s" % (i,self.color_id_dic[str(color_id)]))
+            print("ベースサークル置き場%d:%s" % (i, self.color_id_dic[str(color_id)]))
         # 端点サークル置き場
         color_id = self.color_changer.mode_color(
             self.__end_point[0][0], self.__end_point[0][1], CameraCalibration.TEMP_XSIZE, CameraCalibration.TEMP_YSIZE)
         end_id_list.append(color_id)
-        print("ボーナスブロック置き場%d:%s" % (i,self.color_id_dic[str(color_id)]))
+        print("ボーナスブロック置き場%d:%s" % (i, self.color_id_dic[str(color_id)]))
 
         # コース情報を作成
         game_info.GameInfo.color_block_setter(block_id_list)

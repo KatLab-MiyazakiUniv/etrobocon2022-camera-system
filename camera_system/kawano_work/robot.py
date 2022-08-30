@@ -1,5 +1,6 @@
 from enum import Enum
 
+
 class Direction(Enum):
     N = 0
     NE = 1
@@ -9,6 +10,7 @@ class Direction(Enum):
     SW = 5
     W = 6
     NW = 7
+
 
 class Robot:
     coord = [0, 0]

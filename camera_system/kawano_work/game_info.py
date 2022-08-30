@@ -13,7 +13,6 @@ class GameInfo:
     __block_id_list = []
     __base_id_list = []
     __end_id = []
-    __block_list = []
     __node_dict = {
         (0, 0): -1, (0, 1): -1, (0, 2): -1, (0, 3): -1, (0, 4): -1, (0, 5): -1, (0, 6): -1,
         (1, 0): -1, (1, 1): 0,  (1, 2): -1, (1, 3): 1,  (1, 4): -1, (1, 5): 2,  (1, 6): -1,
@@ -25,36 +24,32 @@ class GameInfo:
     }
     __base_color_dict = {0: "東", 1: "南", 2: "西", 3: "北"}
 
-
-    def color_block_setter(block_id_list:List[int]) -> None:
+    def color_block_setter(block_id_list: List[int]) -> None:
         """ block_id_listのsetter.
-        
+
         Args:
             block_id_list: カラーブロックの色idの配列
 
         """
         GameInfo.__block_id_list = block_id_list
 
-
-    def base_color_block_setter(base_id_list:List[int]) -> None:
+    def base_color_block_setter(base_id_list: List[int]) -> None:
         """ block_id_listのsetter.
-        
+
         Args:
             block_id_list: ベースサークルブロックの色idの配列
         """
         GameInfo.__base_id_list = base_id_list
 
-
-    def bonus_block_setter(end_id:int) -> None:
+    def bonus_block_setter(end_id: int) -> None:
         """ block_id_listのsetter.
-        
+
         Args:
             block_id_list: ボーナスブロックの色id
         """
         GameInfo.__end_id = end_id
 
-
-    def get_candidate_node(self, color) -> List[Tuple[int, int]]:
+    def get_candidate_node(self, color: int) -> List[Tuple[int, int]]:
         """設置先ノードの候補を取得する関数.
 
         Args:
@@ -71,19 +66,19 @@ class GameInfo:
 
         if base_color_dict[color] == "東":
             for cand in east_cand_list:
-                if GameInfo.node_dict[cand] == -1:  # 対象のノードに既に設置済みのブロックがなければ候補に入れる
+                if GameInfo.__node_dict[cand] == -1:  # 対象のノードに既に設置済みのブロックがなければ候補に入れる
                     cand_list.append[cand]
         elif base_color_dict[color] == "南":
             for cand in south_cand_list:
-                if GameInfo.node_dict[cand] == -1:
+                if GameInfo.__node_dict[cand] == -1:
                     cand_list.append[cand]
         elif base_color_dict[color] == "西":
             for cand in west_cand_list:
-                if GameInfo.node_dict[cand] == -1:
+                if GameInfo.__node_dict[cand] == -1:
                     cand_list.append[cand]
         else:
             for cand in north_cand_list:
-                if GameInfo.node_dict[cand] == -1:
+                if GameInfo.__node_dict[cand] == -1:
                     cand_list.append[cand]
 
         return cand_list
@@ -135,11 +130,11 @@ class GameInfo:
         no_entry_list = []
 
         if [x+1, y] in GameInfo.node_dict.keys() and GameInfo.node_dict[x+1, y] != -1:  # 東にブロック
-            no_entry_list.append([x+1, y]) #ブロックのある座標
+            no_entry_list.append([x+1, y])  # ブロックのある座標
             if [x+1, y-1] in GameInfo.node_dict.keys():
-                no_entry_list.append([x+1, y-1]) #ブロックのある座標の北の座標
+                no_entry_list.append([x+1, y-1])  # ブロックのある座標の北の座標
             if [x+1, y+1] in GameInfo.node_dict.keys():
-                no_entry_list.append([x+1, y+1]) #ブロックのある座標の南の座標
+                no_entry_list.append([x+1, y+1])  # ブロックのある座標の南の座標
         if [x, y+1] in GameInfo.node_dict.keys() and GameInfo.node_dict[x, y+1] != -1:  # 南にブロック
             no_entry_list.append([x, y+1])
             if [x-1, y+1] in GameInfo.node_dict.keys():

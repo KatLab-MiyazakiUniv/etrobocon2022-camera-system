@@ -8,6 +8,7 @@ import cv2
 import numpy as np
 import scipy
 
+
 class ColorChanger:
     """画像の色変換クラス.
 
@@ -22,6 +23,7 @@ class ColorChanger:
                         [41, 70, 0], [104, 100, 0], [0, 0, 128]])
     __UPPER = np.array([[15, 255, 255], [180, 255, 255], [40, 255, 255],
                         [103, 255, 255], [150, 255, 255], [180, 70, 255]])
+
     def __init__(self):
         # カラーIDを格納する配列を宣言
         self.color_id_img = []
@@ -63,7 +65,7 @@ class ColorChanger:
         # 6色画像を保存
         cv2.imwrite(save_path, self.result)
 
-    def mode_color(self, coord_x:int, coord_y:int, temp_xsize:int, temp_ysize:int) -> int:
+    def mode_color(self, coord_x: int, coord_y: int, temp_xsize: int, temp_ysize: int) -> int:
         """ ブロック周辺の色の最頻値を求める """
         # 座標周辺を取り出す
         temp = self.color_id_img[coord_y-(temp_ysize//2):coord_y+(temp_ysize//2)+1,
@@ -71,6 +73,7 @@ class ColorChanger:
         # 画像周辺の最頻値を求める(カラーID)
         mode, _ = scipy.stats.mode(temp.reshape(temp_ysize*temp_xsize),  keepdims=True)
         return int(mode[0])
+
 
 if __name__ == "__main__":
     read_path = "course.png"
