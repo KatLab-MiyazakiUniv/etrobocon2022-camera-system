@@ -1,15 +1,20 @@
 """CameraSystemクラスのテストコードを記述するモジュール.
 
-@author: Takahiro55555
+@author: Takahiro55555 miyashita64
 """
 
 import unittest
-
-from camera_system.camera_system import CameraSystem
+from unittest import mock
+from pathlib import Path
+import sys
+sys.path.append(str(Path(__file__).parent.parent))
+sys.path.append(str(Path(__file__).parent.parent / "camera_system"))
+from camera_system.camera_system import CameraSystem    # noqa
 
 
 class TestCameraSystem(unittest.TestCase):
-    def test_start(self):
+    @mock.patch('client.Client.wait_for_start_signal')
+    def test_start(self, client_func_mock):
         cs = CameraSystem()
         cs.start()
 
