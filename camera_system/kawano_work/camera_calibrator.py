@@ -52,21 +52,18 @@ class CameraCalibration:
         # ブロック置き場
         for i in range(len(self.__block_point)):
             color_id = self.color_changer.mode_color(
-                self.__block_point[i][0], self.__block_point[i][1],
-                CameraCalibration.TEMP_XSIZE, CameraCalibration.TEMP_YSIZE)
+                self.__block_point[i][0], self.__block_point[i][1], CameraCalibration.TEMP_XSIZE, CameraCalibration.TEMP_YSIZE)
             block_id_list.append(color_id)
             print("ブロック置き場%d:%s" % (i, self.color_id_dic[str(color_id)]))
         # ベースサークル置き場
         for i in range(len(self.__base_circle)):
             color_id = self.color_changer.mode_color(
-                self.__base_circle[i][0], self.__base_circle[i][1],
-                CameraCalibration.TEMP_XSIZE, CameraCalibration.TEMP_YSIZE)
+                self.__base_circle[i][0], self.__base_circle[i][1], CameraCalibration.TEMP_XSIZE, CameraCalibration.TEMP_YSIZE)
             base_id_list.append(color_id)
             print("ベースサークル置き場%d:%s" % (i, self.color_id_dic[str(color_id)]))
         # 端点サークル置き場
         color_id = self.color_changer.mode_color(
-            self.__end_point[0][0], self.__end_point[0][1],
-            CameraCalibration.TEMP_XSIZE, CameraCalibration.TEMP_YSIZE)
+            self.__end_point[0][0], self.__end_point[0][1], CameraCalibration.TEMP_XSIZE, CameraCalibration.TEMP_YSIZE)
         end_id_list.append(color_id)
         print("ボーナスブロック置き場%d:%s" % (i, self.color_id_dic[str(color_id)]))
 
