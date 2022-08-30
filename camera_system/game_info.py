@@ -12,11 +12,15 @@ class GameInfo:
     """ゲームエリア情報を保持するクラス.
 
     Attributes:
-        __block_id_list (int): ブロック(色ID)
-        __base_id_list (int): ベースブロック(色ID)
-        __end_id (int): ボーナスブロック(色ID)
-        __node_dict (Dict[Tuple(int, int), int]): ノード([座標,ブロックID])
-        __base_color_dict (Dict(int)): ベースエリアの色ID(赤、黄、緑、青)
+        block_id_list (int): ブロック(色ID)
+        base_id_list (int): ベースブロック(色ID)
+        end_id (int): ボーナスブロック(色ID)
+        node_dict (Dict[Tuple(int, int), int]): ノード([座標,ブロックID])
+        base_color_dict (Dict{int, str}): ベースエリアの色ID(赤、黄、緑、青)
+        __east_cand_list = (List[Tuple(int, int)]): 東の候補ノードになりうる座標リスト
+        __south_cand_list = (List[Tuple(int, int)]): 南の候補ノードになりうる座標リスト
+        __west_cand_list = (List[Tuple(int, int)]): 西の候補ノードになりうる座標リスト
+        __north_cand_list = (List[Tuple(int, int)]): 北の候補ノードになりうる座標リスト
     """
 
     block_id_list = []
@@ -32,6 +36,10 @@ class GameInfo:
         (6, 0): -1, (6, 1): -1, (6, 2): -1, (6, 3): -1, (6, 4): -1, (6, 5): -1, (6, 6): -1,
     }
     base_color_dict = {0: "東", 1: "南", 2: "西", 3: "北"}
+    __east_cand_list = [(6, 2), (6, 3), (6, 4)]  # 東の候補ノードになりうる座標リスト
+    __south_cand_list = [(2, 6), (3, 6), (4, 6)]  # 南の候補ノードになりうる座標リスト
+    __west_cand_list = [(0, 2), (0, 3), (0, 4)]  # 西の候補ノードになりうる座標リスト
+    __north_cand_list = [(2, 0), (3, 0), (4, 0)]  # 北の候補ノードになりうる座標リスト
 
     def get_candidate_node(self, color: int) -> List[Tuple[int, int]]:
         """設置先ノードの候補を取得する関数.
@@ -43,25 +51,21 @@ class GameInfo:
             List[Tuple[int, int]]: 候補ノードの座標リスト
         """
         cand_list = []
-        east_cand_list = [(6, 2), (6, 3), (6, 4)]  # 東の候補ノードになりうる座標リスト
-        south_cand_list = [(2, 6), (3, 6), (4, 6)]  # 南の候補ノードになりうる座標リスト
-        west_cand_list = [(0, 2), (0, 3), (0, 4)]  # 西の候補ノードになりうる座標リスト
-        north_cand_list = [(2, 0), (3, 0), (4, 0)]  # 北の候補ノードになりうる座標リスト
 
         if GameInfo.base_color_dict[color] == "東":
-            for cand in east_cand_list:
+            for cand in GameInfo.__east_cand_list:
                 if GameInfo.node_dict[cand] == -1:  # 対象のノードに既に設置済みのブロックがなければ候補に入れる
                     cand_list.append(cand)
         elif GameInfo.base_color_dict[color] == "南":
-            for cand in south_cand_list:
+            for cand in GameInfo.__south_cand_list:
                 if GameInfo.node_dict[cand] == -1:
                     cand_list.append(cand)
         elif GameInfo.base_color_dict[color] == "西":
-            for cand in west_cand_list:
+            for cand in GameInfo.__west_cand_list:
                 if GameInfo.node_dict[cand] == -1:
                     cand_list.append(cand)
         else:
-            for cand in north_cand_list:
+            for cand in GameInfo.__north_cand_list:
                 if GameInfo.node_dict[cand] == -1:
                     cand_list.append(cand)
 
