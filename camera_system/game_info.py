@@ -19,10 +19,10 @@ class GameInfo:
         __base_color_dict (Dict(int)): ベースエリアの色ID(赤、黄、緑、青)
     """
 
-    __block_id_list = []
-    __base_id_list = []
-    __end_id = []
-    __node_dict = {
+    block_id_list = []
+    base_id_list = []
+    end_id = []
+    node_dict = {
         (0, 0): -1, (0, 1): -1, (0, 2): -1, (0, 3): -1, (0, 4): -1, (0, 5): -1, (0, 6): -1,
         (1, 0): -1, (1, 1): 0,  (1, 2): -1, (1, 3): 1,  (1, 4): -1, (1, 5): 2,  (1, 6): -1,
         (2, 0): -1, (2, 1): -1, (2, 2): -1, (2, 3): -1, (2, 4): -1, (2, 5): -1, (2, 6): -1,
@@ -31,7 +31,7 @@ class GameInfo:
         (5, 0): -1, (5, 1): 5,  (5, 2): -1, (5, 3): 6,  (5, 4): -1, (5, 5): 7,  (5, 6): -1,
         (6, 0): -1, (6, 1): -1, (6, 2): -1, (6, 3): -1, (6, 4): -1, (6, 5): -1, (6, 6): -1,
     }
-    __base_color_dict = {0: "東", 1: "南", 2: "西", 3: "北"}
+    base_color_dict = {0: "東", 1: "南", 2: "西", 3: "北"}
 
     def get_candidate_node(self, color: int) -> List[Tuple[int, int]]:
         """設置先ノードの候補を取得する関数.
@@ -48,21 +48,21 @@ class GameInfo:
         west_cand_list = [(0, 2), (0, 3), (0, 4)]  # 西の候補ノードになりうる座標リスト
         north_cand_list = [(2, 0), (3, 0), (4, 0)]  # 北の候補ノードになりうる座標リスト
 
-        if GameInfo.__base_color_dict[color] == "東":
+        if GameInfo.base_color_dict[color] == "東":
             for cand in east_cand_list:
-                if GameInfo.__node_dict[cand] == -1:  # 対象のノードに既に設置済みのブロックがなければ候補に入れる
+                if GameInfo.node_dict[cand] == -1:  # 対象のノードに既に設置済みのブロックがなければ候補に入れる
                     cand_list.append(cand)
-        elif GameInfo.__base_color_dict[color] == "南":
+        elif GameInfo.base_color_dict[color] == "南":
             for cand in south_cand_list:
-                if GameInfo.__node_dict[cand] == -1:
+                if GameInfo.node_dict[cand] == -1:
                     cand_list.append(cand)
-        elif GameInfo.__base_color_dict[color] == "西":
+        elif GameInfo.base_color_dict[color] == "西":
             for cand in west_cand_list:
-                if GameInfo.__node_dict[cand] == -1:
+                if GameInfo.node_dict[cand] == -1:
                     cand_list.append(cand)
         else:
             for cand in north_cand_list:
-                if GameInfo.__node_dict[cand] == -1:
+                if GameInfo.node_dict[cand] == -1:
                     cand_list.append(cand)
 
         return cand_list
@@ -75,7 +75,7 @@ class GameInfo:
         """
         no_trans_block_list = []  # 候補ノードの座標リストを格納する
 
-        for key, value in GameInfo.__node_dict.items():
+        for key, value in GameInfo.node_dict.items():
             x = key[0]
             y = key[1]
             block_id = value
@@ -99,29 +99,29 @@ class GameInfo:
         y = robot.coord[1]
         no_entry_list = []
 
-        if (x+1, y) in GameInfo.__node_dict.keys() and GameInfo.__node_dict[x+1, y] != -1:  # 東にブロック
+        if (x+1, y) in GameInfo.node_dict.keys() and GameInfo.node_dict[x+1, y] != -1:  # 東にブロック
             no_entry_list.append([x+1, y])  # ブロックのある座標
-            if (x+1, y-1) in GameInfo.__node_dict.keys():
+            if (x+1, y-1) in GameInfo.node_dict.keys():
                 no_entry_list.append([x+1, y-1])  # ブロックのある座標の北の座標
-            if (x+1, y+1) in GameInfo.__node_dict.keys():
+            if (x+1, y+1) in GameInfo.node_dict.keys():
                 no_entry_list.append([x+1, y+1])  # ブロックのある座標の南の座標
-        if (x, y+1) in GameInfo.__node_dict.keys() and GameInfo.__node_dict[x, y+1] != -1:  # 南にブロック
+        if (x, y+1) in GameInfo.node_dict.keys() and GameInfo.node_dict[x, y+1] != -1:  # 南にブロック
             no_entry_list.append([x, y+1])  # ブロックのある座標
-            if (x-1, y+1) in GameInfo.__node_dict.keys():
+            if (x-1, y+1) in GameInfo.node_dict.keys():
                 no_entry_list.append([x-1, y+1])  # ブロックのある座標の西の座標
-            if (x-1, y+1) in GameInfo.__node_dict.keys():
+            if (x-1, y+1) in GameInfo.node_dict.keys():
                 no_entry_list.append([x+1, y+1])  # ブロックのある座標の東の座標
-        if (x-1, y) in GameInfo.__node_dict.keys() and GameInfo.__node_dict[x-1, y] != -1:  # 西にブロック
+        if (x-1, y) in GameInfo.node_dict.keys() and GameInfo.node_dict[x-1, y] != -1:  # 西にブロック
             no_entry_list.append([x-1, y])  # ブロックのある座標
-            if (x-1, y-1) in GameInfo.__node_dict.keys():
+            if (x-1, y-1) in GameInfo.node_dict.keys():
                 no_entry_list.append([x-1, y-1])  # ブロックのある座標の北の座標
-            if (x-1, y+1) in GameInfo.__node_dict.keys():
+            if (x-1, y+1) in GameInfo.node_dict.keys():
                 no_entry_list.append([x-1, y+1])  # ブロックのある座標の南の座標
-        if (x, y-1) in GameInfo.__node_dict.keys() and GameInfo.__node_dict[x, y-1] != -1:  # 北にブロック
+        if (x, y-1) in GameInfo.node_dict.keys() and GameInfo.node_dict[x, y-1] != -1:  # 北にブロック
             no_entry_list.append([x, y-1])  # ブロックのある座標
-            if (x-1, y-1) in GameInfo.__node_dict.keys():
+            if (x-1, y-1) in GameInfo.node_dict.keys():
                 no_entry_list.append([x-1, y-1])  # ブロックのある座標の西の座標
-            if [x+1, y-1] in GameInfo.__node_dict.keys():
+            if [x+1, y-1] in GameInfo.node_dict.keys():
                 no_entry_list.append([x+1, y-1])  # ブロックのある座標の東の座標
 
         return no_entry_list
@@ -141,23 +141,23 @@ class GameInfo:
         no_rotate_list = []
 
         # 東にブロック
-        if (x+1, y) in GameInfo.__node_dict.keys() and GameInfo.__node_dict[x+1, y] != -1:
+        if (x+1, y) in GameInfo.node_dict.keys() and GameInfo.node_dict[x+1, y] != -1:
             no_rotate_list.append(6)  # 西を回頭禁止方向に追加
         # 南にブロック
-        if (x, y+1) in GameInfo.__node_dict.keys() and GameInfo.__node_dict[x, y+1] != -1:
+        if (x, y+1) in GameInfo.node_dict.keys() and GameInfo.node_dict[x, y+1] != -1:
             no_rotate_list.append(0)  # 北を回頭禁止方向に追加
         # 西にブロック
-        if (x-1, y) in GameInfo.__node_dict.keys() and GameInfo.__node_dict[x-1, y] != -1:
+        if (x-1, y) in GameInfo.node_dict.keys() and GameInfo.node_dict[x-1, y] != -1:
             no_rotate_list.append(2)  # 東を回頭禁止方向に追加
         # 北にブロック
-        if (x, y-1) in GameInfo.__node_dict.keys() and GameInfo.__node_dict[x, y-1] != -1:
+        if (x, y-1) in GameInfo.node_dict.keys() and GameInfo.node_dict[x, y-1] != -1:
             no_rotate_list.append(4)  # 南を回頭禁止方向に追加
 
         # 回頭禁止方向が2つ以上ある場合、それらの間にある方向も回頭禁止
         if len(no_rotate_list) >= 2:
             if min(no_rotate_list) < direct and direct < max(no_rotate_list):
                 for i in range(min(no_rotate_list)):
-                    no_rotate_list.appned(i)
+                    no_rotate_list.append(i)
                 for i in range(max(no_rotate_list)+1, 8):
                     no_rotate_list.append(i)
             else:
@@ -178,12 +178,12 @@ if __name__ == "__main__":
     base = [0, 1, 2, 3]
     end = 0
 
-    info.__block_id_list = block
-    info.__base_id_list = base
-    info.__end_id = end
-    print(info.__block_id_list)
-    print(info.__base_id_list)
-    print(info.__end_id)
+    info.block_id_list = block
+    info.base_id_list = base
+    info.end_id = end
+    print(info.block_id_list)
+    print(info.base_id_list)
+    print(info.end_id)
     print("候補ノード取得")
     print(info.get_candidate_node(color))
     print("未運搬のブロックがあるブロック置き場")
