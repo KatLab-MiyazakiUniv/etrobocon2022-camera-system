@@ -153,7 +153,7 @@ class GameInfo:
         if (x, y-1) in GameInfo.node_dict.keys() and GameInfo.node_dict[x, y-1] != -1:
             no_rotate_list.append(4)  # 南を回頭禁止方向に追加
 
-        # 回頭禁止方向が2つ以上ある場合、それらの間にある方向も回頭禁止
+        # 回頭禁止方向が2つ以上ある場合、それらの間にある方向も回頭禁止方向
         if len(no_rotate_list) >= 2:
             if min(no_rotate_list) < direct and direct < max(no_rotate_list):
                 for i in range(min(no_rotate_list)):
