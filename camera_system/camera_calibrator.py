@@ -7,7 +7,7 @@ import cv2
 from color_changer import ColorChanger
 from color_changer import Color
 from camera_coordinate_calibrator import CameraCoordinateCalibrator
-# import game_info
+from game_info import GameInfo
 
 
 class CameraCalibration:
@@ -46,7 +46,7 @@ class CameraCalibration:
         # 座標からカラーIDを取得
         block_id_list = []
         base_id_list = []
-        bonus_id_list = []
+        end_id = []
 
         # ブロック置き場
         for i, point in enumerate(self.__coord.block_point):
@@ -64,13 +64,13 @@ class CameraCalibration:
         color_id = self.__color_changer.mode_color(
             self.__coord.end_point[0][0], self.__coord.end_point[0][1],
             CameraCalibration.TEMP_XSIZE, CameraCalibration.TEMP_YSIZE)
-        bonus_id_list.append(color_id)
+        end_id.append(color_id)
         print("ボーナスブロック置き場%d:%s" % (i, Color(color_id).name))
 
         # コース情報を作成
-        # game_info.GameInfo.color_block_setter(block_id_list)
-        # game_info.GameInfo.base_color_block_setter(base_id_list)
-        # game_info.GameInfo.bonus_block_setter(bonus_id_list)
+        GameInfo.block_id_list = block_id_list
+        GameInfo.base_id_list = base_id_list
+        GameInfo.end_id = end_id
 
 
 if __name__ == "__main__":
