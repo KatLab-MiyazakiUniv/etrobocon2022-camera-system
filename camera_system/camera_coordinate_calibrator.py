@@ -20,7 +20,7 @@ from typing import List, Tuple
 class CameraCoordinateCalibrator:
     """カメラ画像から座標を取得するクラス."""
 
-    def __init__(self, img: cv2.Mat) -> None:
+    def __init__(self) -> None:
         """CameraCoordinateCalibratorのコンストラクタ.
 
         Args:
@@ -30,13 +30,12 @@ class CameraCoordinateCalibrator:
         self.__block_point = []  # ブロック置き場の座標リスト
         self.__base_circle = []  # ベースサークルの座標リスト
         self.__end_point = []  # 端点サークルの座標リスト
-        self.__img = img
 
-    def show_window(self) -> None:
+    def show_window(self, img) -> None:
         """画像取得ツールを起動する関数."""
         # 画像情報を取得する
-        img_height = self.__img.shape[0]  # 画像の高さ
-        img_width = self.__img.shape[1]  # 画像の横幅
+        img_height = img.shape[0]  # 画像の高さ
+        img_width = img.shape[1]  # 画像の横幅
 
         # ウィンドウを定義する
         self.__window = tk.Tk()
@@ -50,7 +49,7 @@ class CameraCoordinateCalibrator:
         self.__message.place(x=img_width+10, y=80, width=180)
 
         # OpenCVで取得した画像を変換する
-        img_rgb = cv2.cvtColor(self.__img, cv2.COLOR_BGR2RGB)  # imreadはBGRなのでRGBに変換
+        img_rgb = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)  # imreadはBGRなのでRGBに変換
         img_pil = Image.fromarray(img_rgb)    # RGBからPILフォーマットへ変換
         img_tk = ImageTk.PhotoImage(img_pil)  # ImageTkフォーマットへ変換
 
@@ -149,8 +148,8 @@ class CameraCoordinateCalibrator:
 
 if __name__ == "__main__":
     img = cv2.imread("course.png")
-    coord = CameraCoordinateCalibrator(img)
-    coord.show_window()
+    coord = CameraCoordinateCalibrator()
+    coord.show_window(img)
     print("ブロック置き場: %s" % coord.block_point)
     print("ベースサークル: %s" % coord.base_circle)
     print("端点サークル: %s" % coord.end_point)

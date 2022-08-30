@@ -1,11 +1,13 @@
 """カメラキャリブレーションモジュール.
+
+カメラキャリブレーションを行う
 @author kawanoichi
 """
 import cv2
 from color_changer import ColorChanger
 from color_changer import Color
 from camera_coordinate_calibrator import CameraCoordinateCalibrator
-# import game_info
+import game_info
 
 
 class CameraCalibration:
@@ -25,23 +27,21 @@ class CameraCalibration:
         self.__color_changer = ColorChanger()
         self.__coord = CameraCoordinateCalibrator()
 
-
     def camera_calibration_start(self):
         """ カメラキャリブレーションを行う関数. """
         # GUIから座標取得
-        print("\n座標取得")
         self.__coord.show_window(self.__img)
 
     def make_game_info(self):
         # 6色変換
         self.__color_changer.change_color(self.__img, self.__save_path)
-        
+
         # 座標からカラーIDを取得
         block_id_list = []
         base_id_list = []
         bonus_id_list = []
 
-        # ブロック置き場 
+        # ブロック置き場
         for i, point in enumerate(self.__coord.block_point):
             color_id = self.__color_changer.mode_color(
                 point[0], point[1], CameraCalibration.TEMP_XSIZE, CameraCalibration.TEMP_YSIZE)
@@ -55,14 +55,16 @@ class CameraCalibration:
             print("ベースサークル置き場%d:%s" % (i, Color(color_id).name))
         # 端点サークル置き場
         color_id = self.__color_changer.mode_color(
-            self.__coord.end_point[0][0], self.__coord.end_point[0][1], CameraCalibration.TEMP_XSIZE, CameraCalibration.TEMP_YSIZE)
+            self.__coord.end_point[0][0], self.__coord.end_point[0][1], 
+            CameraCalibration.TEMP_XSIZE, CameraCalibration.TEMP_YSIZE)
         bonus_id_list.append(color_id)
         print("ボーナスブロック置き場%d:%s" % (i, Color(color_id).name))
 
         # コース情報を作成
-        # game_info.GameInfo.color_block_setter(block_id_list)
-        # game_info.GameInfo.base_color_block_setter(base_id_list)
-        # game_info.GameInfo.bonus_block_setter(end_id_list)
+        game_info.GameInfo.color_block_setter(block_id_list)
+        game_info.GameInfo.base_color_block_setter(base_id_list)
+        game_info.GameInfo.bonus_block_setter(bonus_id_list)
+
 
 if __name__ == "__main__":
     read_path = "course.png"
