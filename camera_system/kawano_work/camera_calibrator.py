@@ -1,81 +1,73 @@
 """カメラキャリブレーションモジュール.
-@author
+@author kawanoichi
 """
 import cv2
-import color_changer
-import camera_coordinate_calibrator
-import game_info
+from color_changer import ColorChanger
+from color_changer import Color
+from camera_coordinate_calibrator import CameraCoordinateCalibrator
+# import game_info
 
 
 class CameraCalibration:
-    """
-    1. GUIから座標取得
-    2. 6色変換
-    3. 座標のところからカラーIDを取得
-    """
-    # テンプレートサイズ
+    """ ゲームエリア認識クラス. """
+    # テンプレートサイズ(奇数)
     TEMP_XSIZE = 5
     TEMP_YSIZE = 5
 
     def __init__(self, read_path):
-        # global変数を宣言
+        """CameraCalibrationのコンストラクタ.
+        Args:
+            read_path: コース画像パス
+        """
         self.__img = cv2.imread(read_path)
         self.__save_path = "result_" + read_path
 
-        # 他のファイルクラスのインスタンス化
-        self.coord = camera_coordinate_calibrator.CameraCoordinateCalibrator()
-        self.color_changer = color_changer.ColorChanger()
+        self.__color_changer = ColorChanger()
+        self.__coord = CameraCoordinateCalibrator()
 
-        # カラーid
-        self.color_id_dic = {"0": "赤", "1": "黄", "2": "緑", "3": "青", "4": "白"}
-
-        # 座標
-        self.__block_point = []
-        self.__base_circle = []
-        self.__end_point = []
 
     def camera_calibration_start(self):
-        """ カメラキャリブレーションを行う関数 """
+        """ カメラキャリブレーションを行う関数. """
         # GUIから座標取得
         print("\n座標取得")
-        self.__block_point, self.__base_circle, self.__end_point = self.coord.show_window(
-            self.__img)
+        self.__coord.show_window(self.__img)
 
     def make_game_info(self):
         # 6色変換
-        self.color_changer.change_color(self.__img, self.__save_path)
+        self.__color_changer.change_color(self.__img, self.__save_path)
+        
         # 座標からカラーIDを取得
         block_id_list = []
         base_id_list = []
-        end_id_list = []
+        bonus_id_list = []
 
-        # ブロック置き場
-        for i in range(len(self.__block_point)):
-            color_id = self.color_changer.mode_color(
-                self.__block_point[i][0], self.__block_point[i][1], CameraCalibration.TEMP_XSIZE, CameraCalibration.TEMP_YSIZE)
+        # ブロック置き場 
+        for i, point in enumerate(self.__coord.block_point):
+            color_id = self.__color_changer.mode_color(
+                point[0], point[1], CameraCalibration.TEMP_XSIZE, CameraCalibration.TEMP_YSIZE)
             block_id_list.append(color_id)
-            print("ブロック置き場%d:%s" % (i, self.color_id_dic[str(color_id)]))
+            print("ブロック置き場%d:%s" % (i, Color(color_id).name))
         # ベースサークル置き場
-        for i in range(len(self.__base_circle)):
-            color_id = self.color_changer.mode_color(
-                self.__base_circle[i][0], self.__base_circle[i][1], CameraCalibration.TEMP_XSIZE, CameraCalibration.TEMP_YSIZE)
+        for i, base in enumerate(self.__coord.base_circle):
+            color_id = self.__color_changer.mode_color(
+                base[0], base[1], CameraCalibration.TEMP_XSIZE, CameraCalibration.TEMP_YSIZE)
             base_id_list.append(color_id)
-            print("ベースサークル置き場%d:%s" % (i, self.color_id_dic[str(color_id)]))
+            print("ベースサークル置き場%d:%s" % (i, Color(color_id).name))
         # 端点サークル置き場
-        color_id = self.color_changer.mode_color(
-            self.__end_point[0][0], self.__end_point[0][1], CameraCalibration.TEMP_XSIZE, CameraCalibration.TEMP_YSIZE)
-        end_id_list.append(color_id)
-        print("ボーナスブロック置き場%d:%s" % (i, self.color_id_dic[str(color_id)]))
+        color_id = self.__color_changer.mode_color(
+            self.__coord.end_point[0][0], self.__coord.end_point[0][1], CameraCalibration.TEMP_XSIZE, CameraCalibration.TEMP_YSIZE)
+        bonus_id_list.append(color_id)
+        print("ボーナスブロック置き場%d:%s" % (i, Color(color_id).name))
 
         # コース情報を作成
-        game_info.GameInfo.color_block_setter(block_id_list)
-        game_info.GameInfo.base_color_block_setter(base_id_list)
-        game_info.GameInfo.bonus_block_setter(end_id_list)
-
+        # game_info.GameInfo.color_block_setter(block_id_list)
+        # game_info.GameInfo.base_color_block_setter(base_id_list)
+        # game_info.GameInfo.bonus_block_setter(end_id_list)
 
 if __name__ == "__main__":
     read_path = "course.png"
     save_path = "result_" + read_path
     camera_calibration = CameraCalibration(read_path)
     camera_calibration.camera_calibration_start()
+    camera_calibration.make_game_info()
     print("CameraCalibration 終了")
