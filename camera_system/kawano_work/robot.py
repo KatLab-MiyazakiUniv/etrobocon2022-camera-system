@@ -1,7 +1,15 @@
+"""ロボットモジュール.
+
+ロボットのクラス（構造体）を定義したモジュール
+@author: kodama0720
+"""
+
 from enum import Enum
 
 
 class Direction(Enum):
+    """方位の列挙体."""
+
     N = 0
     NE = 1
     E = 2
@@ -13,5 +21,7 @@ class Direction(Enum):
 
 
 class Robot:
+    """仮想走行体クラス."""
+
     coord = [0, 0]
     direct = Direction.N.value

@@ -1,3 +1,9 @@
+"""ゲームエリア情報モジュール.
+
+ゲームエリア情報を保持するクラスを定義している
+@author: kodama0720
+"""
+
 from typing import List, Tuple, Dict
 import robot
 
@@ -61,7 +67,7 @@ class GameInfo:
 
         return cand_list
 
-    def get_no_transported_block(self):  # -> List[List[int, int]]: TypeHintを書くとエラーになる
+    def get_no_transported_block(self):  # -> List[List[int, int]]: Type Hintを書くとエラーになる
         """運搬していないブロックがあるブロック置き場を取得する関数.
 
         Returns:
@@ -80,7 +86,7 @@ class GameInfo:
 
         return no_trans_block_list
 
-    def get_no_entry_coordinate(self, robot):  # -> List[List[int, int]]: TypeHintを書くとエラーになる
+    def get_no_entry_coordinate(self, robot):  # -> List[List[int, int]]: Type Hintを書くとエラーになる
         """走行禁止座標を取得する関数.
 
         Args:
@@ -136,27 +142,27 @@ class GameInfo:
 
         # 東にブロック
         if (x+1, y) in GameInfo.__node_dict.keys() and GameInfo.__node_dict[x+1, y] != -1:
-            no_rotate_list += [6]  # 西を回頭禁止方向に追加
+            no_rotate_list.append(6)  # 西を回頭禁止方向に追加
         # 南にブロック
         if (x, y+1) in GameInfo.__node_dict.keys() and GameInfo.__node_dict[x, y+1] != -1:
-            no_rotate_list += [0]  # 北を回頭禁止方向に追加
+            no_rotate_list.append(0)  # 北を回頭禁止方向に追加
         # 西にブロック
         if (x-1, y) in GameInfo.__node_dict.keys() and GameInfo.__node_dict[x-1, y] != -1:
-            no_rotate_list += [2]  # 東を回頭禁止方向に追加
+            no_rotate_list.append(2)  # 東を回頭禁止方向に追加
         # 北にブロック
         if (x, y-1) in GameInfo.__node_dict.keys() and GameInfo.__node_dict[x, y-1] != -1:
-            no_rotate_list += [4]  # 南を回頭禁止方向に追加
+            no_rotate_list.append(4)  # 南を回頭禁止方向に追加
 
         # 回頭禁止方向が2つ以上ある場合、それらの間にある方向も回頭禁止
         if len(no_rotate_list) >= 2:
             if min(no_rotate_list) < direct and direct < max(no_rotate_list):
                 for i in range(min(no_rotate_list)):
-                    no_rotate_list += [i]
+                    no_rotate_list.appned(i)
                 for i in range(max(no_rotate_list)+1, 8):
-                    no_rotate_list += [i]
+                    no_rotate_list.append(i)
             else:
                 for i in range(min(no_rotate_list)+1, max(no_rotate_list)):
-                    no_rotate_list += [i]
+                    no_rotate_list.append(i)
 
         return no_rotate_list
 
