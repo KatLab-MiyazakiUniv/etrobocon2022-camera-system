@@ -11,8 +11,7 @@ from camera_system.camera_coordinate_calibrator import CameraCoordinateCalibrato
 
 class TestCameraCoordinateCalibrator(unittest.TestCase):
     def test_constructor(self):
-        img = cv2.imread("tests/test_image.png")
-        ccc = CameraCoordinateCalibrator(img)
+        ccc = CameraCoordinateCalibrator()
         expected = []
         actual_block_point = ccc.block_point
         actual_base_circle = ccc.base_circle
