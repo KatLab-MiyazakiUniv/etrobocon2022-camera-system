@@ -2,7 +2,6 @@
 
 カメラから取得した画像を6色画像に変換する。
 @author kodama0720 kawanoichi
-
 """
 import cv2
 import numpy as np
@@ -11,6 +10,8 @@ from enum import Enum
 
 
 class Color(Enum):
+    """色クラス."""
+
     BLACK = 0
     RED = 1
     YELLOW = 2
@@ -27,6 +28,7 @@ class ColorChanger:
         __LOWER(ndarray): HSV閾値下限(赤1、赤2、黄、緑、青、白)
         __UPPER(ndarray): HSV閾値上限(赤1、赤2、黄、緑、青、白)
     """
+
     __BGR_COLOR = np.array([[0, 0, 0], [0, 0, 255], [0, 255, 255],
                             [0, 255, 0], [255, 0, 0], [255, 255, 255]])
     __LOWER = np.array([[0, 90, 0], [151, 90, 0], [16, 130, 0],
@@ -35,8 +37,8 @@ class ColorChanger:
                         [103, 255, 255], [150, 255, 255], [180, 70, 255]])
 
     def __init__(self):
-        # カラーIDを格納する配列を宣言
-        self.color_id_img = []
+        """ColorChangerのコンストラクタ."""
+        self.color_id_img = []  # カラーIDを格納する配列を宣言
 
     def change_color(self, img, save_path) -> None:
         """画像を6色画像に変換する関数.
@@ -78,7 +80,7 @@ class ColorChanger:
         cv2.imwrite(save_path, self.result)
 
     def mode_color(self, coord_x: int, coord_y: int, temp_xsize: int, temp_ysize: int) -> int:
-        """ ブロック周辺の色の最頻値を求める.
+        """ブロック周辺の色の最頻値を求める.
 
         Args:
             coord_x : ブロックのx座標
