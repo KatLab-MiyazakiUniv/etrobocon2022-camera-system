@@ -39,7 +39,7 @@ class ColorChanger:
         """ColorChangerのコンストラクタ."""
         self.color_id_img = []  # カラーIDを格納する配列を宣言
 
-    def change_color(self, img, save_path) -> None:
+    def change_color(self, img: list, save_path: str) -> None:
         """画像を6色画像に変換する関数.
 
         Args:

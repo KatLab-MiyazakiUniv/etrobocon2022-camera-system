@@ -1,7 +1,7 @@
 """カメラ画像の座標取得するためのモジュール.
 
 カメラ画像を表示し、クリックした座標を保持する
-@author miyashita64 mutotaka0426
+@author miyashita64 mutotaka0426 kawanoichi
 @note 参考: https://techacademy.jp/magazine/51035
 @note 参考:
     - [【Python】Tkinterによる画像表示をわかりやすく解説](https://onl.bz/5Bwmt1b)

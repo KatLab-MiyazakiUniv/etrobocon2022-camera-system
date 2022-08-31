@@ -23,7 +23,7 @@ class CameraCalibration:
     MODE_AREA_XSIZE = 5
     MODE_AREA_YSIZE = 5
 
-    def __init__(self, read_path):
+    def __init__(self, read_path: str):
         """CameraCalibrationのコンストラクタ.
 
         Args:
@@ -34,7 +34,7 @@ class CameraCalibration:
         self.__color_changer = ColorChanger()
         self.__coord = CameraCoordinateCalibrator()
 
-    def camera_calibration_start(self):
+    def camera_calibration(self):
         """カメラキャリブレーションを行う関数."""
         # GUIから座標取得
         self.__coord.show_window(self.__img)
@@ -44,13 +44,14 @@ class CameraCalibration:
         # 6色変換
         self.__color_changer.change_color(self.__img, self.__save_path)
 
-        # 座標からカラーIDを取得
+        # カラーIDを格納する配列を宣言
         block_id_list = []
         base_id_list = []
         end_id = []
 
         # ブロック置き場
         for i, point in enumerate(self.__coord.block_point):
+            # 最頻値を求めてブロックの色を判定
             color_id = self.__color_changer.mode_color(point[0],
                                                        point[1],
                                                        CameraCalibration.MODE_AREA_XSIZE,
@@ -59,6 +60,7 @@ class CameraCalibration:
             print("ブロック置き場%d:%s" % (i, Color(color_id).name))
         # ベースサークル置き場
         for i, base in enumerate(self.__coord.base_circle):
+            # 最頻値を求めてブロックの色を判定
             color_id = self.__color_changer.mode_color(base[0],
                                                        base[1],
                                                        CameraCalibration.MODE_AREA_XSIZE,
@@ -66,6 +68,7 @@ class CameraCalibration:
             base_id_list.append(color_id)
             print("ベースサークル置き場%d:%s" % (i, Color(color_id).name))
         # 端点サークル置き場
+        # 最頻値を求めてブロックの色を判定
         color_id = self.__color_changer.mode_color(
             self.__coord.end_point[0][0], self.__coord.end_point[0][1],
             CameraCalibration.MODE_AREA_XSIZE, CameraCalibration.MODE_AREA_YSIZE)
@@ -100,6 +103,6 @@ if __name__ == "__main__":
     read_path = "test_image.png"
     save_path = "result_" + read_path
     camera_calibration = CameraCalibration(read_path)
-    camera_calibration.camera_calibration_start()
+    camera_calibration.camera_calibration()
     camera_calibration.make_game_info()
     print("CameraCalibration 終了")
