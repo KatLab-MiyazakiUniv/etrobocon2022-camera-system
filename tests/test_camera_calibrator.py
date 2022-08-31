@@ -1,6 +1,6 @@
-"""CameraCoordinateCalibratorクラスのテストコードを記述するモジュール.
+"""Camera_Calibrationクラスのテストコードを記述するモジュール.
 
-@author: mutotaka0426
+@author: kawanoichi
 """
 
 import unittest
@@ -14,7 +14,7 @@ from camera_system.camera_calibrator import CameraCalibration  # noqa
 
 class TestCameraCalibrator(unittest.TestCase):
     def test_constructor(self):
-        read_path = "course.png"
+        read_path = "test_image.png"
         cc = CameraCalibration(read_path)
         img = cv2.imread(read_path)
         save_path = "result_" + read_path

@@ -147,6 +147,7 @@ class CameraCoordinateCalibrator:
 
 
 if __name__ == "__main__":
+    img = cv2.imread("test_image.png")
     img = cv2.imread("course.png")
     coord = CameraCoordinateCalibrator()
     coord.show_window(img)

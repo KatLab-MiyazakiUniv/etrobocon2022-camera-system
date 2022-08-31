@@ -97,7 +97,8 @@ class ColorChanger:
 
 
 if __name__ == "__main__":
-    read_path = "course.png"
+    # read_path = "course.png"
+    read_path = "test_image.png"
     save_path = "result_" + read_path
     img = cv2.imread(read_path)
     # インスタンス化

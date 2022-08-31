@@ -4,8 +4,6 @@
 """
 
 import unittest
-import cv2
-
 from camera_system.camera_coordinate_calibrator import CameraCoordinateCalibrator
 
 
