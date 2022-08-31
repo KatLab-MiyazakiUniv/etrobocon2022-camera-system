@@ -5,8 +5,8 @@
 """
 import cv2
 from typing import List
-from color_changer import ColorChanger
 from color_changer import Color
+from color_changer import ColorChanger
 from camera_coordinate_calibrator import CameraCoordinateCalibrator
 from game_info import GameInfo
 
