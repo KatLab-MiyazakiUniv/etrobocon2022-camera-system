@@ -4,8 +4,9 @@
 @author kawanoichi
 """
 import cv2
-from color_changer import ColorChanger
+from typing import List
 from color_changer import Color
+from color_changer import ColorChanger
 from camera_coordinate_calibrator import CameraCoordinateCalibrator
 from game_info import GameInfo
 
@@ -71,6 +72,24 @@ class CameraCalibration:
         GameInfo.block_id_list = block_id_list
         GameInfo.base_id_list = base_id_list
         GameInfo.end_id = end_id
+
+    @property
+    def img(self) -> List[int]:
+        """Getter.
+
+        Returns:
+            List[Tuple[int, int]]: コース画像
+        """
+        return self.__img
+
+    @property
+    def save_path(self) -> str:
+        """Getter.
+
+        Returns:
+            str: 6色変換後の保存パス
+        """
+        return self.__save_path
 
 
 if __name__ == "__main__":
