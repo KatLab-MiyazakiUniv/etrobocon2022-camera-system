@@ -3,9 +3,16 @@
 @author: kodama0720
 """
 
+
 import unittest
 
-from camera_system.game_info import GameInfo
+from pathlib import Path
+import sys
+sys.path.append(str(Path(__file__).parent.parent))
+sys.path.append(str(Path(__file__).parent.parent / "camera_system"))
+from camera_system.game_info import GameInfo  # noqa
+from camera_system.color_changer import Color  # noqa
+from camera_system.robot import Robot, Direction  # noqa
 
 
 class TestGameInfo(unittest.TestCase):
