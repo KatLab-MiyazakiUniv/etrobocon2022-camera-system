@@ -16,7 +16,7 @@ from camera_system.camera_calibrator import CameraCalibration  # noqa
 class TestCameraCalibrator(unittest.TestCase):
     def test_constructor(self):
         read_path = os.path.dirname(os.path.realpath(__file__)) + "/test_image.png"
-        save_path = "result_" + read_path
+        save_path = "color_" + read_path
         cc = CameraCalibration(read_path)
         actual_save_path = cc.save_path
 

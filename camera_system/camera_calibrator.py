@@ -29,11 +29,11 @@ class CameraCalibration:
             read_path: コース画像パス
         """
         self.__img = cv2.imread(read_path)
-        self.__save_path = "result_" + read_path  # 6色変換後の画像の保存パス
+        self.__save_path = "color_" + read_path  # 6色変換後の画像の保存パス
         self.__color_changer = ColorChanger()
         self.__coord = CameraCoordinateCalibrator(self.__img)
 
-    def camera_calibration(self) -> None:
+    def start_camera_calibration(self) -> None:
         """カメラキャリブレーションを行う関数."""
         # GUIから座標取得
         self.__coord.show_window()
@@ -102,6 +102,6 @@ if __name__ == "__main__":
     read_path = "test_image.png"
     actual_cource_img = cv2.imread(read_path)
     camera_calibration = CameraCalibration(read_path)
-    camera_calibration.camera_calibration()
+    camera_calibration.start_camera_calibration()
     camera_calibration.make_game_info(actual_cource_img)
     print("CameraCalibration 終了")
