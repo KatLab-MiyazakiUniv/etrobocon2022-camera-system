@@ -6,18 +6,21 @@
 import unittest
 import cv2
 import os
-from camera_system.color_changer import ColorChanger
+from pathlib import Path
+import sys
+sys.path.append(str(Path(__file__).parent.parent))
+sys.path.append(str(Path(__file__).parent.parent / "camera_system"))
+from camera_system.color_changer import ColorChanger  # noqa
 
 
 class TestColorChanger(unittest.TestCase):
-    def test_ColorChanger(self):
+    def test_color_changer(self):
         cc = ColorChanger()
-        read_path = os.getcwd() + "/test_image.png"
-        save_path = "result_" + read_path
+        read_path = os.path.dirname(os.path.realpath(__file__)) + "/test_image.png"
+        save_path = os.path.dirname(os.path.realpath(__file__)) + "/result_test_image.png"
         if os.path.exists(save_path):
             os.remove(save_path)
         img = cv2.imread(read_path)
-        print("img", img)
         # 6色変換のテスト
         cc.change_color(img, save_path)
         actual_exist = os.path.exists(save_path)

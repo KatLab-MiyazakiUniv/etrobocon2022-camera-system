@@ -5,9 +5,7 @@
 """
 import cv2
 import numpy as np
-# import scipy
 from enum import Enum
-import statistics
 
 
 class Color(Enum):
