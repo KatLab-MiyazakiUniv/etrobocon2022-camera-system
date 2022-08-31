@@ -35,15 +35,14 @@ class ColorChanger:
     __UPPER = np.array([[15, 255, 255], [180, 255, 255], [40, 255, 255],
                         [103, 255, 255], [150, 255, 255], [180, 70, 255]])
 
-    def __init__(self):
+    def __init__(self) -> None:
         """ColorChangerのコンストラクタ."""
         self.color_id_img = []  # カラーIDを格納する配列を宣言
 
-    def change_color(self, img: list, save_path: str) -> None:
+    def change_color(self, img: cv2.Mat, save_path: str) -> None:
         """画像を6色画像に変換する関数.
 
         Args:
-            read_path : 入力画像ファイルのパス
             save_path : 出力画像ファイルの保存パス
         """
         y_size = img.shape[0]  # 入力画像の縦サイズ
@@ -78,8 +77,8 @@ class ColorChanger:
         # 6色画像を保存
         cv2.imwrite(save_path, self.result)
 
-    def mode_color(self, coord_x: int, coord_y: int,
-                   mode_area_xsize: int, mode_area_ysize: int) -> int:
+    def calculate_mode_color(self, coord_x: int, coord_y: int,
+                             mode_area_xsize: int, mode_area_ysize: int) -> int:
         """ブロック周辺の色の最頻値を求める.
 
         Args:
@@ -91,10 +90,14 @@ class ColorChanger:
         # 座標周辺を取り出す
         mode_area = self.color_id_img[coord_y-(mode_area_ysize//2):coord_y+(mode_area_ysize//2)+1,
                                       coord_x-(mode_area_xsize//2):coord_x+(mode_area_xsize//2)+1]
-        # 配列から黒を除去
-        mode_area = np.delete(mode_area, np.argwhere(mode_area == 0))
-        # 配列から白を除去
-        mode_area = np.delete(mode_area, np.argwhere(mode_area == 5))
+        # 配列から黒と白を除去
+        mode_area = mode_area = mode_area[
+            np.where((mode_area != Color.BLACK.value) & (mode_area != Color.WHITE.value))]
+
+        # もし選択した座標周辺に白と黒しかなかった場合は赤を返す
+        if not mode_area.shape[0]:
+            return Color.RED.value
+
         # 配列に存在するIDの種類と頻度を求める
         uniqs, counts = np.unique(mode_area, return_counts=True)
         # 最頻値が複数の場合小さいほうを返す
@@ -110,6 +113,6 @@ if __name__ == "__main__":
     # 6色変換
     color_changer.change_color(img, save_path)
     # 最頻値取得　ボーナスブロック(211,432)
-    mode = color_changer.mode_color(211, 432, 5, 5)
+    mode = color_changer.calculate_mode_color(211, 432, 5, 5)
     print("mode", mode)
     print("color_changer 終了")
