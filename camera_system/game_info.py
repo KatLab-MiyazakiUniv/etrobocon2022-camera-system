@@ -5,8 +5,8 @@
 """
 
 from typing import List, Tuple, Dict
-from .robot import Robot, Direction
-from .color_changer import Color
+from robot import Robot, Direction
+from color_changer import Color
 
 
 class GameInfo:
