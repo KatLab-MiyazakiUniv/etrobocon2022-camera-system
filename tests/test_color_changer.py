@@ -12,11 +12,12 @@ from camera_system.color_changer import ColorChanger
 class TestColorChanger(unittest.TestCase):
     def test_ColorChanger(self):
         cc = ColorChanger()
-        read_path = "test_image.png"
+        read_path = os.getcwd() + "/test_image.png"
         save_path = "result_" + read_path
-        img = cv2.imread(read_path)
         if os.path.exists(save_path):
             os.remove(save_path)
+        img = cv2.imread(read_path)
+        print("img", img)
         # 6色変換のテスト
         cc.change_color(img, save_path)
         actual_exist = os.path.exists(save_path)

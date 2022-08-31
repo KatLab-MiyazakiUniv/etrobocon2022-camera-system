@@ -5,8 +5,9 @@
 """
 import cv2
 import numpy as np
-import scipy
+# import scipy
 from enum import Enum
+import statistics
 
 
 class Color(Enum):
@@ -79,25 +80,30 @@ class ColorChanger:
         # 6色画像を保存
         cv2.imwrite(save_path, self.result)
 
-    def mode_color(self, coord_x: int, coord_y: int, temp_xsize: int, temp_ysize: int) -> int:
+    def mode_color(self, coord_x: int, coord_y: int,
+                   mode_area_xsize: int, mode_area_ysize: int) -> int:
         """ブロック周辺の色の最頻値を求める.
 
         Args:
             coord_x : ブロックのx座標
             coord_y : ブロックのy座標
-            temp_xsize : 最頻値を求める範囲のxサイズ
-            temp_ysize : 最頻値を求める範囲のyサイズ
+            mode_area_xsize : 最頻値を求める範囲のxサイズ
+            mode_area_ysize : 最頻値を求める範囲のyサイズ
         """
         # 座標周辺を取り出す
-        temp = self.color_id_img[coord_y-(temp_ysize//2):coord_y+(temp_ysize//2)+1,
-                                 coord_x-(temp_xsize//2):coord_x+(temp_xsize//2)+1]
-        # 画像周辺の最頻値を求める(カラーID)
-        mode, _ = scipy.stats.mode(temp.reshape(temp_ysize*temp_xsize),  keepdims=True)
-        return int(mode[0])
+        mode_area = self.color_id_img[coord_y-(mode_area_ysize//2):coord_y+(mode_area_ysize//2)+1,
+                                      coord_x-(mode_area_xsize//2):coord_x+(mode_area_xsize//2)+1]
+        # 配列から黒を除去
+        mode_area = np.delete(mode_area, np.argwhere(mode_area == 0))
+        # 配列から白を除去
+        mode_area = np.delete(mode_area, np.argwhere(mode_area == 5))
+        # 配列に存在するIDの種類と頻度を求める
+        uniqs, counts = np.unique(mode_area, return_counts=True)
+        # 最頻値が複数の場合小さいほうを返す
+        return int(min(uniqs[counts == np.amax(counts)]))
 
 
 if __name__ == "__main__":
-    # read_path = "course.png"
     read_path = "test_image.png"
     save_path = "result_" + read_path
     img = cv2.imread(read_path)

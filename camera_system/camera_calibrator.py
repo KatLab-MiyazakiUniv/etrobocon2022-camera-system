@@ -15,13 +15,13 @@ class CameraCalibration:
     """ゲームエリア認識クラス.
 
     Attributes:
-        TEMP_XSIZE: 最頻値を求める範囲のxサイズ(奇数)
-        TEMP_YSIZE: 最頻値を求める範囲のyサイズ(奇数)
+        MODE_AREA_XSIZE: 最頻値を求める範囲のxサイズ(奇数)
+        MODE_AREA_YSIZE: 最頻値を求める範囲のyサイズ(奇数)
     """
 
     # テンプレートサイズ(奇数)
-    TEMP_XSIZE = 5
-    TEMP_YSIZE = 5
+    MODE_AREA_XSIZE = 5
+    MODE_AREA_YSIZE = 5
 
     def __init__(self, read_path):
         """CameraCalibrationのコンストラクタ.
@@ -51,20 +51,24 @@ class CameraCalibration:
 
         # ブロック置き場
         for i, point in enumerate(self.__coord.block_point):
-            color_id = self.__color_changer.mode_color(
-                point[0], point[1], CameraCalibration.TEMP_XSIZE, CameraCalibration.TEMP_YSIZE)
+            color_id = self.__color_changer.mode_color(point[0],
+                                                       point[1],
+                                                       CameraCalibration.MODE_AREA_XSIZE,
+                                                       CameraCalibration.MODE_AREA_YSIZE)
             block_id_list.append(color_id)
             print("ブロック置き場%d:%s" % (i, Color(color_id).name))
         # ベースサークル置き場
         for i, base in enumerate(self.__coord.base_circle):
-            color_id = self.__color_changer.mode_color(
-                base[0], base[1], CameraCalibration.TEMP_XSIZE, CameraCalibration.TEMP_YSIZE)
+            color_id = self.__color_changer.mode_color(base[0],
+                                                       base[1],
+                                                       CameraCalibration.MODE_AREA_XSIZE,
+                                                       CameraCalibration.MODE_AREA_YSIZE)
             base_id_list.append(color_id)
             print("ベースサークル置き場%d:%s" % (i, Color(color_id).name))
         # 端点サークル置き場
         color_id = self.__color_changer.mode_color(
             self.__coord.end_point[0][0], self.__coord.end_point[0][1],
-            CameraCalibration.TEMP_XSIZE, CameraCalibration.TEMP_YSIZE)
+            CameraCalibration.MODE_AREA_XSIZE, CameraCalibration.MODE_AREA_YSIZE)
         end_id.append(color_id)
         print("ボーナスブロック置き場%d:%s" % (i, Color(color_id).name))
 
@@ -93,7 +97,7 @@ class CameraCalibration:
 
 
 if __name__ == "__main__":
-    read_path = "course.png"
+    read_path = "test_image.png"
     save_path = "result_" + read_path
     camera_calibration = CameraCalibration(read_path)
     camera_calibration.camera_calibration_start()
