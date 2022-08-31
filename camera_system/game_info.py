@@ -31,7 +31,7 @@ class GameInfo:
         (0, 0): -1, (0, 1): -1, (0, 2): -1, (0, 3): -1, (0, 4): -1, (0, 5): -1, (0, 6): -1,
         (1, 0): -1, (1, 1): 0,  (1, 2): -1, (1, 3): 1,  (1, 4): -1, (1, 5): 2,  (1, 6): -1,
         (2, 0): -1, (2, 1): -1, (2, 2): -1, (2, 3): -1, (2, 4): -1, (2, 5): -1, (2, 6): -1,
-        (3, 0): -1, (3, 1): 3,  (3, 2): -1, (3, 3): -1,  (3, 4): -1, (3, 5): 4, (3, 6): -1,
+        (3, 0): -1, (3, 1): 3,  (3, 2): -1, (3, 3): -1, (3, 4): -1, (3, 5): 4,  (3, 6): -1,
         (4, 0): -1, (4, 1): -1, (4, 2): -1, (4, 3): -1, (4, 4): -1, (4, 5): -1, (4, 6): -1,
         (5, 0): -1, (5, 1): 5,  (5, 2): -1, (5, 3): 6,  (5, 4): -1, (5, 5): 7,  (5, 6): -1,
         (6, 0): -1, (6, 1): -1, (6, 2): -1, (6, 3): -1, (6, 4): -1, (6, 5): -1, (6, 6): -1,
@@ -50,7 +50,7 @@ class GameInfo:
             color: 運搬するブロックの色
 
         Returns:
-            List[Tuple[int, int]]: 候補ノードの座標リスト
+            List[Tuple(int, int)]: 候補ノードの座標リスト
         """
         cand_list = []
 
@@ -73,11 +73,11 @@ class GameInfo:
 
         return cand_list
 
-    def get_no_transported_block(self):  # -> List[List[int, int]]: Type Hintを書くとエラーになる
+    def get_no_transported_block(self) -> List[Tuple[int, int]]:
         """運搬していないブロックがあるブロック置き場を取得する関数.
 
         Returns:
-            List[List(int, int)]: 運搬していないブロックがあるブロック置き場の座標リスト
+            List[Tuple(int, int)]: 運搬していないブロックがあるブロック置き場の座標リスト
         """
         no_trans_block_list = []  # 候補ノードの座標リストを格納する
 
@@ -88,47 +88,47 @@ class GameInfo:
 
             if block_id != -1:  # ブロックがない座標を省く
                 if x % 2 != 0 and y % 2 != 0:  # xとyが奇数ならば運搬していないブロックと判定
-                    no_trans_block_list.append([x, y])
+                    no_trans_block_list.append((x, y))
 
         return no_trans_block_list
 
-    def get_no_entry_coordinate(self, robot):  # -> List[List[int, int]]: Type Hintを書くとエラーになる
+    def get_no_entry_coordinate(self, robot) -> List[Tuple[int, int]]:
         """走行禁止座標を取得する関数.
 
         Args:
             robot: 仮想走行体
 
         Returns:
-            List[Tuple[int, int]]: 走行禁止座標の座標リスト
+            List[Tuple(int, int)]: 走行禁止座標の座標リスト
         """
         x = robot.coord[0]
         y = robot.coord[1]
         no_entry_list = []
 
         if (x+1, y) in GameInfo.node_dict.keys() and GameInfo.node_dict[x+1, y] != -1:  # 東にブロック
-            no_entry_list.append([x+1, y])  # ブロックのある座標
+            no_entry_list.append((x+1, y))  # ブロックのある座標
             if (x+1, y-1) in GameInfo.node_dict.keys():
-                no_entry_list.append([x+1, y-1])  # ブロックのある座標の北の座標
+                no_entry_list.append((x+1, y-1))  # ブロックのある座標の北の座標
             if (x+1, y+1) in GameInfo.node_dict.keys():
-                no_entry_list.append([x+1, y+1])  # ブロックのある座標の南の座標
+                no_entry_list.append((x+1, y+1))  # ブロックのある座標の南の座標
         if (x, y+1) in GameInfo.node_dict.keys() and GameInfo.node_dict[x, y+1] != -1:  # 南にブロック
-            no_entry_list.append([x, y+1])  # ブロックのある座標
+            no_entry_list.append((x, y+1))  # ブロックのある座標
             if (x-1, y+1) in GameInfo.node_dict.keys():
-                no_entry_list.append([x-1, y+1])  # ブロックのある座標の西の座標
+                no_entry_list.append((x-1, y+1))  # ブロックのある座標の西の座標
             if (x-1, y+1) in GameInfo.node_dict.keys():
-                no_entry_list.append([x+1, y+1])  # ブロックのある座標の東の座標
+                no_entry_list.append((x+1, y+1))  # ブロックのある座標の東の座標
         if (x-1, y) in GameInfo.node_dict.keys() and GameInfo.node_dict[x-1, y] != -1:  # 西にブロック
-            no_entry_list.append([x-1, y])  # ブロックのある座標
+            no_entry_list.append((x-1, y))  # ブロックのある座標
             if (x-1, y-1) in GameInfo.node_dict.keys():
-                no_entry_list.append([x-1, y-1])  # ブロックのある座標の北の座標
+                no_entry_list.append((x-1, y-1))  # ブロックのある座標の北の座標
             if (x-1, y+1) in GameInfo.node_dict.keys():
-                no_entry_list.append([x-1, y+1])  # ブロックのある座標の南の座標
+                no_entry_list.append((x-1, y+1))  # ブロックのある座標の南の座標
         if (x, y-1) in GameInfo.node_dict.keys() and GameInfo.node_dict[x, y-1] != -1:  # 北にブロック
-            no_entry_list.append([x, y-1])  # ブロックのある座標
+            no_entry_list.append((x, y-1))  # ブロックのある座標
             if (x-1, y-1) in GameInfo.node_dict.keys():
-                no_entry_list.append([x-1, y-1])  # ブロックのある座標の西の座標
-            if [x+1, y-1] in GameInfo.node_dict.keys():
-                no_entry_list.append([x+1, y-1])  # ブロックのある座標の東の座標
+                no_entry_list.append((x-1, y-1))  # ブロックのある座標の西の座標
+            if (x+1, y-1) in GameInfo.node_dict.keys():
+                no_entry_list.append((x+1, y-1))  # ブロックのある座標の東の座標
 
         return no_entry_list
 
@@ -179,7 +179,7 @@ if __name__ == "__main__":
     robo = Robot()
 
     robo.coord = [2, 1]
-    robo.direct = Direction.S.value
+    robo.direct = Direction.N.value
     color = Color.RED.value
 
     info.block_id_list = [Color.RED.value, Color.RED.value, Color.YELLOW.value, Color.YELLOW.value,
