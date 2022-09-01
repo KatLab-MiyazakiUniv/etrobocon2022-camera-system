@@ -29,7 +29,7 @@ class Client:
             sock = socket.socket(socket.AF_INET)
 
             try:
-                # サーバーに接続する
+                # サーバに接続する
                 sock.connect((self.server_ip, self.server_port))
                 # レスポンスを受け取る
                 response = sock.recv(256).decode()
@@ -37,9 +37,9 @@ class Client:
                     print("Received '%s' Signal." % (response))
                 if response == "Start":
                     break
-            except ConnectionRefusedError:
+            except ConnectionRefusedError as e:
                 # 接続できなかった場合
-                print("Unconnected.")
+                print(e)
 
             # ソケットを削除する
             sock.close()
