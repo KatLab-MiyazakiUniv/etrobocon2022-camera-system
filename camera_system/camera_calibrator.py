@@ -28,20 +28,20 @@ class CameraCalibrator:
         Args:
             read_path: コース画像パス
         """
-        self.__img = cv2.imread(read_path)
+        self.__calibration_img = cv2.imread(read_path)
         self.__save_path = "color_" + read_path  # 6色変換後の画像の保存パス
         self.__color_changer = ColorChanger()
-        self.__coord = CameraCoordinateCalibrator(self.__img)
+        self.__coord = CameraCoordinateCalibrator(self.__calibration_img)
 
     def start_camera_calibration(self) -> None:
         """カメラキャリブレーションを行う関数."""
         # GUIから座標取得
         self.__coord.show_window()
 
-    def make_game_area_info(self, actual_course_img: cv2.Mat) -> None:
+    def make_game_area_info(self, game_area_img: cv2.Mat) -> None:
         """コース情報作成を行う関数."""
         # 6色変換
-        self.__color_changer.change_color(actual_course_img, self.__save_path)
+        self.__color_changer.change_color(game_area_img, self.__save_path)
 
         # カラーIDを格納する配列を宣言
         block_id_list = []
@@ -86,7 +86,7 @@ class CameraCalibrator:
         Returns:
             List[Tuple[int, int]]: コース画像
         """
-        return self.__img
+        return self.__calibration_img
 
     @property
     def save_path(self) -> str:
@@ -100,8 +100,8 @@ class CameraCalibrator:
 
 if __name__ == "__main__":
     read_path = "test_image.png"
-    actual_course_img = cv2.imread(read_path)
+    game_area_img = cv2.imread(read_path)
     camera_calibration = CameraCalibrator(read_path)
     camera_calibration.start_camera_calibration()
-    camera_calibration.make_game_area_info(actual_course_img)
+    camera_calibration.make_game_area_info(game_area_img)
     print("CameraCalibrator 終了")

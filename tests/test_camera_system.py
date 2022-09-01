@@ -2,15 +2,18 @@
 
 @author: Takahiro55555
 """
+import unittest
+from unittest import mock
 import cv2
 import os
-import unittest
 
 from camera_system.camera_system import CameraSystem
 
 
 class TestCameraSystem(unittest.TestCase):
-    def test_start(self):
+    @mock.patch('camera_calibrator.CameraCalibrator.start_camera_calibration')
+    @mock.patch('camera_calibrator.CameraCalibrator.make_game_area_info')
+    def test_start(self, make_game_area_info_mock, start_camera_calibration_mock):
         read_path = os.path.dirname(os.path.realpath(__file__)) + "/test_image.png"
         img = cv2.imread(read_path)
         cs = CameraSystem()
