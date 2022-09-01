@@ -32,3 +32,14 @@ class CompositeGameMotion:
         for game_motion in self.__game_motion_list:
             commands += game_motion.generate_command()
         return commands
+
+    def get_cost(self) -> float:
+        """ゲーム動作のリストからコストを計算する.
+
+        Returns:
+            float: 総コスト
+        """
+        total_cost = 0
+        for game_motion in self.__game_motion_list:
+            total_cost += game_motion.get_cost()
+        return total_cost

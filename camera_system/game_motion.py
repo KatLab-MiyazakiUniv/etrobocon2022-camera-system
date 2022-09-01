@@ -37,7 +37,7 @@ class Edge:
 class GameMotion(metaclass=ABCMeta):
     """ゲーム動作の親クラス.
 
-    ttributes:
+    attributes:
         MAX_TIME: 最大計測時間
         ROTATION_PWM: 回頭のPWM値
         ROTATION_TIME: 回頭の動作時間(45度単位で0~360度)
