@@ -4,6 +4,8 @@
 @author: Takahiro55555 miyashita64
 """
 
+from client import Client
+
 
 class CameraSystem:
     """カメラシステムクラス."""
@@ -18,11 +20,12 @@ class CameraSystem:
 
     def start(self) -> None:
         """ゲーム攻略を計画する."""
-        # ToDo: 通信を確立する(通信).
-
         # ToDo: キャリブレーションする(ゲームエリア情報).
 
-        # ToDo: 開始合図を受け取るまで待機する(通信).
+        # 通信を開始する.
+        client = Client("127.0.0.1", 8080)
+        # 開始合図を受け取るまで待機する.
+        client.wait_for_start_signal()
 
         # ToDo: ゲームエリア情報を生成する(ゲームエリア情報).
 
