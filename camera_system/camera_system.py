@@ -27,7 +27,7 @@ class CameraSystem:
         # GUIから座標取得
         camera_calibrator.start_camera_calibration()
         # コース情報の作成
-        camera_calibrator.make_game_info(actual_course_img)
+        camera_calibrator.make_game_area_info(actual_course_img)
 
         # ToDo: 開始合図を受け取るまで待機する(通信).
 
