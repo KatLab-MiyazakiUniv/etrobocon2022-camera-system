@@ -2,7 +2,8 @@
 
 @author: Takahiro55555
 """
-
+import cv2
+import os
 import unittest
 
 from camera_system.camera_system import CameraSystem
@@ -10,8 +11,10 @@ from camera_system.camera_system import CameraSystem
 
 class TestCameraSystem(unittest.TestCase):
     def test_start(self):
+        read_path = os.path.dirname(os.path.realpath(__file__)) + "/test_image.png"
+        img = cv2.imread(read_path)
         cs = CameraSystem()
-        cs.start()
+        cs.start(read_path, img)
 
     def test_is_left_course_default_value(self):
         cs = CameraSystem()

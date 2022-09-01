@@ -10,7 +10,7 @@ from camera_coordinate_calibrator import CameraCoordinateCalibrator
 from game_info import GameInfo
 
 
-class CameraCalibration:
+class CameraCalibrator:
     """ゲームエリア認識クラス.
 
     Attributes:
@@ -38,10 +38,10 @@ class CameraCalibration:
         # GUIから座標取得
         self.__coord.show_window()
 
-    def make_game_info(self, actual_cource_img: cv2.Mat) -> None:
+    def make_game_info(self, actual_course_img: cv2.Mat) -> None:
         """コース情報作成を行う関数."""
         # 6色変換
-        self.__color_changer.change_color(actual_cource_img, self.__save_path)
+        self.__color_changer.change_color(actual_course_img, self.__save_path)
 
         # カラーIDを格納する配列を宣言
         block_id_list = []
@@ -53,8 +53,8 @@ class CameraCalibration:
             # 最頻値を求めてブロックの色を判定
             color_id = self.__color_changer.calculate_mode_color(point[0],
                                                                  point[1],
-                                                                 CameraCalibration.MODE_AREA_XSIZE,
-                                                                 CameraCalibration.MODE_AREA_YSIZE)
+                                                                 CameraCalibrator.MODE_AREA_XSIZE,
+                                                                 CameraCalibrator.MODE_AREA_YSIZE)
             block_id_list.append(color_id)
             print("ブロック置き場%d:%s" % (i, Color(color_id).name))
         # ベースサークル置き場
@@ -62,15 +62,15 @@ class CameraCalibration:
             # 最頻値を求めてブロックの色を判定
             color_id = self.__color_changer.calculate_mode_color(base[0],
                                                                  base[1],
-                                                                 CameraCalibration.MODE_AREA_XSIZE,
-                                                                 CameraCalibration.MODE_AREA_YSIZE)
+                                                                 CameraCalibrator.MODE_AREA_XSIZE,
+                                                                 CameraCalibrator.MODE_AREA_YSIZE)
             base_id_list.append(color_id)
             print("ベースサークル置き場%d:%s" % (i, Color(color_id).name))
         # 端点サークル置き場
         # 最頻値を求めてブロックの色を判定
         color_id = self.__color_changer.calculate_mode_color(
             self.__coord.end_point[0][0], self.__coord.end_point[0][1],
-            CameraCalibration.MODE_AREA_XSIZE, CameraCalibration.MODE_AREA_YSIZE)
+            CameraCalibrator.MODE_AREA_XSIZE, CameraCalibrator.MODE_AREA_YSIZE)
         end_id.append(color_id)
         print("ボーナスブロック置き場%d:%s" % (i, Color(color_id).name))
 
@@ -100,8 +100,8 @@ class CameraCalibration:
 
 if __name__ == "__main__":
     read_path = "test_image.png"
-    actual_cource_img = cv2.imread(read_path)
-    camera_calibration = CameraCalibration(read_path)
+    actual_course_img = cv2.imread(read_path)
+    camera_calibration = CameraCalibrator(read_path)
     camera_calibration.start_camera_calibration()
-    camera_calibration.make_game_info(actual_cource_img)
-    print("CameraCalibration 終了")
+    camera_calibration.make_game_info(actual_course_img)
+    print("CameraCalibrator 終了")

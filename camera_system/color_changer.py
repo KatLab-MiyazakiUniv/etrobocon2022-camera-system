@@ -113,6 +113,7 @@ if __name__ == "__main__":
     # 6色変換
     color_changer.change_color(img, save_path)
     # 最頻値取得　ボーナスブロック(211,432)
-    mode = color_changer.calculate_mode_color(211, 432, 5, 5)
+    # mode = color_changer.calculate_mode_color(211, 432, 5, 5)
+    mode = color_changer.calculate_mode_color(0, 0, 5, 5)
     print("mode", mode)
     print("color_changer 終了")
