@@ -35,7 +35,7 @@ class CameraSystem:
 
         # コマンドファイルを生成する
         file_name = "GameAreaLeft.csv" if self.is_left_course else "GameAreaRight.csv"  # ファイル名をセット
-        f = open(file_name, 'w')
+        f = open("command_files/" + file_name, 'w')
         f.write(game_motion_list.generate_command())  # ゲーム動作リストからコマンドを生成して書き込む
         f.close()
         print("Create %s\n" % file_name)
