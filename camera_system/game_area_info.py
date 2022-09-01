@@ -120,7 +120,7 @@ class GameAreaInfo:
         """運搬していないブロックがあるブロック置き場を取得する関数.
 
         Returns:
-            List[Node]: 運搬していないブロックがあるブロック置き場の座標リスト
+            List[Node]: 運搬していないブロックがあるブロック置き場のノード
         """
         no_trans_block_list = []
 
@@ -259,7 +259,7 @@ class GameAreaInfo:
             Direction.S.value for node in GameAreaInfo.node_list
             if node.block_id != -1 and node.coord == block_coord]
 
-        # 回頭禁止方向が2つ以上ある場合、それらの間にある方向も回頭禁止方向
+        # 回頭禁止方向が2つ以上ある場合、それらの間にある方位も回頭禁止方向
         if len(no_rotate_list) >= 2:
             if min(no_rotate_list) < direct and direct < max(no_rotate_list):
                 for i in range(min(no_rotate_list)):
