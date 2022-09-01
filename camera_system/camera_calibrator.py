@@ -38,7 +38,7 @@ class CameraCalibrator:
         # GUIから座標取得
         self.__coord.show_window()
 
-    def make_game_info(self, actual_course_img: cv2.Mat) -> None:
+    def make_game_area_info(self, actual_course_img: cv2.Mat) -> None:
         """コース情報作成を行う関数."""
         # 6色変換
         self.__color_changer.change_color(actual_course_img, self.__save_path)
@@ -103,5 +103,5 @@ if __name__ == "__main__":
     actual_course_img = cv2.imread(read_path)
     camera_calibration = CameraCalibrator(read_path)
     camera_calibration.start_camera_calibration()
-    camera_calibration.make_game_info(actual_course_img)
+    camera_calibration.make_game_area_info(actual_course_img)
     print("CameraCalibrator 終了")
