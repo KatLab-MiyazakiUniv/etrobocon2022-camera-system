@@ -91,7 +91,7 @@ class CameraCalibrator:
         """Getter.
 
         Returns:
-            List[Tuple[int, int]]: コース画像
+            List[Tuple[int, int]]: キャリブレーション画像
         """
         return self.__calibration_img
 
