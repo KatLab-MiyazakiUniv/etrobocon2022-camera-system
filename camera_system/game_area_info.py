@@ -15,9 +15,6 @@ class GameAreaInfo:
     """ゲームエリア情報を保持するクラス.
 
     Attributes:
-        __cross ノードが交点
-        __middle ノードが中点
-        __block_storage ノードがブロック置き場
         block_id_list (List[int]): ブロック(色ID)
         base_id_list (List[int]): ベースブロック(色ID)
         end_id (List[int]): ボーナスブロック(色ID)
@@ -29,59 +26,52 @@ class GameAreaInfo:
         __north_cand_list = (List[Node]): 北の候補ノードになりうる座標リスト
     """
 
-    __cross = NodeType.CROSS.value
-    __middle = NodeType.MIDDLE.value
-    __block_storage = NodeType.BLOCK.value
     block_id_list = []
     base_id_list = []
     end_id = []
     node_list = [
-        Node(-1, Coordinate(0, 0), __cross), Node(-1, Coordinate(1, 0), __middle),
-        Node(-1, Coordinate(2, 0), __cross), Node(-1, Coordinate(3, 0), __middle),
-        Node(-1, Coordinate(4, 0), __cross), Node(-1, Coordinate(5, 0), __middle),
-        Node(-1, Coordinate(6, 0), __cross),
-        Node(-1, Coordinate(0, 1), __cross), Node(0, Coordinate(1, 1), __block_storage),
-        Node(-1, Coordinate(2, 1), __cross), Node(1, Coordinate(3, 1), __block_storage),
-        Node(-1, Coordinate(4, 1), __cross), Node(2, Coordinate(5, 1), __block_storage),
-        Node(-1, Coordinate(6, 1), __cross),
-        Node(-1, Coordinate(0, 2), __cross), Node(-1, Coordinate(1, 2), __middle),
-        Node(-1, Coordinate(2, 2), __cross), Node(-1, Coordinate(3, 2), __middle),
-        Node(-1, Coordinate(4, 2), __cross), Node(-1, Coordinate(5, 2), __middle),
-        Node(-1, Coordinate(6, 2), __cross),
-        Node(-1, Coordinate(0, 3), __cross), Node(3, Coordinate(1, 3), __block_storage),
-        Node(-1, Coordinate(2, 3), __cross), Node(-1, Coordinate(3, 3), __middle),
-        Node(-1, Coordinate(4, 3), __cross), Node(4, Coordinate(5, 3), __block_storage),
-        Node(-1, Coordinate(6, 3), __cross),
-        Node(-1, Coordinate(0, 4), __cross), Node(-1, Coordinate(1, 4), __middle),
-        Node(-1, Coordinate(2, 4), __cross), Node(-1, Coordinate(3, 4), __middle),
-        Node(-1, Coordinate(4, 4), __cross), Node(-1, Coordinate(5, 4), __middle),
-        Node(-1, Coordinate(6, 4), __cross),
-        Node(-1, Coordinate(0, 5), __cross), Node(5, Coordinate(1, 5), __block_storage),
-        Node(-1, Coordinate(2, 5), __cross), Node(6, Coordinate(3, 5), __block_storage),
-        Node(-1, Coordinate(4, 5), __cross), Node(7, Coordinate(5, 5), __block_storage),
-        Node(-1, Coordinate(6, 5), __cross),
-        Node(-1, Coordinate(0, 6), __cross), Node(-1, Coordinate(1, 6), __middle),
-        Node(-1, Coordinate(2, 6), __cross), Node(-1, Coordinate(3, 6), __middle),
-        Node(-1, Coordinate(4, 6), __cross), Node(-1, Coordinate(5, 6), __middle),
-        Node(-1, Coordinate(6, 6), __cross),
+        Node(-1, Coordinate(0, 0)), Node(-1, Coordinate(1, 0)),
+        Node(-1, Coordinate(2, 0)), Node(-1, Coordinate(3, 0)),
+        Node(-1, Coordinate(4, 0)), Node(-1, Coordinate(5, 0)),
+        Node(-1, Coordinate(6, 0)),
+        Node(-1, Coordinate(0, 1)), Node(0, Coordinate(1, 1)),
+        Node(-1, Coordinate(2, 1)), Node(1, Coordinate(3, 1)),
+        Node(-1, Coordinate(4, 1)), Node(2, Coordinate(5, 1)),
+        Node(-1, Coordinate(6, 1)),
+        Node(-1, Coordinate(0, 2)), Node(-1, Coordinate(1, 2)),
+        Node(-1, Coordinate(2, 2)), Node(-1, Coordinate(3, 2)),
+        Node(-1, Coordinate(4, 2)), Node(-1, Coordinate(5, 2)),
+        Node(-1, Coordinate(6, 2)),
+        Node(-1, Coordinate(0, 3)), Node(3, Coordinate(1, 3)),
+        Node(-1, Coordinate(2, 3)), Node(-1, Coordinate(3, 3)),
+        Node(-1, Coordinate(4, 3)), Node(4, Coordinate(5, 3)),
+        Node(-1, Coordinate(6, 3)),
+        Node(-1, Coordinate(0, 4)), Node(-1, Coordinate(1, 4)),
+        Node(-1, Coordinate(2, 4)), Node(-1, Coordinate(3, 4)),
+        Node(-1, Coordinate(4, 4)), Node(-1, Coordinate(5, 4)),
+        Node(-1, Coordinate(6, 4)),
+        Node(-1, Coordinate(0, 5)), Node(5, Coordinate(1, 5)),
+        Node(-1, Coordinate(2, 5)), Node(6, Coordinate(3, 5)),
+        Node(-1, Coordinate(4, 5)), Node(7, Coordinate(5, 5)),
+        Node(-1, Coordinate(6, 5)),
+        Node(-1, Coordinate(0, 6)), Node(-1, Coordinate(1, 6)),
+        Node(-1, Coordinate(2, 6)), Node(-1, Coordinate(3, 6)),
+        Node(-1, Coordinate(4, 6)), Node(-1, Coordinate(5, 6)),
+        Node(-1, Coordinate(6, 6)),
     ]
     base_color_dict = {Color.RED.value: "東", Color.YELLOW.value: "南",
                        Color.GREEN.value: "西", Color.BLUE.value: "北"}
     __east_cand_list = [
-        Node(-1, Coordinate(6, 2), __cross), Node(-1, Coordinate(6, 3),
-                                                  __middle), Node(-1, Coordinate(6, 4), __cross)
+        Node(-1, Coordinate(6, 2)), Node(-1, Coordinate(6, 3)), Node(-1, Coordinate(6, 4))
     ]
     __south_cand_list = [
-        Node(-1, Coordinate(2, 6), __cross), Node(-1, Coordinate(3, 6),
-                                                  __middle), Node(-1, Coordinate(4, 6), __cross)
+        Node(-1, Coordinate(2, 6)), Node(-1, Coordinate(3, 6)), Node(-1, Coordinate(4, 6))
     ]
     __west_cand_list = [
-        Node(-1, Coordinate(0, 2), __cross), Node(-1, Coordinate(0, 3),
-                                                  __middle), Node(-1, Coordinate(0, 4), __cross)
+        Node(-1, Coordinate(0, 2)), Node(-1, Coordinate(0, 3)), Node(-1, Coordinate(0, 4))
     ]
     __north_cand_list = [
-        Node(-1, Coordinate(2, 0), __cross), Node(-1, Coordinate(3, 0),
-                                                  __middle), Node(-1, Coordinate(4, 0), __cross)
+        Node(-1, Coordinate(2, 0)), Node(-1, Coordinate(3, 0)), Node(-1, Coordinate(4, 0))
     ]
 
     @staticmethod
@@ -127,13 +117,13 @@ class GameAreaInfo:
         # ブロックがブロック置き場にあるノードをリストに格納する
         for node in GameAreaInfo.node_list:
             if node.block_id != -1:  # ブロックがあるノード
-                if node.node_type == GameAreaInfo.__block_storage:  # ブロック置き場のノード
+                if node.node_type == NodeType.BLOCK.value:  # ブロック置き場のノード
                     no_trans_block_list.append(node)
 
         return no_trans_block_list
 
     @staticmethod
-    def get_no_entry_coordinate(robot) -> List[Node]:
+    def get_no_entry_coordinate(robot) -> List[Coordinate]:
         """走行禁止座標を取得する関数.
 
         Args:
@@ -220,14 +210,14 @@ class GameAreaInfo:
         return no_entry_list
 
     @staticmethod
-    def get_no_rotate_direction(robot) -> List[int]:
+    def get_no_rotate_direction(robot) -> List[Direction]:
         """回頭禁止方向を取得する関数.
 
         Args:
             robot: 仮想走行体
 
         Returns:
-            List[int]: 回頭禁止方向の方位リスト
+            List[Direction]: 回頭禁止方向の方位リスト
         """
         coord = robot.coord
         direct = robot.direct
@@ -295,7 +285,8 @@ if __name__ == "__main__":
     print("候補ノード")
     print(GameAreaInfo.get_candidate_node(color))
     print("未運搬のブロックがあるブロック置き場")
-    print(GameAreaInfo.get_no_transported_block())
+    for block in GameAreaInfo.get_no_transported_block():
+        print(block.block_id, block.coord)
     print("走行禁止座標")
     print(GameAreaInfo.get_no_entry_coordinate(robo))
     print("回頭禁止方向")
