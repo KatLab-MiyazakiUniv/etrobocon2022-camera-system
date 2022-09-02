@@ -26,7 +26,7 @@ class CameraCalibrator:
         """CameraCalibrationのコンストラクタ.
 
         Args:
-            camera_id (int): 撮影カメラID
+            camera_id (int): 撮影カメラ番号
             cali_img_save_path (str): キャリブレーション用画像保存パス
         """
         # キャリブレーション用画像の取得
