@@ -5,10 +5,11 @@
 """
 import cv2
 from typing import List
+import argparse
 from color_changer import Color, ColorChanger
 from camera_coordinate_calibrator import CameraCoordinateCalibrator
-from game_info import GameInfo
 from camera_interface import CameraInterface
+from game_area_info import GameAreaInfo
 
 
 class CameraCalibrator:
@@ -82,9 +83,9 @@ class CameraCalibrator:
         print("ボーナスブロック置き場%d:%s" % (i, Color(color_id).name))
 
         # ゲームエリア情報を作成
-        GameInfo.block_id_list = block_id_list
-        GameInfo.base_id_list = base_id_list
-        GameInfo.end_id = end_id
+        GameAreaInfo.block_id_list = block_id_list
+        GameAreaInfo.base_id_list = base_id_list
+        GameAreaInfo.end_id = end_id
 
     @property
     def img(self) -> List[int]:
@@ -106,7 +107,22 @@ class CameraCalibrator:
 
 
 if __name__ == "__main__":
-    camera_calibration = CameraCalibrator(camera_id=0)
+    parser = argparse.ArgumentParser(description="使用例\n"
+                                                 " 接続されているカメラIDを表示する\n"
+                                                 " $ python camera_calibrator.py\n"
+                                                 " カメラキャリブレーションを開始する\n"
+                                                 " $ python camera_calibrator.py -id 0 (0はカメラID)",
+                                     formatter_class=argparse.RawTextHelpFormatter)
+
+    parser.add_argument("-id", "--camera-id", type=int, help="カメラキャリブレーションを開始する")
+    args = parser.parse_args()
+
+    # カメラIDがない時、接続されているカメラを取得し、表示する
+    if args.camera_id is None:
+        CameraInterface.check_camera_connection()
+        exit(0)
+
+    camera_calibration = CameraCalibrator(camera_id=args.camera_id)
     camera_calibration.start_camera_calibration()
     camera_calibration.make_game_area_info()
     print("CameraCalibrator 終了")

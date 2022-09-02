@@ -5,10 +5,23 @@
 """
 
 from enum import Enum
+from dataclasses import dataclass
+from coordinate import Coordinate
 
 
 class Direction(Enum):
-    """方位の列挙体."""
+    """方位の列挙体.
+
+    Attributes:
+        N: 北
+        NE: 北東
+        E = 東
+        SE = 南東
+        S = 南
+        SW = 南西
+        W = 西
+        NW = 北西
+    """
 
     N = 0
     NE = 1
@@ -20,8 +33,14 @@ class Direction(Enum):
     NW = 7
 
 
+@dataclass
 class Robot:
-    """仮想走行体クラス."""
+    """仮想走行体のデータクラス.
 
-    coord = [0, 0]
-    direct = Direction.N.value
+    Attributes:
+        coord: 座標
+        direct: 方位
+    """
+
+    coord: Coordinate
+    direct: Direction
