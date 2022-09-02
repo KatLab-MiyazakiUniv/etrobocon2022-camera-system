@@ -5,7 +5,6 @@
 """
 
 from enum import Enum
-from dataclasses import dataclass
 from coordinate import Coordinate
 
 
@@ -23,16 +22,22 @@ class NodeType(Enum):
     BLOCK = 2
 
 
-@dataclass
 class Node:
-    """ノードのデータクラス.
+    """ノードを保持するクラス."""
 
-    Attributes:
-        block_id: ブロックID
-        coord: 座標
-        node_type: ノードの型 (0:交点 1:中点 2:ブロック置き場)
-    """
+    def __init__(self, block_id: int, coord: Coordinate) -> None:
+        """Nodeのコンストラクタ.
 
-    block_id: int
-    coord: Coordinate
-    node_type: NodeType
+        Args:
+            block_id(int): ブロックID
+            coord(Coordinate): 座標
+            node_type(NodeType): ノードの型
+        """
+        self.block_id = block_id
+        self.coord = coord
+        if coord.x % 2 != 0 and coord.y % 2 != 0:
+            self.node_type = NodeType.BLOCK.value
+        elif coord.x % 2 == 0 and coord.y % 2 == 0:
+            self.node_type = NodeType.CROSS.value
+        else:
+            self.node_type = NodeType.MIDDLE.value

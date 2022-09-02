@@ -34,10 +34,10 @@ class TestGameAreaInfo(unittest.TestCase):
         middle = NodeType.MIDDLE.value
         block_storage = NodeType.BLOCK.value
         expected = [
-            Node(0, Coordinate(1, 1), block_storage), Node(1, Coordinate(3, 1), block_storage),
-            Node(2, Coordinate(5, 1), block_storage), Node(3, Coordinate(1, 3), block_storage),
-            Node(4, Coordinate(5, 3), block_storage), Node(5, Coordinate(1, 5), block_storage),
-            Node(6, Coordinate(3, 5), block_storage), Node(7, Coordinate(5, 5), block_storage)
+            Node(0, Coordinate(1, 1)), Node(1, Coordinate(3, 1)),
+            Node(2, Coordinate(5, 1)), Node(3, Coordinate(1, 3)),
+            Node(4, Coordinate(5, 3)), Node(5, Coordinate(1, 5)),
+            Node(6, Coordinate(3, 5)), Node(7, Coordinate(5, 5))
         ]
         actual = GameAreaInfo.get_no_transported_block()
         for i in range(len(actual)):
