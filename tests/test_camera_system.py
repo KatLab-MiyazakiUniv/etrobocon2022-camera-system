@@ -5,11 +5,12 @@
 
 import unittest
 from unittest import mock
+
 from pathlib import Path
 import sys
 sys.path.append(str(Path(__file__).parent.parent))
 sys.path.append(str(Path(__file__).parent.parent / "camera_system"))
-from camera_system.camera_system import CameraSystem    # noqa
+from camera_system.camera_system import CameraSystem  # noqa
 
 
 class TestCameraSystem(unittest.TestCase):
