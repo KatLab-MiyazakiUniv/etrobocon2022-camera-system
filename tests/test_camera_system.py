@@ -4,8 +4,6 @@
 """
 import unittest
 from unittest import mock
-import cv2
-import os
 
 from camera_system.camera_system import CameraSystem
 
