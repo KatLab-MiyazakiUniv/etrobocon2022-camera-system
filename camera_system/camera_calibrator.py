@@ -42,13 +42,13 @@ class CameraCalibrator:
         # GUIから座標取得
         self.__coord.show_window()
 
-    def make_game_area_info(self, color_save_path="game_course.png") -> None:
+    def make_game_area_info(self, game_save_path="game_course.png") -> None:
         """ゲームエリア情報作成を行う関数."""
         # ゲームエリア画像を取得
-        game_area_img = self.__camera_interface.capture_frame(color_save_path)
+        game_area_img = self.__camera_interface.capture_frame(game_save_path)
         # 6色変換
-        game_save_path = "color_" + color_save_path
-        self.__color_changer.change_color(game_area_img, game_save_path)
+        color_save_path = "color_" + game_save_path
+        self.__color_changer.change_color(game_area_img, color_save_path)
 
         # カラーIDを格納する配列を宣言
         block_id_list = []

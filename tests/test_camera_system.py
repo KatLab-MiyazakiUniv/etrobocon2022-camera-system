@@ -1,6 +1,6 @@
 """CameraSystemクラスのテストコードを記述するモジュール.
 
-@author: Takahiro55555
+@author: Takahiro55555 kawanoichi
 """
 import unittest
 from unittest import mock

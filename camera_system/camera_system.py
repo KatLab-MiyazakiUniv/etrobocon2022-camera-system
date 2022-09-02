@@ -1,7 +1,7 @@
 """カメラシステムモジュール.
 
 カメラシステムにおいて、一番最初に呼ばれるクラスを定義している
-@author: Takahiro55555 miyashita64
+@author: Takahiro55555 miyashita64 kawanoichi
 """
 from camera_calibrator import CameraCalibrator
 

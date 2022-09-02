@@ -1,6 +1,6 @@
 """CameraCoordinateCalibratorクラスのテストコードを記述するモジュール.
 
-@author: mutotaka0426
+@author: mutotaka0426 kawanoichi
 """
 
 import unittest
