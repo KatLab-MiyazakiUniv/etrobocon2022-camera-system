@@ -21,6 +21,7 @@ class CameraSystem:
         """ゲーム攻略を計画する."""
         # ToDo: 通信を確立する(通信).
 
+        # カメラキャリブレーションを開始する
         camera_calibrator = CameraCalibrator(camera_id)
         # GUIから座標取得
         camera_calibrator.start_camera_calibration()
