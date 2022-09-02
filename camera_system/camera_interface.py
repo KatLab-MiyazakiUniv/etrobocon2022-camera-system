@@ -29,8 +29,15 @@ class CameraInterface:
         # 画像取得するカメラを選択する（引数はカメラ番号）
         self.camera = cv2.VideoCapture(camera_id)
 
-    def capture_frame(self, save_path: str) -> None:
-        """カメラから画像を取得、保存."""
+    def capture_frame(self, save_path: str) -> cv2.Mat:
+        """カメラから画像を取得、保存.
+
+        Args:
+            save_path (str): 画像保存のパス
+
+        Returns:
+            cv2.Mat: 画像データ
+        """
         # successed: 画像が取得が成功したか(True or False)
         # frame: 画像
         successed, frame = self.camera.read()

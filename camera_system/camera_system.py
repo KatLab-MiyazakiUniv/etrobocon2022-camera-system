@@ -18,20 +18,21 @@ class CameraSystem:
         self.__set_is_left_course(is_left_course)
 
     def start(self, camera_id=1) -> None:
-        """ゲーム攻略を計画する."""
+        """ゲーム攻略を計画する.
+
+        Args:
+            camera_id (int): カメラ番号
+        """
         # ToDo: 通信を確立する(通信).
 
         # カメラキャリブレーションを開始する
         camera_calibrator = CameraCalibrator(camera_id)
         # GUIから座標取得
         camera_calibrator.start_camera_calibration()
-        # ゲームエリア情報の作成
-        camera_calibrator.make_game_area_info()
-
         # ToDo: 開始合図を受け取るまで待機する(通信).
 
-        # ToDo: ゲームエリア情報を生成する(ゲームエリア情報).
-
+        # ゲームエリア情報を生成する(ゲームエリア情報).
+        camera_calibrator.make_game_area_info()
         # ToDo: 計画する.
 
         # ToDo: コマンドファイルを生成する(ゲーム動作).
