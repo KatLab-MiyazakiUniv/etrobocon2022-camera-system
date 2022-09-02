@@ -86,15 +86,6 @@ class CameraCalibrator:
         GameAreaInfo.base_id_list = base_id_list
         GameAreaInfo.end_id = end_id
 
-    @property
-    def img(self) -> List[int]:
-        """Getter.
-
-        Returns:
-            List[Tuple[int, int]]: キャリブレーション画像
-        """
-        return self.__calibration_img
-
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="使用例\n"
