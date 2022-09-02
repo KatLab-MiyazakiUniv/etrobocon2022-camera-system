@@ -148,7 +148,8 @@ class CameraCoordinateCalibrator:
 
 
 if __name__ == "__main__":
-    img = cv2.imread("test_image.png")
+    read_path = "test_image.png"
+    img = cv2.imread(read_path)
     coord = CameraCoordinateCalibrator(img)
     coord.show_window()
     print("ブロック置き場: %s" % coord.block_point)

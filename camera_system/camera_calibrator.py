@@ -8,6 +8,7 @@ from typing import List
 from color_changer import Color, ColorChanger
 from camera_coordinate_calibrator import CameraCoordinateCalibrator
 from game_info import GameInfo
+from camera_interface import CameraInterface
 
 
 class CameraCalibrator:
@@ -22,14 +23,17 @@ class CameraCalibrator:
     MODE_AREA_XSIZE = 5
     MODE_AREA_YSIZE = 5
 
-    def __init__(self, read_path: str):
+    def __init__(self, camera_id: int, cali_img_save_path="cali_course.png") -> None:
         """CameraCalibrationのコンストラクタ.
 
         Args:
-            read_path: コース画像パス
+            camera_id: 撮影カメラID
+            cali_img_save_path: キャリブレーション用画像保存パス
         """
-        self.__calibration_img = cv2.imread(read_path)
-        self.__save_path = "color_" + read_path  # 6色変換後の画像の保存パス
+        # キャリブレーション用画像の取得
+        self.__camera_interface = CameraInterface(camera_id)
+        self.__calibration_img = self.__camera_interface.capture_frame(cali_img_save_path)
+
         self.__color_changer = ColorChanger()
         self.__coord = CameraCoordinateCalibrator(self.__calibration_img)
 
@@ -38,10 +42,13 @@ class CameraCalibrator:
         # GUIから座標取得
         self.__coord.show_window()
 
-    def make_game_area_info(self, game_area_img: cv2.Mat) -> None:
-        """コース情報作成を行う関数."""
+    def make_game_area_info(self, color_save_path="game_course.png") -> None:
+        """ゲームエリア情報作成を行う関数."""
+        # ゲームエリア画像を取得
+        game_area_img = self.__camera_interface.capture_frame(color_save_path)
         # 6色変換
-        self.__color_changer.change_color(game_area_img, self.__save_path)
+        game_save_path = "color_" + color_save_path
+        self.__color_changer.change_color(game_area_img, game_save_path)
 
         # カラーIDを格納する配列を宣言
         block_id_list = []
@@ -74,7 +81,7 @@ class CameraCalibrator:
         end_id.append(color_id)
         print("ボーナスブロック置き場%d:%s" % (i, Color(color_id).name))
 
-        # コース情報を作成
+        # ゲームエリア情報を作成
         GameInfo.block_id_list = block_id_list
         GameInfo.base_id_list = base_id_list
         GameInfo.end_id = end_id
@@ -99,9 +106,7 @@ class CameraCalibrator:
 
 
 if __name__ == "__main__":
-    read_path = "test_image.png"
-    game_area_img = cv2.imread(read_path)
-    camera_calibration = CameraCalibrator(read_path)
+    camera_calibration = CameraCalibrator(camera_id=0)
     camera_calibration.start_camera_calibration()
-    camera_calibration.make_game_area_info(game_area_img)
+    camera_calibration.make_game_area_info()
     print("CameraCalibrator 終了")

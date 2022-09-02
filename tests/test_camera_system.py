@@ -13,11 +13,11 @@ from camera_system.camera_system import CameraSystem
 class TestCameraSystem(unittest.TestCase):
     @mock.patch('camera_calibrator.CameraCalibrator.start_camera_calibration')
     @mock.patch('camera_calibrator.CameraCalibrator.make_game_area_info')
-    def test_start(self, make_game_area_info_mock, start_camera_calibration_mock):
-        read_path = os.path.dirname(os.path.realpath(__file__)) + "/test_image.png"
-        img = cv2.imread(read_path)
+    @mock.patch('camera_interface.CameraInterface.capture_frame')
+    def test_start(self, capture_frame_mock, make_game_area_info_mock,
+                   start_camera_calibration_mock):
         cs = CameraSystem()
-        cs.start(read_path, img)
+        cs.start(camera_id=0)
 
     def test_is_left_course_default_value(self):
         cs = CameraSystem()
