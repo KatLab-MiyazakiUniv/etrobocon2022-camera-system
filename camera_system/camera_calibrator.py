@@ -3,7 +3,6 @@
 カメラキャリブレーションを行う
 @author kawanoichi
 """
-import cv2
 from typing import List
 import argparse
 from color_changer import Color, ColorChanger
@@ -95,15 +94,6 @@ class CameraCalibrator:
             List[Tuple[int, int]]: コース画像
         """
         return self.__calibration_img
-
-    @property
-    def save_path(self) -> str:
-        """Getter.
-
-        Returns:
-            str: 6色変換後の保存パス
-        """
-        return self.__save_path
 
 
 if __name__ == "__main__":

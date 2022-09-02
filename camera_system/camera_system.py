@@ -3,7 +3,6 @@
 カメラシステムにおいて、一番最初に呼ばれるクラスを定義している
 @author: Takahiro55555 miyashita64
 """
-import cv2
 from camera_calibrator import CameraCalibrator
 
 
