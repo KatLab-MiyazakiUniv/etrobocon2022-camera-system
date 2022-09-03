@@ -6,7 +6,7 @@
 
 import numpy as np
 import copy
-from typing import List
+from typing import List, Dict
 from game_area_info import GameAreaInfo
 from node import Node
 from robot import Robot, Direction
@@ -17,17 +17,54 @@ from motion_converter_mock import MotionConverterMock  # ToDo: 動作変換が�
 
 class OptimalMotionSearcher:
     """最適動作探索クラス."""
-
-    def search(self, start_robot: Robot, goal_node: Node) -> CompositeGameMotion:
+    @classmethod
+    def search(cls, start_robot: Robot, goal_node: Node) -> CompositeGameMotion:
         """最適動作を探索する."""
-        # 探索用の仮想走行体を生成する
-        robot = copy.copy(start_robot)
-        # 遷移可能な状態を取得する
-        robots = self.next_robots(robot)
+        # 探索する状態のハッシュ値を保持
+        open = [cls.robot_hash(start_robot)]
+        # 各状態について、状態、遷移するための動作群、予測コストを保持
+        state_table = {
+            open[0]: { "robot": copy.copy(start_robot),
+                       "motions": CompositeGameMotion(),
+                       "cost": cls.pre_cost() }
+        }
 
-        # コストを計算する
+        while state_table[open[0]]["robot"].coord != goal_node.coord:
+            # コストが最小な状態を取り出す
+            min_robot_state = state_table[open.pop(0)]
+            # 遷移可能な状態を取得する
+            robots = cls.next_robots(min_robot_state["robot"])
+            for robot in robots:
+                hash = cls.robot_hash(robot)
+                motions = copy.copy(min_robot_state["motions"])
+                motion = MotionConverterMock.convert(min_robot_state["robot"], robot)
+                state = { "robot": robot,
+                          "motions": motions.append_game_motion(motion),
+                          "cost": motions.get_cost() + cls.pre_cost(robot) }
+                if hash not in state_table.keys():
+                    state_table[hash] = state
+                elif state["cost"] < state_table[hash]["cost"]:
+                    state_table[hash] = state
+                else:
+                    continue
+                # ToDo: openがコストの昇順になるようにhashを挿入する
+        return state_table[open[0]]["motions"]
 
-    def next_robots(self, current_robot: Robot) -> List[Robot]:
+    @classmethod
+    def pre_cost(cls, start_coord: Coordinate, end_coord: Coordinate) -> int:
+        """予測コストを算出する.
+
+        Args:
+            start_coord:
+            end_coord:
+        
+        Returns:
+            予測コスト: int
+        """
+        return np.abs(start_coord.y - end_coord.y) + np.abs(start_coord.x - end_coord.x)
+
+    @classmethod
+    def next_robots(cls, current_robot: Robot) -> List[Robot]:
         """1つのゲーム動作で遷移可能な走行体の状態を返す."""
         # 8方位の角度を求める
         angs = np.array([direction.value * 45 + 90 for direction in Direction])
@@ -48,3 +85,16 @@ class OptimalMotionSearcher:
                            and Coordinate(*coords[direction.value]) not in no_entry_coordinates])
 
         return robots
+
+    @classmethod
+    def robot_hash(cls, robot: Robot) -> int:
+        """走行体の状態ごとのハッシュ値を計算する.
+
+        Args:
+            robot:
+        
+        Returns:
+            ハッシュ値: int
+        """
+        
+        return 100 * robot.coord.y + 10 * robot.coord.x + robot.direct.value
