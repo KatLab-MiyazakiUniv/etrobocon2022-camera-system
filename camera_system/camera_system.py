@@ -5,6 +5,9 @@
 """
 from camera_calibrator import CameraCalibrator
 
+from client import Client
+from composite_game_motion import CompositeGameMotion
+
 
 class CameraSystem:
     """カメラシステムクラス."""
@@ -19,24 +22,28 @@ class CameraSystem:
 
     def start(self, camera_id=1) -> None:
         """ゲーム攻略を計画する."""
-        # ToDo: 通信を確立する(通信).
-
         # カメラキャリブレーションを開始する
         camera_calibrator = CameraCalibrator(camera_id)
         # GUIから座標取得
         camera_calibrator.start_camera_calibration()
+        # 通信を開始する.
+        client = Client("127.0.0.1", 8080)
+        # 開始合図を受け取るまで待機する.
+        client.wait_for_start_signal()
         # ゲームエリア情報の作成
         camera_calibrator.make_game_area_info()
-
-        # ToDo: 開始合図を受け取るまで待機する(通信).
-
         # ToDo: ゲームエリア情報を生成する(ゲームエリア情報).
 
         # ToDo: 計画する.
+        game_motion_list = CompositeGameMotion()  # TODO: 計画した結果のゲーム動作のリストをセットする
 
-        # ToDo: コマンドファイルを生成する(ゲーム動作).
+        # コマンドファイルを生成する
+        file_name = "GameAreaLeft.csv" if self.is_left_course else "GameAreaRight.csv"  # ファイル名をセット
+        f = open("command_files/" + file_name, 'w')
+        f.write(game_motion_list.generate_command())  # ゲーム動作リストからコマンドを生成して書き込む
+        f.close()
+        print("Create %s\n" % file_name)
 
-        # ToDo: コマンドファイルを送信する(システム外).
         pass
 
     @property

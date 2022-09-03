@@ -1,5 +1,5 @@
 #### general ####
-transfer_data/*
+command_files/*
 *.png
 !tests/*.png
 
