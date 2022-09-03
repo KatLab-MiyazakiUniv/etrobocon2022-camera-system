@@ -37,7 +37,7 @@ class CameraSystem:
         game_motion_list = CompositeGameMotion()  # TODO: 計画した結果のゲーム動作のリストをセットする
 
         # コマンドファイルを生成する
-        os.mkdir("command_files")
+        os.makedirs("command_files", exist_ok=True)
         file_name = "GameAreaLeft.csv" if self.is_left_course else "GamereaRight.csv"  # ファイル名をセット
         f = open("command_files/" + file_name, 'w')
         f.write(game_motion_list.generate_command())  # ゲーム動作リストからコマンドを生成して書き込む
