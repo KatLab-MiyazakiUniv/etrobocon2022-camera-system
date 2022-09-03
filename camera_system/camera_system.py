@@ -3,6 +3,7 @@
 カメラシステムにおいて、一番最初に呼ばれるクラスを定義している
 @author: Takahiro55555 miyashita64 kawanoichi
 """
+import os
 from camera_calibrator import CameraCalibrator
 
 from client import Client
@@ -36,7 +37,8 @@ class CameraSystem:
         game_motion_list = CompositeGameMotion()  # TODO: 計画した結果のゲーム動作のリストをセットする
 
         # コマンドファイルを生成する
-        file_name = "GameAreaLeft.csv" if self.is_left_course else "GameAreaRight.csv"  # ファイル名をセット
+        os.mkdir("command_files")
+        file_name = "GameAreaLeft.csv" if self.is_left_course else "GamereaRight.csv"  # ファイル名をセット
         f = open("command_files/" + file_name, 'w')
         f.write(game_motion_list.generate_command())  # ゲーム動作リストからコマンドを生成して書き込む
         f.close()

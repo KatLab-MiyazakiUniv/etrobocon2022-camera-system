@@ -2,7 +2,6 @@
 command_files/*
 *.png
 !tests/*.png
-!command_files/.gitkeep
 
 #### macOS ####
 # General
