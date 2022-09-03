@@ -32,8 +32,6 @@ class CameraSystem:
         client.wait_for_start_signal()
         # ゲームエリア情報の作成
         camera_calibrator.make_game_area_info()
-        # ToDo: ゲームエリア情報を生成する(ゲームエリア情報).
-
         # ToDo: 計画する.
         game_motion_list = CompositeGameMotion()  # TODO: 計画した結果のゲーム動作のリストをセットする
 

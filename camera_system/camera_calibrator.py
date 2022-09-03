@@ -3,7 +3,6 @@
 カメラキャリブレーションを行う
 @author kawanoichi
 """
-from typing import List
 import argparse
 from color_changer import Color, ColorChanger
 from camera_coordinate_calibrator import CameraCoordinateCalibrator
@@ -15,8 +14,8 @@ class CameraCalibrator:
     """ゲームエリア認識クラス.
 
     Attributes:
-        MODE_AREA_XSIZE: 最頻値を求める範囲のxサイズ(奇数)
-        MODE_AREA_YSIZE: 最頻値を求める範囲のyサイズ(奇数)
+        MODE_AREA_XSIZE (int): 最頻値を求める範囲のxサイズ(奇数)
+        MODE_AREA_YSIZE (int): 最頻値を求める範囲のyサイズ(奇数)
     """
 
     # テンプレートサイズ(奇数)
@@ -27,8 +26,8 @@ class CameraCalibrator:
         """CameraCalibrationのコンストラクタ.
 
         Args:
-            camera_id: 撮影カメラID
-            cali_img_save_path: キャリブレーション用画像保存パス
+            camera_id (int): 撮影カメラ番号
+            cali_img_save_path (str): キャリブレーション用画像保存パス
         """
         # キャリブレーション用画像の取得
         self.__camera_interface = CameraInterface(camera_id)
@@ -43,7 +42,11 @@ class CameraCalibrator:
         self.__coord.show_window()
 
     def make_game_area_info(self, game_save_path="game_course.png") -> None:
-        """ゲームエリア情報作成を行う関数."""
+        """ゲームエリア情報作成を行う関数.
+
+        Args:
+            game_save_path (str): ゲームエリア画像保存パス
+        """
         # ゲームエリア画像を取得
         game_area_img = self.__camera_interface.capture_frame(game_save_path)
         # 6色変換

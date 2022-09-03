@@ -43,7 +43,8 @@ class ColorChanger:
         """画像を6色画像に変換する関数.
 
         Args:
-            save_path : 出力画像ファイルの保存パス
+            game_area_img (cv2.Mat): ゲームエリア画像
+            save_path (str): 出力画像ファイルの保存パス
         """
         y_size = game_area_img.shape[0]  # 入力画像の縦サイズ
         x_size = game_area_img.shape[1]  # 入力画像の横サイズ
@@ -82,10 +83,10 @@ class ColorChanger:
         """ブロック周辺の色の最頻値を求める.
 
         Args:
-            coord_x : ブロックのx座標
-            coord_y : ブロックのy座標
-            mode_area_xsize : 最頻値を求める範囲のxサイズ
-            mode_area_ysize : 最頻値を求める範囲のyサイズ
+            coord_x (int): ブロックのx座標
+            coord_y (int): ブロックのy座標
+            mode_area_xsize (int): 最頻値を求める範囲のxサイズ
+            mode_area_ysize (int): 最頻値を求める範囲のyサイズ
         """
         # 座標周辺を取り出す
         mode_area = self.color_id_img[coord_y-(mode_area_ysize//2):coord_y+(mode_area_ysize//2)+1,
