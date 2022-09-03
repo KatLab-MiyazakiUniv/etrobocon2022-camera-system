@@ -1,8 +1,7 @@
 """CameraSystemクラスのテストコードを記述するモジュール.
 
-@author: Takahiro55555 miyashita64
+@author: Takahiro55555 miyashita64 kawanoichi
 """
-
 import unittest
 from unittest import mock
 
@@ -14,10 +13,14 @@ from camera_system.camera_system import CameraSystem  # noqa
 
 
 class TestCameraSystem(unittest.TestCase):
+    @mock.patch('camera_calibrator.CameraCalibrator.start_camera_calibration')
+    @mock.patch('camera_calibrator.CameraCalibrator.make_game_area_info')
+    @mock.patch('camera_interface.CameraInterface.capture_frame')
     @mock.patch('client.Client.wait_for_start_signal')
-    def test_start(self, client_func_mock):
+    def test_start(self, capture_frame_mock, make_game_area_info_mock,
+                   start_camera_calibration_mock, client_func_mock):
         cs = CameraSystem()
-        cs.start()
+        cs.start(camera_id=0)
 
     def test_is_left_course_default_value(self):
         cs = CameraSystem()

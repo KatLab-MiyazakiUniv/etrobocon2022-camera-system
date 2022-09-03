@@ -20,7 +20,7 @@ import cv2  # noqa
 class CameraInterface:
     """カメラ仲介クラス."""
 
-    def __init__(self, camera_id: int) -> None:
+    def __init__(self, camera_id=1) -> None:
         """CameraInterfaceのコンストラクタ.
 
         Args:
@@ -29,17 +29,26 @@ class CameraInterface:
         # 画像取得するカメラを選択する（引数はカメラ番号）
         self.camera = cv2.VideoCapture(camera_id)
 
-    def capture_frame(self) -> None:
-        """カメラから画像を取得、保存."""
+    def capture_frame(self, save_path: str) -> cv2.Mat:
+        """カメラから画像を取得、保存.
+
+        Args:
+            save_path (str): 画像保存のパス
+
+        Returns:
+            cv2.Mat: 画像データ
+        """
         # successed: 画像が取得が成功したか(True or False)
         # frame: 画像
         successed, frame = self.camera.read()
         if successed:
             # 画像の保存
-            cv2.imwrite("course.png", frame)
+            cv2.imwrite(save_path, frame)
             print("画像を保存しました")
         else:
             print("画像を取得できませんでした")
+
+        return cv2.imread(save_path)
 
     @staticmethod
     def check_camera_connection() -> None:
@@ -79,5 +88,6 @@ if __name__ == "__main__":
         exit(0)
 
     # カメラから画像を取得し、保存する
+    save_path = "course.png"
     camera_interface = CameraInterface(args.camera_id)
-    camera_interface.capture_frame()
+    camera_interface.capture_frame(save_path)

@@ -1,7 +1,7 @@
 """カメラ画像の座標取得するためのモジュール.
 
 カメラ画像を表示し、クリックした座標を保持する
-@author miyashita64 mutotaka0426
+@author miyashita64 mutotaka0426 kawanoichi
 @note 参考: https://techacademy.jp/magazine/51035
 @note 参考:
     - [【Python】Tkinterによる画像表示をわかりやすく解説](https://onl.bz/5Bwmt1b)
@@ -30,13 +30,13 @@ class CameraCoordinateCalibrator:
         self.__block_point = []  # ブロック置き場の座標リスト
         self.__base_circle = []  # ベースサークルの座標リスト
         self.__end_point = []  # 端点サークルの座標リスト
-        self.__img = img
+        self.__calibration_img = img
 
     def show_window(self) -> None:
         """画像取得ツールを起動する関数."""
         # 画像情報を取得する
-        img_height = self.__img.shape[0]  # 画像の高さ
-        img_width = self.__img.shape[1]  # 画像の横幅
+        img_height = self.__calibration_img.shape[0]  # 画像の高さ
+        img_width = self.__calibration_img.shape[1]  # 画像の横幅
 
         # ウィンドウを定義する
         self.__window = tk.Tk()
@@ -50,7 +50,7 @@ class CameraCoordinateCalibrator:
         self.__message.place(x=img_width+10, y=80, width=180)
 
         # OpenCVで取得した画像を変換する
-        img_rgb = cv2.cvtColor(self.__img, cv2.COLOR_BGR2RGB)  # imreadはBGRなのでRGBに変換
+        img_rgb = cv2.cvtColor(self.__calibration_img, cv2.COLOR_BGR2RGB)  # imreadはBGRなのでRGBに変換
         img_pil = Image.fromarray(img_rgb)    # RGBからPILフォーマットへ変換
         img_tk = ImageTk.PhotoImage(img_pil)  # ImageTkフォーマットへ変換
 
@@ -148,7 +148,8 @@ class CameraCoordinateCalibrator:
 
 
 if __name__ == "__main__":
-    img = cv2.imread("course.png")
+    read_path = "test_image.png"
+    img = cv2.imread(read_path)
     coord = CameraCoordinateCalibrator(img)
     coord.show_window()
     print("ブロック置き場: %s" % coord.block_point)
