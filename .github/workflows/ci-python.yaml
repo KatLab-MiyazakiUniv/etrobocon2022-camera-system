@@ -22,9 +22,6 @@ jobs:
       - name: Install Tkinter
         run: sudo apt-get install python3-tk
 
-      - name: Make command_files
-        run: mkdir command_files
-
       - name: Test
         run: poetry run python -m unittest
 
