@@ -53,6 +53,7 @@ jobs:
         run: |
           poetry run python -m pycodestyle camera_system/ tests/
           poetry run python -m pydocstyle camera_system/ tests/
+          exit 1  # わざと失敗する
 
       # 参考資料
       # - Slack が提供する GitHub Action "slack-send" を使って GitHub から Slack に通知する - Qiita
