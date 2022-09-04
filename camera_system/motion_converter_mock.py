@@ -36,22 +36,24 @@ class MotionConverterMock():
         Returns:
             GameMotion: 遷移に必要なゲーム動作
         """
-        before_type = cls.coord_to_node(before.coord).nodeType
-        after_type = cls.coord_to_node(after.coord).nodeType
-        if before_type == NodeType.CROSS:
-            if after_type == NodeType.MIDDLE:
+        before_type = cls.coord_to_node(before.coord).node_type
+        after_type = cls.coord_to_node(after.coord).node_type
+        if before_type == NodeType.CROSS.value:
+            if after_type == NodeType.MIDDLE.value:
                 return IntersectionToMiddle(0, False)
-            elif after_type == NodeType.BLOCK:
-                return IntersectionToBlock(0, False)
-        elif before_type == NodeType.MIDDLE:
-            if after_type == NodeType.CROSS:
+            elif after_type == NodeType.BLOCK.value:
+                return IntersectionToBlock(0, False, False)
+        elif before_type == NodeType.MIDDLE.value:
+            if after_type == NodeType.CROSS.value:
                 return MiddleToIntersection(0, "RED")
-            elif after_type == NodeType.MIDDLE:
-                MiddleToMiddle(0, False)
-            elif after_type == NodeType.BLOCK:
+            elif after_type == NodeType.MIDDLE.value:
+                return MiddleToMiddle(0, False)
+            elif after_type == NodeType.BLOCK.value:
                 return MiddleToBlock(0, False)
-        elif before_type == NodeType.BLOCK:
-            if after_type == NodeType.CROSS:
+        elif before_type == NodeType.BLOCK.value:
+            if after_type == NodeType.CROSS.value:
                 return BlockToIntersection(0, "RED")
-            elif after_type == NodeType.MIDDLE:
+            elif after_type == NodeType.MIDDLE.value:
                 return BlockToMiddle(0)
+        else:
+            print("異常")

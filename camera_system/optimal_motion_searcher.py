@@ -6,48 +6,104 @@
 
 import numpy as np
 import copy
+import operator
 from typing import List, Dict
 from game_area_info import GameAreaInfo
-from node import Node
+from node import Node, NodeType
 from robot import Robot, Direction
 from coordinate import Coordinate
 from composite_game_motion import CompositeGameMotion
 from motion_converter_mock import MotionConverterMock  # ToDo: 動作変換が実装でき次第差し替える.
 
+# ToDo: テストように書いてるだけなので削除する
+import random
+import time
+
 
 class OptimalMotionSearcher:
     """最適動作探索クラス."""
+
+    # 縦横移動にかかるコストの目安
+    __VERTICAL_COST = 0.5480
+    # 斜め移動にかかるコストの目安
+    __DIAGONAL_COST = 0.7840
+
     @classmethod
     def search(cls, start_robot: Robot, goal_node: Node) -> CompositeGameMotion:
-        """最適動作を探索する."""
+        """開始状態から目標ノードに遷移するための最適動作を探索する.
+
+        Args:
+            start_robot: 開始状態
+            goal_node:   目標ノード
+        Returns:
+            目標ノードに遷移するためのゲーム動作群
+        """
         # 探索する状態のハッシュ値を保持
         open = [cls.robot_hash(start_robot)]
-        # 各状態について、状態、遷移するための動作群、予測コストを保持
+        # 走行体について、状態のハッシュ値をキーに状態、遷移するための動作群、予測コストを保持
         state_table = {
-            open[0]: { "robot": copy.copy(start_robot),
-                       "motions": CompositeGameMotion(),
-                       "cost": cls.pre_cost() }
+            open[0]: {"robot": copy.deepcopy(start_robot),
+                      "motions": CompositeGameMotion(),
+                      "cost": cls.pre_cost(start_robot.coord, goal_node.coord)}
         }
 
+        # 探索対象がブロック設置動作か、ブロック取得動作か(True:設置, False:取得)
+        is_set_motion = goal_node.node_type != NodeType.BLOCK
+        # 設置先ノードが、ブロックエリア外周の上下/左右どちらにあるか(True:上下, False:左右)
+        is_border_y = goal_node.coord.y % 7 == 0
+
+        # ToDo: 既存の経路内、経路の前半部分についてよりよいルートが見つかっても、その部分だけを更新できない問題
+        # ToDo: 各関数をこのクラスで持つべきか検討する
+        # ToDo: 処理効率を考える
+
+        # 最適動作を探索する
         while state_table[open[0]]["robot"].coord != goal_node.coord:
+            # 遷移できる状態がない
+            if open == []:
+                print("ERROR: Impossible to reach.")
+                exit()
+
             # コストが最小な状態を取り出す
-            min_robot_state = state_table[open.pop(0)]
+            min_cost_state = state_table[open.pop(0)]
             # 遷移可能な状態を取得する
-            robots = cls.next_robots(min_robot_state["robot"])
-            for robot in robots:
-                hash = cls.robot_hash(robot)
-                motions = copy.copy(min_robot_state["motions"])
-                motion = MotionConverterMock.convert(min_robot_state["robot"], robot)
-                state = { "robot": robot,
-                          "motions": motions.append_game_motion(motion),
-                          "cost": motions.get_cost() + cls.pre_cost(robot) }
+            options = cls.next_robots(min_cost_state["robot"])
+            for option in options:
+                # # 設置動作の探索の場合、設置先ノードがある外辺への動作は排除する
+                # if is_set_motion and (
+                #     (is_border_y and goal_node.coord.y == option.coord.y)
+                #         or (not is_border_y and goal_node.coord.x == option.coord.x)):
+                #     continue
+
+                # 状態のハッシュ値を求める
+                hash = cls.robot_hash(option)
+                # 開始状態からその状態までの動作を保持する
+                motions = copy.deepcopy(min_cost_state["motions"])
+                motion = MotionConverterMock.convert(min_cost_state["robot"], option)
+                motions.append_game_motion(motion)
+
+                # 走行体の状態に関する情報を生成する
+                state = {"robot": option,
+                         "motions": motions,
+                         "cost": motions.get_cost() + cls.pre_cost(option.coord, goal_node.coord)}
+                # テーブルにない状態については、情報を登録する
                 if hash not in state_table.keys():
                     state_table[hash] = state
+                # テーブルにある状態をより低コストで実現できる場合は、情報更新する
                 elif state["cost"] < state_table[hash]["cost"]:
                     state_table[hash] = state
+                # それ以外の場合、状態を破棄する
                 else:
                     continue
-                # ToDo: openがコストの昇順になるようにhashを挿入する
+                open.append(hash)
+            # 最小コストのハッシュ値をリストの先頭に持ってくる
+            list(set(open))
+            min_hash = open[0]
+            for op in open:
+                if state_table[op]["cost"] < state_table[min_hash]["cost"]:
+                    min_hash = op
+            open.remove(min_hash)
+            open.insert(0,min_hash)
+        # 探索した最適動作を返す
         return state_table[open[0]]["motions"]
 
     @classmethod
@@ -55,13 +111,19 @@ class OptimalMotionSearcher:
         """予測コストを算出する.
 
         Args:
-            start_coord:
-            end_coord:
-        
+            start_coord: 開始座標
+            end_coord:   終了座標
         Returns:
             予測コスト: int
         """
-        return np.abs(start_coord.y - end_coord.y) + np.abs(start_coord.x - end_coord.x)
+        # ToDo: ちゃんとゴールまでの予測コストを考える
+        dy = abs(start_coord.y - end_coord.y)
+        dx = abs(start_coord.x - end_coord.x)
+        # 斜めに移動できるだけ斜めに移動すると想定する
+        diagonal_distance = dy if dy < dx else dx
+        # 斜めに行けない分だけ縦横に移動すると想定する
+        vertical_distance = abs(dy - dx)
+        return (vertical_distance*cls.__VERTICAL_COST + diagonal_distance*cls.__DIAGONAL_COST)
 
     @classmethod
     def next_robots(cls, current_robot: Robot) -> List[Robot]:
@@ -69,21 +131,25 @@ class OptimalMotionSearcher:
         # 8方位の角度を求める
         angs = np.array([direction.value * 45 + 90 for direction in Direction])
         # 各方位に進んだ際の移動ベクトルを求める
-        dys = np.round(-np.sin(np.radians(angs)))
         dxs = np.round(-np.cos(np.radians(angs)))
+        dys = np.round(-np.sin(np.radians(angs)))
         # 到達可能な座標を取得する
-        coords = np.array([current_robot.coord.y, current_robot.coord.x]) + np.stack([dys, dxs], 1)
+        coords = np.array([current_robot.coord.x, current_robot.coord.y]) + np.stack([dxs, dys], 1)
 
         # 回頭禁止方向を取得する
         no_rotate_directions = GameAreaInfo.get_no_rotate_direction(current_robot)
         # 走行禁止座標を取得する
         no_entry_coordinates = GameAreaInfo.get_no_entry_coordinate(current_robot)
         # 遷移可能な走行体の状態を生成する
-        robots = np.array([Robot(coords[direction.value], direction.value)
+        robots = np.array([Robot(Coordinate(*coords[direction.value]), direction.value)
                            for direction in Direction
                            if direction.value not in no_rotate_directions
-                           and Coordinate(*coords[direction.value]) not in no_entry_coordinates])
-
+                           and Coordinate(*coords[direction.value]) not in no_entry_coordinates
+                           # ToDo: 綺麗にする
+                           and 0 <= Coordinate(*coords[direction.value]).x < 7
+                           and 0 <= Coordinate(*coords[direction.value]).y < 7
+                           # ToDo: ブロックがある座標
+                           ])
         return robots
 
     @classmethod
@@ -91,10 +157,23 @@ class OptimalMotionSearcher:
         """走行体の状態ごとのハッシュ値を計算する.
 
         Args:
-            robot:
-        
+            robot: 走行体の状態
         Returns:
             ハッシュ値: int
         """
-        
-        return 100 * robot.coord.y + 10 * robot.coord.x + robot.direct.value
+        return int(100 * robot.coord.x + 10 * robot.coord.y + robot.direct)
+
+
+if __name__ == "__main__":
+    start_time = time.time()
+    
+    for i in range((1+3)*8):
+        rx = random.randrange(0, 7)
+        ry = random.randrange(0, 7)
+        nx = random.randrange(0, 7)
+        ny = random.randrange(0, 7)
+        robo = Robot(Coordinate(rx, ry), Direction.N.value)
+        node = Node(1, Coordinate(nx, ny))
+        OptimalMotionSearcher.search(robo, node)
+            
+    print(time.time() - start_time)
