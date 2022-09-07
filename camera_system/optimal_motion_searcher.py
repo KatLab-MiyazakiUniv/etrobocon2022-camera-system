@@ -15,7 +15,7 @@ from coordinate import Coordinate
 from composite_game_motion import CompositeGameMotion
 from motion_converter_mock import MotionConverterMock  # ToDo: 動作変換が実装でき次第差し替える.
 
-# ToDo: テストように書いてるだけなので削除する
+# ToDo: 動作確認用に書いてるだけなので後で削除する
 import random
 import time
 
@@ -49,30 +49,30 @@ class OptimalMotionSearcher:
 
         # 探索対象がブロック設置動作か、ブロック取得動作か(True:設置, False:取得)
         is_set_motion = goal_node.node_type != NodeType.BLOCK
-        # 設置先ノードが、ブロックエリア外周の上下/左右どちらにあるか(True:上下, False:左右)
-        is_border_y = goal_node.coord.y % 7 == 0
+        # 設置先ノードがブロックエリア外周の上下(y座標が0か6)/左右どちらにあるか(True:上下, False:左右)
+        is_border_y = goal_node.coord.y % 6 == 0
 
-        # ToDo: 既存の経路内、経路の前半部分についてよりよいルートが見つかっても、その部分だけを更新できない問題
-        # ToDo: 各関数をこのクラスで持つべきか検討する
-        # ToDo: 処理効率を考える
+        # ToDo: 既存の経路内、経路の前半部分についてよりよいルートが見つかっても、その部分だけを更新できない問題（効率が悪いだけで問題はないはず）
+        # ToDo: 探索不可能なパターンの検証
 
         # 最適動作を探索する
         while state_table[open[0]]["robot"].coord != goal_node.coord:
-            # 遷移できる状態がない
-            if open == []:
-                print("ERROR: Impossible to reach.")
-                exit()
-
             # コストが最小な状態を取り出す
             min_cost_state = state_table[open.pop(0)]
             # 遷移可能な状態を取得する
             options = cls.next_robots(min_cost_state["robot"])
+            # ブロックがある座標を取得する
+            on_block_coordinates = [node.coord for node in GameAreaInfo.get_no_transported_block()]
             for option in options:
-                # # 設置動作の探索の場合、設置先ノードがある外辺への動作は排除する
-                # if is_set_motion and (
-                #     (is_border_y and goal_node.coord.y == option.coord.y)
-                #         or (not is_border_y and goal_node.coord.x == option.coord.x)):
-                #     continue
+                if option.coord != goal_node.coord:
+                    # ゴールノード以外でブロックがある座標は除外する
+                    if option.coord in on_block_coordinates:
+                        continue
+                    # 設置動作の探索の場合、設置先ノードがある外辺は排除する
+                    if is_set_motion:
+                        if (is_border_y and goal_node.coord.y == option.coord.y) or ((not is_border_y) and goal_node.coord.x == option.coord.x):
+                            continue
+
 
                 # 状態のハッシュ値を求める
                 hash = cls.robot_hash(option)
@@ -95,6 +95,12 @@ class OptimalMotionSearcher:
                 else:
                     continue
                 open.append(hash)
+            # 遷移できる状態がない
+            if open == []:
+                print("ERROR: Impossible move (%d,%d) to (%d,%d)." % (start_robot.coord.x, start_robot.coord.y, goal_node.coord.x, goal_node.coord.y))
+                return  # 動作確認用に継続
+                # exit()
+
             # 最小コストのハッシュ値をリストの先頭に持ってくる
             list(set(open))
             min_hash = open[0]
@@ -116,7 +122,6 @@ class OptimalMotionSearcher:
         Returns:
             予測コスト: int
         """
-        # ToDo: ちゃんとゴールまでの予測コストを考える
         dy = abs(start_coord.y - end_coord.y)
         dx = abs(start_coord.x - end_coord.x)
         # 斜めに移動できるだけ斜めに移動すると想定する
@@ -134,21 +139,20 @@ class OptimalMotionSearcher:
         dxs = np.round(-np.cos(np.radians(angs)))
         dys = np.round(-np.sin(np.radians(angs)))
         # 到達可能な座標を取得する
-        coords = np.array([current_robot.coord.x, current_robot.coord.y]) + np.stack([dxs, dys], 1)
+        coords = np.array([current_robot.coord.x, current_robot.coord.y]) + np.stack([dxs, dys], 1).astype(int)
 
         # 回頭禁止方向を取得する
         no_rotate_directions = GameAreaInfo.get_no_rotate_direction(current_robot)
         # 走行禁止座標を取得する
         no_entry_coordinates = GameAreaInfo.get_no_entry_coordinate(current_robot)
         # 遷移可能な走行体の状態を生成する
-        robots = np.array([Robot(Coordinate(*coords[direction.value]), direction.value)
+        # ToDo: 綺麗にする
+        robots = np.array([Robot(Coordinate(*coords[direction.value]), direction)
                            for direction in Direction
-                           if direction.value not in no_rotate_directions
+                           if direction not in no_rotate_directions
                            and Coordinate(*coords[direction.value]) not in no_entry_coordinates
-                           # ToDo: 綺麗にする
                            and 0 <= Coordinate(*coords[direction.value]).x < 7
                            and 0 <= Coordinate(*coords[direction.value]).y < 7
-                           # ToDo: ブロックがある座標
                            ])
         return robots
 
@@ -161,19 +165,38 @@ class OptimalMotionSearcher:
         Returns:
             ハッシュ値: int
         """
-        return int(100 * robot.coord.x + 10 * robot.coord.y + robot.direct)
+        return int(100 * robot.coord.x + 10 * robot.coord.y + robot.direct.value)
 
+# 動作確認用
+def test(robot_coord, node_coord):
+    direction = Direction.N
+    robo = Robot(robot_coord, direction)
+    node_id = node_coord.y*7 + node_coord.x
+    node = GameAreaInfo.node_list[node_id]
+    result = OptimalMotionSearcher.search(robo, node)
 
 if __name__ == "__main__":
     start_time = time.time()
-    
-    for i in range((1+3)*8):
-        rx = random.randrange(0, 7)
-        ry = random.randrange(0, 7)
-        nx = random.randrange(0, 7)
-        ny = random.randrange(0, 7)
-        robo = Robot(Coordinate(rx, ry), Direction.N.value)
-        node = Node(1, Coordinate(nx, ny))
-        OptimalMotionSearcher.search(robo, node)
-            
+    get_coord_elm = [1,3,5]
+    set_coord_elm = [2,3,4]
+    # get_coord_elm = range(7)
+    # set_coord_elm = range(7)
+    # for ry in [2,4]:
+    for ry in range(7):
+        # for rx in [2,4]:
+        for rx in range(7):
+            print(f"======robot({ry}, {rx})")
+            # ブロック取得
+            for ny in get_coord_elm:
+                for nx in get_coord_elm:
+                    if ny == nx == 3:
+                        continue
+                    test(Coordinate(ry, rx), Coordinate(ny, nx))
+            # ブロック設置
+            for ny in set_coord_elm:
+                for nx in [0,6]:
+                    test(Coordinate(ry, rx), Coordinate(ny, nx))
+            for ny in [0,6]:
+                for nx in set_coord_elm:
+                    test(Coordinate(ry, rx), Coordinate(ny, nx))
     print(time.time() - start_time)
