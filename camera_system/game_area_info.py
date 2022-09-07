@@ -15,20 +15,19 @@ class GameAreaInfo:
     """ゲームエリア情報を保持するクラス.
 
     Attributes:
-        block_id_list (List[int]): ブロック(色ID)
-        base_id_list (List[int]): ベースブロック(色ID)
-        end_id (List[int]): ボーナスブロック(色ID)
+        block_color_list (List[int]): ブロックの色のリスト
+        base_color_list (List[int]): ベースブロックの色のリスト
+        bonus_color (List[int]): ボーナスブロックの色
         node_list (List[Node]): ノードリスト(ノード)
-        base_color_dict (Dict{int, str}): ベースエリアの色ID(赤、黄、緑、青)
         __east_cand_list = (List[Node]): 東の候補ノードになりうる座標リスト
         __south_cand_list = (List[Node]): 南の候補ノードになりうる座標リスト
         __west_cand_list = (List[Node]): 西の候補ノードになりうる座標リスト
         __north_cand_list = (List[Node]): 北の候補ノードになりうる座標リスト
     """
 
-    block_id_list = []
-    base_id_list = []
-    end_id = []
+    block_color_list = []
+    base_color_list = []
+    bonus_color = []
     node_list = [
         Node(-1, Coordinate(0, 0)), Node(-1, Coordinate(1, 0)),
         Node(-1, Coordinate(2, 0)), Node(-1, Coordinate(3, 0)),
@@ -59,8 +58,6 @@ class GameAreaInfo:
         Node(-1, Coordinate(4, 6)), Node(-1, Coordinate(5, 6)),
         Node(-1, Coordinate(6, 6)),
     ]
-    base_color_dict = {Color.RED.value: "東", Color.YELLOW.value: "南",
-                       Color.GREEN.value: "西", Color.BLUE.value: "北"}
     __east_cand_list = [
         Node(-1, Coordinate(6, 2)), Node(-1, Coordinate(6, 3)), Node(-1, Coordinate(6, 4))
     ]
@@ -75,7 +72,7 @@ class GameAreaInfo:
     ]
 
     @staticmethod
-    def get_candidate_node(color: int) -> List[Node]:
+    def get_candidate_node(color: Color) -> List[Node]:
         """設置先ノードの候補を取得する関数.
 
         Args:
@@ -84,22 +81,28 @@ class GameAreaInfo:
         Returns:
             List[Node]: 候補ノード
         """
+        # ベースエリアの色と東西南北の対応表
+        base_color_dict = {GameAreaInfo.base_color_list[0].value: "東",
+                           GameAreaInfo.base_color_list[1].value: "南",
+                           GameAreaInfo.base_color_list[2].value: "西",
+                           GameAreaInfo.base_color_list[3].value: "北"}
+
+        color_id = color.value  # colorをidに直す
         # 一致する要素(候補ノードになりうるノードの中で設置済みのブロックが無いノード)を返す
-        if GameAreaInfo.base_color_dict[color] == "東":
-            cand = [east_cand.coord for node in GameAreaInfo.node_list
+        if base_color_dict[color_id] == "東":
+            cand = [east_cand for node in GameAreaInfo.node_list
                     for east_cand in GameAreaInfo.__east_cand_list
                     if node.coord == east_cand.coord and node.block_id == -1]
-        elif GameAreaInfo.base_color_dict[color] == "南":
-            cand = [south_cand.coord for node in GameAreaInfo.node_list
+        elif base_color_dict[color_id] == "南":
+            cand = [south_cand for node in GameAreaInfo.node_list
                     for southt_cand in GameAreaInfo.__south_cand_list
                     if node.coord == south_cand.coord and node.block_id == -1]
-            return list(set(GameAreaInfo.node_list) & set(GameAreaInfo.__south_cand_list))
-        elif GameAreaInfo.base_color_dict[color] == "西":
-            cand = [west_cand.coord for node in GameAreaInfo.node_list
+        elif base_color_dict[color_id] == "西":
+            cand = [west_cand for node in GameAreaInfo.node_list
                     for west_cand in GameAreaInfo.__west_cand_list
                     if node.coord == west_cand.coord and node.block_id == -1]
         else:
-            cand = [north_cand.coord for node in GameAreaInfo.node_list
+            cand = [north_cand for node in GameAreaInfo.node_list
                     for north_cand in GameAreaInfo.__north_cand_list
                     if node.coord == north_cand.coord and node.block_id == -1]
 
@@ -112,15 +115,15 @@ class GameAreaInfo:
         Returns:
             List[Node]: 運搬していないブロックがあるブロック置き場のノード
         """
-        no_trans_block_list = []
+        no_trans_block_color_list = []
 
         # ブロックがブロック置き場にあるノードをリストに格納する
         for node in GameAreaInfo.node_list:
             if node.block_id != -1:  # ブロックがあるノード
-                if node.node_type == NodeType.BLOCK.value:  # ブロック置き場のノード
-                    no_trans_block_list.append(node)
+                if node.node_type == NodeType.BLOCK:  # ブロック置き場のノード
+                    no_trans_block_color_list.append(node)
 
-        return no_trans_block_list
+        return no_trans_block_color_list
 
     @staticmethod
     def get_no_entry_coordinate(robot) -> List[Coordinate]:
@@ -266,21 +269,21 @@ class GameAreaInfo:
 if __name__ == "__main__":
     robo = Robot(Coordinate(1, 2), Direction.N.value)
 
-    color = Color.RED.value
+    color = Color.RED
 
-    GameAreaInfo.block_id_list = [
-        Color.RED.value, Color.RED.value, Color.YELLOW.value,
-        Color.YELLOW.value, Color.GREEN.value, Color.GREEN.value,
-        Color.BLUE.value, Color.BLUE.value
+    GameAreaInfo.block_color_list = [
+        Color.RED, Color.RED, Color.YELLOW,
+        Color.YELLOW, Color.GREEN, Color.GREEN,
+        Color.BLUE, Color.BLUE
     ]
-    GameAreaInfo.base_id_list = [
-        Color.RED.value, Color.YELLOW.value,
-        Color.GREEN.value, Color.BLUE.value
+    GameAreaInfo.base_color_list = [
+        Color.RED, Color.YELLOW,
+        Color.GREEN, Color.BLUE
     ]
-    GameAreaInfo.end_id = Color.RED.value
-    print(GameAreaInfo.block_id_list)
-    print(GameAreaInfo.base_id_list)
-    print(GameAreaInfo.end_id)
+    GameAreaInfo.bonus_color = Color.RED
+    print(GameAreaInfo.block_color_list)
+    print(GameAreaInfo.base_color_list)
+    print(GameAreaInfo.bonus_color)
 
     print("候補ノード")
     print(GameAreaInfo.get_candidate_node(color))
