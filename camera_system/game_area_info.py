@@ -219,52 +219,63 @@ class GameAreaInfo:
         Returns:
             List[Direction]: 回頭禁止方向の方位リスト
         """
-        coord = robot.coord
-        direct = robot.direct
-        no_rotate_list = []
+        # 回頭禁止方向の方位リスト
+        no_rotate_directions = []
 
-        # 東の座標
-        block_coord = Coordinate(robot.coord.x+1, robot.coord.y)
-        # 東の座標にブロックが存在する場合、西を回頭禁止方向に追加
-        no_rotate_list += [
-            Direction.W.value for node in GameAreaInfo.node_list
-            if node.block_id != -1 and node.coord == block_coord
-        ]
-        # 南の座標
-        block_coord = Coordinate(robot.coord.x, robot.coord.y+1)
-        # 南の座標にブロックが存在する場合、北を回頭禁止方向に追加
-        no_rotate_list += [
-            Direction.N.value for node in GameAreaInfo.node_list
-            if node.block_id != -1 and node.coord == block_coord]
-        # 西の座標
-        block_coord = Coordinate(robot.coord.x-1, robot.coord.y)
-        # 西の座標にブロックが存在する場合、東を回頭禁止方向に追加
-        no_rotate_list += [
-            Direction.E.value for node in GameAreaInfo.node_list
-            if node.block_id != -1 and node.coord == block_coord]
-        # 北の座標
-        block_coord = Coordinate(robot.coord.x, robot.coord.y-1)
-        # 北の座標にブロックが存在する場合、南を回頭禁止方向に追加
-        no_rotate_list += [
-            Direction.S.value for node in GameAreaInfo.node_list
-            if node.block_id != -1 and node.coord == block_coord]
+        # 走行体の東のノード
+        east_coord = Coordinate(robot.coord.x+1, robot.coord.y)
+        node_id = int(east_coord.y * 7 + east_coord.x)
+        if 0 <= node_id < 49:
+            east_node = GameAreaInfo.node_list[node_id]
+            # ノードにブロックが存在する場合、西を回頭禁止方向に追加
+            if east_node.block_id != -1:
+                no_rotate_directions += [Direction.W]
+
+        # 走行体の南のノード
+        south_coord = Coordinate(robot.coord.x, robot.coord.y+1)
+        node_id = int(south_coord.y * 7 + south_coord.x)
+        if 0 <= node_id < 49:
+            south_node = GameAreaInfo.node_list[node_id]
+            # ノードにブロックが存在する場合、北を回頭禁止方向に追加
+            if south_node.block_id != -1:
+                no_rotate_directions += [Direction.N]
+
+        # 走行体の西のノード
+        west_coord = Coordinate(robot.coord.x-1, robot.coord.y)
+        node_id = int(west_coord.y * 7 + west_coord.x)
+        if 0 <= node_id < 49:
+            west_node = GameAreaInfo.node_list[node_id]
+            # ノードにブロックが存在する場合、東を回頭禁止方向に追加
+            if west_node.block_id != -1:
+                no_rotate_directions += [Direction.E]
+
+        # 走行体の北のノード
+        north_coord = Coordinate(robot.coord.x, robot.coord.y-1)
+        node_id = int(north_coord.y * 7 + north_coord.x)
+        if 0 <= node_id < 49:
+            north_node = GameAreaInfo.node_list[node_id]
+            # ノードにブロックが存在する場合、南を回頭禁止方向に追加
+            if north_node.block_id != -1:
+                no_rotate_directions += [Direction.S]
 
         # 回頭禁止方向が2つ以上ある場合、それらの間にある方位も回頭禁止方向
-        if len(no_rotate_list) >= 2:
-            if min(no_rotate_list) < direct and direct < max(no_rotate_list):
-                for i in range(min(no_rotate_list)):
-                    no_rotate_list.append(i)
-                for i in range(max(no_rotate_list)+1, 8):
-                    no_rotate_list.append(i)
+        if len(no_rotate_directions) >= 2:
+            min_direction_value = min([direction.value for direction in no_rotate_directions])
+            max_direction_value = max([direction.value for direction in no_rotate_directions])
+            if min_direction_value < robot.direct.value < max_direction_value:
+                for direction_value in range(min_direction_value):
+                    no_rotate_directions += [Direction(direction_value)]
+                for direction_value in range(max_direction_value+1, 8):
+                    no_rotate_directions += [Direction(direction_value)]
             else:
-                for i in range(min(no_rotate_list)+1, max(no_rotate_list)):
-                    no_rotate_list.append(i)
+                for direction_value in range(min_direction_value+1, max_direction_value):
+                    no_rotate_directions += [Direction(direction_value)]
 
-        return no_rotate_list
+        return no_rotate_directions
 
 
 if __name__ == "__main__":
-    robo = Robot(Coordinate(1, 2), Direction.N.value)
+    robo = Robot(Coordinate(1, 2), Direction.N)
 
     color = Color.RED.value
 
