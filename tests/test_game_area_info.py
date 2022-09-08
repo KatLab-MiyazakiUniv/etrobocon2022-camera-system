@@ -10,7 +10,7 @@ from camera_system.game_area_info import GameAreaInfo
 from camera_system.color_changer import Color
 from camera_system.robot import Direction, Robot
 from camera_system.node import NodeType, Node
-from coordinate import Coordinate
+from camera_system.coordinate import Coordinate
 
 
 class TestGameAreaInfo(unittest.TestCase):

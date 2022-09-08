@@ -8,7 +8,7 @@ from typing import List, Tuple, Dict
 from robot import Robot, Direction
 from color_changer import Color
 from node import Node, NodeType
-from coordinate import Coordinate
+from camera_system.coordinate import Coordinate
 
 
 class GameAreaInfo:

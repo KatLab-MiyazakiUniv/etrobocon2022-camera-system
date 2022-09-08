@@ -6,16 +6,16 @@
 import unittest
 
 from camera_system.composite_game_motion import CompositeGameMotion
-from block_to_intersection import BlockToIntersection
-from block_to_middle import BlockToMiddle
-from intersection_to_block import IntersectionToBlock
-from intersection_to_middle import IntersectionToMiddle
-from middle_to_block import MiddleToBlock
-from middle_to_intersection import MiddleToIntersection
-from middle_to_middle import MiddleToMiddle
-from return_to_intersection import ReturnToIntersection
-from return_to_middle import ReturnToMiddle
-from return_to_block import ReturnToBlock
+from camera_system.block_to_intersection import BlockToIntersection
+from camera_system.block_to_middle import BlockToMiddle
+from camera_system.intersection_to_block import IntersectionToBlock
+from camera_system.intersection_to_middle import IntersectionToMiddle
+from camera_system.middle_to_block import MiddleToBlock
+from camera_system.middle_to_intersection import MiddleToIntersection
+from camera_system.middle_to_middle import MiddleToMiddle
+from camera_system.return_to_intersection import ReturnToIntersection
+from camera_system.return_to_middle import ReturnToMiddle
+from camera_system.return_to_block import ReturnToBlock
 
 
 class TestCompositeGameMotion(unittest.TestCase):
