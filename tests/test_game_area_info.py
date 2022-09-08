@@ -6,15 +6,11 @@
 
 import unittest
 
-from pathlib import Path
-import sys
-sys.path.append(str(Path(__file__).parent.parent))
-sys.path.append(str(Path(__file__).parent.parent / "camera_system"))
-from camera_system.game_area_info import GameAreaInfo  # noqa
-from camera_system.color_changer import Color  # noqa
-from camera_system.robot import Direction, Robot  # noqa
-from camera_system.node import NodeType, Node  # noqa
-from coordinate import Coordinate  # noqa
+from camera_system.game_area_info import GameAreaInfo
+from camera_system.color_changer import Color
+from camera_system.robot import Direction, Robot
+from camera_system.node import NodeType, Node
+from coordinate import Coordinate
 
 
 class TestGameAreaInfo(unittest.TestCase):
