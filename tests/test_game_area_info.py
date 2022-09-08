@@ -23,12 +23,7 @@ class TestGameAreaInfo(unittest.TestCase):
         self.assertEqual(expected, actual)
 
     # 未運搬のブロック置き場があるブロック置き場を取得するテスト
-
     def test_get_no_transported_block(self):
-        color = Color.BLUE.value
-        cross = NodeType.CROSS.value
-        middle = NodeType.MIDDLE.value
-        block_storage = NodeType.BLOCK.value
         expected = [
             Node(0, Coordinate(1, 1)), Node(1, Coordinate(3, 1)),
             Node(2, Coordinate(5, 1)), Node(3, Coordinate(1, 3)),
