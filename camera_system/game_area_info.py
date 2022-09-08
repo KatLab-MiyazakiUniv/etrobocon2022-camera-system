@@ -1,7 +1,7 @@
 """ゲームエリア情報モジュール.
 
 ゲームエリア情報を保持するクラスを定義している
-@author: kodama0720
+@author: kodama0720 miyashita64 KakinokiKanta
 """
 
 from typing import List, Tuple, Dict
@@ -91,9 +91,8 @@ class GameAreaInfo:
                     if node.coord == east_cand.coord and node.block_id == -1]
         elif GameAreaInfo.base_color_dict[color] == "南":
             cand = [south_cand.coord for node in GameAreaInfo.node_list
-                    for southt_cand in GameAreaInfo.__south_cand_list
+                    for south_cand in GameAreaInfo.__south_cand_list
                     if node.coord == south_cand.coord and node.block_id == -1]
-            return list(set(GameAreaInfo.node_list) & set(GameAreaInfo.__south_cand_list))
         elif GameAreaInfo.base_color_dict[color] == "西":
             cand = [west_cand.coord for node in GameAreaInfo.node_list
                     for west_cand in GameAreaInfo.__west_cand_list
@@ -123,7 +122,31 @@ class GameAreaInfo:
         return no_trans_block_list
 
     @staticmethod
-    def get_no_entry_coordinate(robot) -> List[Coordinate]:
+    def move_block(move_block_id: int, goal_node: Node) -> None:
+        """指定したブロックを移動する関数.
+        
+        Args:
+            block_id: 移動させるブロックのID
+            goal_node: 移動後ブロックのノード
+        """
+        if goal_node.block_id != -1:
+            print(goal_node.block_id)
+            print("Block on destination")
+            return
+
+        if not 0 <= move_block_id <=7:
+            print("Block ID is abnormal.")
+            return
+
+        for node in GameAreaInfo.node_list:
+            if node.block_id == move_block_id:  # 指定したブロックがあるノード
+                node.block_id = -1
+        goal_node.block_id = move_block_id
+
+        return
+
+    @staticmethod
+    def get_no_entry_coordinates(robot) -> List[Coordinate]:
         """走行禁止座標を取得する関数.
 
         Args:
@@ -132,85 +155,100 @@ class GameAreaInfo:
         Returns:
             List[Coordinate]: 走行禁止座標の座標リスト
         """
-        coord = robot.coord
-        no_entry_list = []
+        no_entry_coords = []
 
         # 東にブロック
         if robot.coord.x < 6:
             # 東の座標
-            block_coord = Coordinate(robot.coord.x+1, robot.coord.y)
+            east_coord = Coordinate(robot.coord.x+1, robot.coord.y)
+            east_node = GameAreaInfo.node_list[east_coord.y*7+east_coord.x]
             # 東の座標にブロックが存在する場合、東を走行禁止座標に追加
-            east_coord = [
-                node.coord for node in GameAreaInfo.node_list
-                if node.block_id != -1 and node.coord == block_coord
-            ]
-            no_entry_list += east_coord
-            if east_coord:
-                if block_coord.y > 0:
+            if east_node.block_id != -1:
+                no_entry_coords += [east_coord]
+                if east_coord.y > 0:
                     # 北東を走行禁止座標に追加
-                    no_entry_list.append(Coordinate(block_coord.x, block_coord.y-1))
-                if block_coord.y < 6:
+                    no_entry_coords += [Coordinate(east_coord.x, east_coord.y-1)]
+                if east_coord.y < 6:
                     # 南東を走行禁止座標に追加
-                    no_entry_list.append(Coordinate(block_coord.x, block_coord.y+1))
+                    no_entry_coords += [Coordinate(east_coord.x, east_coord.y+1)]
 
         # 南にブロック
         if robot.coord.y < 6:
             # 南の座標
-            block_coord = Coordinate(robot.coord.x, robot.coord.y+1)
+            south_coord = Coordinate(robot.coord.x, robot.coord.y+1)
+            south_node = GameAreaInfo.node_list[south_coord.y*7+south_coord.x]
             # 南の座標にブロックが存在する場合、南を走行禁止座標に追加
-            south_coord = [
-                node.coord for node in GameAreaInfo.node_list
-                if node.block_id != -1 and node.coord == block_coord
-            ]
-            no_entry_list += south_coord
-            if south_coord:
-                if block_coord.x > 0:
+            if south_node.block_id != -1:
+                no_entry_coords += [south_coord]
+                if south_coord.x > 0:
                     # 南西を走行禁止座標に追加
-                    no_entry_list.append(Coordinate(block_coord.x-1, block_coord.y))
-                if block_coord.x < 6:
+                    no_entry_coords += [Coordinate(south_coord.x-1, south_coord.y)]
+                if south_coord.x < 6:
                     # 南東を走行禁止座標に追加
-                    no_entry_list.append(Coordinate(block_coord.x+1, block_coord.y))
+                    no_entry_coords += [Coordinate(south_coord.x+1, south_coord.y)]
 
         # 西にブロック
         if robot.coord.x > 0:
             # 西の座標
-            block_coord = Coordinate(robot.coord.x-1, robot.coord.y)
+            west_coord = Coordinate(robot.coord.x-1, robot.coord.y)
             # 西の座標にブロックが存在する場合、西を走行禁止座標に追加
-            west_coord = [
-                node.coord for node in GameAreaInfo.node_list
-                if node.block_id != -1 and node.coord == block_coord
-            ]
-            no_entry_list += west_coord
-            if west_coord:
-                if block_coord.x > 0:
+            west_node = GameAreaInfo.node_list[west_coord.y*7+west_coord.x]
+            if west_node.block_id != -1:
+                no_entry_coords += [west_coord]
+                if west_coord.x > 0:
                     # 北西を走行禁止座標に追加
-                    no_entry_list.append(Coordinate(block_coord.x, block_coord.y-1))
-                if block_coord.x < 6:
+                    no_entry_coords += [Coordinate(west_coord.x, west_coord.y-1)]
+                if west_coord.x < 6:
                     # 南西を走行禁止座標に追加
-                    no_entry_list.append(Coordinate(block_coord.x, block_coord.y+1))
+                    no_entry_coords += [Coordinate(west_coord.x, west_coord.y+1)]
 
         # 北にブロック
         if robot.coord.y > 0:
             # 北の座標
-            block_coord = Coordinate(robot.coord.x, robot.coord.y-1)
+            north_coord = Coordinate(robot.coord.x, robot.coord.y-1)
             # 北の座標にブロックが存在する場合、北を走行禁止座標に追加
-            north_coord = [
-                node.coord for node in GameAreaInfo.node_list
-                if node.block_id != -1 and node.coord == block_coord
-            ]
-            no_entry_list += north_coord
-            if north_coord:
-                if block_coord.x > 0:
+            north_node = GameAreaInfo.node_list[north_coord.y*7+north_coord.x]
+            if north_node.block_id != -1:
+                no_entry_coords += [north_coord]
+                if north_coord.x > 0:
                     # 北西を走行禁止座標に追加
-                    no_entry_list.append(Coordinate(block_coord.x-1, block_coord.y))
-                if block_coord.x < 6:
+                    no_entry_coords += [Coordinate(north_coord.x-1, north_coord.y)]
+                if north_coord.x < 6:
                     # 北東を走行禁止座標に追加
-                    no_entry_list.append(Coordinate(block_coord.x+1, block_coord.y))
+                    no_entry_coords += [Coordinate(north_coord.x+1, north_coord.y)]
 
-        return no_entry_list
+        # 南東にブロック
+        if robot.coord.y < 6 and robot.coord.x < 6:
+            south_east_coord = Coordinate(robot.coord.x+1, robot.coord.y+1)
+            south_east_node = GameAreaInfo.node_list[south_east_coord.y*7+south_east_coord.x]
+            if south_east_node.block_id != -1:
+                no_entry_coords += [south_east_coord]
+
+        # 南西にブロック
+        if robot.coord.y < 6 and robot.coord.x > 0:
+            south_west_coord = Coordinate(robot.coord.x-1, robot.coord.y+1)
+            south_west_node = GameAreaInfo.node_list[south_west_coord.y*7+south_west_coord.x]
+            if south_west_node.block_id != -1:
+                no_entry_coords += [south_west_coord]
+
+        # 北西にブロック
+        if robot.coord.y > 0 and robot.coord.x > 0:
+            north_west_coord = Coordinate(robot.coord.x-1, robot.coord.y-1)
+            north_west_node = GameAreaInfo.node_list[north_west_coord.y*7+north_west_coord.x]
+            if north_west_node.block_id != -1:
+                no_entry_coords += [north_west_coord]
+
+        # 北東にブロック
+        if robot.coord.y > 0 and robot.coord.x < 6:
+            north_east_coord = Coordinate(robot.coord.x+1, robot.coord.y-1)
+            north_east_node = GameAreaInfo.node_list[north_east_coord.y*7+north_east_coord.x]
+            if north_east_node.block_id != -1:
+                no_entry_coords += [north_east_coord]
+
+        return no_entry_coords
 
     @staticmethod
-    def get_no_rotate_direction(robot) -> List[Direction]:
+    def get_no_rotate_directions(robot) -> List[Direction]:
         """回頭禁止方向を取得する関数.
 
         Args:
@@ -299,6 +337,6 @@ if __name__ == "__main__":
     for block in GameAreaInfo.get_no_transported_block():
         print(block.block_id, block.coord)
     print("走行禁止座標")
-    print(GameAreaInfo.get_no_entry_coordinate(robo))
+    print(GameAreaInfo.get_no_entry_coordinates(robo))
     print("回頭禁止方向")
-    print(GameAreaInfo.get_no_rotate_direction(robo))
+    print(GameAreaInfo.get_no_rotate_directions(robo))
