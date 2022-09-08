@@ -4,7 +4,7 @@
 @author: kodama0720
 """
 
-from typing import List, Tuple, Dict
+from typing import List
 from robot import Robot, Direction
 from color_changer import Color
 from node import Node, NodeType

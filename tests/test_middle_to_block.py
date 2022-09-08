@@ -5,7 +5,7 @@
 
 import unittest
 
-from camera_system.game_motion import Edge, GameMotion
+from camera_system.game_motion import GameMotion
 from camera_system.middle_to_block import MiddleToBlock
 
 
