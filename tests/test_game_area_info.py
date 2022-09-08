@@ -58,8 +58,7 @@ class TestGameAreaInfo(unittest.TestCase):
 
     # 回頭禁止方向を取得するテスト
     def test_get_no_rotate_direction(self):
-        robo = Robot(Coordinate(1, 4), Direction.E.value)
+        robo = Robot(Coordinate(1, 4), Direction.E)
         expected = [0, 4, 5, 6, 7]
-        actual = GameAreaInfo.get_no_rotate_direction(robo)
-
-        self.assertEqual(expected, actual)
+        actual = [direction.value for direction in GameAreaInfo.get_no_rotate_direction(robo)]
+        self.assertCountEqual(expected, actual)
