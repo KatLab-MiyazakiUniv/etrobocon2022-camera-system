@@ -124,7 +124,7 @@ class GameAreaInfo:
     @staticmethod
     def move_block(move_block_id: int, goal_node: Node) -> None:
         """指定したブロックを移動する関数.
-        
+
         Args:
             block_id: 移動させるブロックのID
             goal_node: 移動後ブロックのノード
@@ -134,7 +134,7 @@ class GameAreaInfo:
             print("Block on destination")
             return
 
-        if not 0 <= move_block_id <=7:
+        if not 0 <= move_block_id <= 7:
             print("Block ID is abnormal.")
             return
 
@@ -146,7 +146,7 @@ class GameAreaInfo:
         return
 
     @staticmethod
-    def get_no_entry_coordinates(robot) -> List[Coordinate]:
+    def get_no_entry_coordinate(robot) -> List[Coordinate]:
         """走行禁止座標を取得する関数.
 
         Args:
@@ -248,7 +248,7 @@ class GameAreaInfo:
         return no_entry_coords
 
     @staticmethod
-    def get_no_rotate_directions(robot) -> List[Direction]:
+    def get_no_rotate_direction(robot) -> List[Direction]:
         """回頭禁止方向を取得する関数.
 
         Args:
@@ -337,6 +337,6 @@ if __name__ == "__main__":
     for block in GameAreaInfo.get_no_transported_block():
         print(block.block_id, block.coord)
     print("走行禁止座標")
-    print(GameAreaInfo.get_no_entry_coordinates(robo))
+    print(GameAreaInfo.get_no_entry_coordinate(robo))
     print("回頭禁止方向")
-    print(GameAreaInfo.get_no_rotate_directions(robo))
+    print(GameAreaInfo.get_no_rotate_direction(robo))

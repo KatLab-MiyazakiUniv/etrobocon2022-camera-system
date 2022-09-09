@@ -152,9 +152,9 @@ class OptimalMotionSearcher:
             np.stack([dxs, dys], 1).astype(int)
 
         # 回頭禁止方向を取得する
-        no_rotate_directions = GameAreaInfo.get_no_rotate_directions(current_robot)
+        no_rotate_directions = GameAreaInfo.get_no_rotate_direction(current_robot)
         # 走行禁止座標を取得する
-        no_entry_coordinates = GameAreaInfo.get_no_entry_coordinates(current_robot)
+        no_entry_coordinates = GameAreaInfo.get_no_entry_coordinate(current_robot)
         # 遷移可能な走行体の状態を生成する
         # ToDo: 綺麗にする
         robots = np.array([Robot(Coordinate(*coords[direction.value]), direction)
@@ -176,6 +176,7 @@ class OptimalMotionSearcher:
             ハッシュ値: int
         """
         return int(100 * robot.coord.x + 10 * robot.coord.y + robot.direct.value)
+
 
 if __name__ == "__main__":
     start_time = time.time()
@@ -208,7 +209,8 @@ if __name__ == "__main__":
             costs += [cost if cost > 0 else 100000000000]
         # マップの更新
         mindex = costs.index(min(costs))
-        candidate_node = GameAreaInfo.node_list[candidate_coords[mindex].y*7+candidate_coords[mindex].x]
+        candidate_node = GameAreaInfo.node_list[candidate_coords[mindex].y *
+                                                7+candidate_coords[mindex].x]
         print(candidate_node.block_id, block_id)
         GameAreaInfo.move_block(block_id, candidate_node)
         print(candidate_node.block_id)
