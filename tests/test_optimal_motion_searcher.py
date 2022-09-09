@@ -17,7 +17,7 @@ from coordinate import Coordinate
 class TestCompositeGameMotion(unittest.TestCase):
     """CompositeGameMotionのテスト."""
 
-    def test_optiaml_motion_searcher(self):
+    def test_optiaml_motion_search(self):
         # ブロック取得ノードの座標を構成する値
         get_coord_elm = [1, 3, 5]
         # ブロック設置ノードの座標を構成する値

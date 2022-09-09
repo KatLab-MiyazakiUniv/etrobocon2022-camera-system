@@ -49,8 +49,8 @@ class TestGameAreaInfo(unittest.TestCase):
     def test_get_no_entry_coordinate(self):
         robo = Robot(Coordinate(1, 2), Direction.NE.value)
         expected = [
-            Coordinate(1, 3), Coordinate(0, 3), Coordinate(2, 3),
-            Coordinate(1, 1), Coordinate(0, 1), Coordinate(2, 1)
+            Coordinate(0, 3), Coordinate(2, 3),
+            Coordinate(0, 1), Coordinate(2, 1)
         ]
         actual = GameAreaInfo.get_no_entry_coordinate(robo)
 
