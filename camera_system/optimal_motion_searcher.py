@@ -238,7 +238,7 @@ if __name__ == "__main__":
     start_time = time.time()
 
     # コースを初期化する
-    robo = Robot(Coordinate(4, 2), Direction.N)
+    robo = Robot(Coordinate(3, 3), Direction.N)
     GameAreaInfo.block_id_list = [
         Color.RED.value, Color.YELLOW.value,
         Color.GREEN.value, Color.BLUE.value,
@@ -254,13 +254,21 @@ if __name__ == "__main__":
     # 全ブロックをブロックID順に運搬する
     for block_id, block_color_id in enumerate(GameAreaInfo.block_id_list):
         node = [node for node in GameAreaInfo.node_list if node.block_id == block_id][0]
+        # 復帰時の座標を(3,3)と仮定する
+        robo.coord = Coordinate(3, 3)
         # 取得動作を探索する
         OptimalMotionSearcher.search(robo, node)
+        print("get move Robot(%d,%d) to Block(%d,%d)" %
+              (robo.coord.x, robo.coord.y, node.coord.x, node.coord.y))
+        # 走行体の座標を更新する
+        robo.coord = node.coord
         # 設置先候補ノードを取得する
         candidate_coords = GameAreaInfo.get_candidate_node(block_color_id)
         costs = []
         # 各設置先候補ノードについて設置動作を探索する
         for candidate_coord in candidate_coords:
+            print("pattern: Robot(%d,%d) to Candidate(%d,%d)" %
+                  (robo.coord.x, robo.coord.y, candidate_coord.x, candidate_coord.y))
             candidate_node = GameAreaInfo.node_list[candidate_coord.y*7+candidate_coord.x]
             motions = OptimalMotionSearcher.search(robo, candidate_node)
             # 遷移不可能な動作のコストを大きく設定する
@@ -268,6 +276,8 @@ if __name__ == "__main__":
             costs += [cost if cost > 0 else 100000000000]
         # マップを更新する
         mindex = costs.index(min(costs))
+        print("set Block(%d,%d) to Goal(%d,%d)" %
+              (node.coord.x, node.coord.y, candidate_coords[mindex].x, candidate_coords[mindex].y))
         set_node = GameAreaInfo.node_list[candidate_coords[mindex].y *
                                           7+candidate_coords[mindex].x]
         GameAreaInfo.move_block(block_id, set_node)
