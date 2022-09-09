@@ -14,8 +14,7 @@ from robot import Robot, Direction
 from coordinate import Coordinate
 from composite_game_motion import CompositeGameMotion
 from motion_converter_mock import MotionConverterMock  # ToDo: 動作変換が実装でき次第差し替える.
-
-# ToDo: 動作確認用に書いてるだけなので後で削除する
+# 動作確認用
 import time
 from color_changer import Color
 
@@ -41,6 +40,7 @@ class OptimalMotionSearcher:
         # 探索する状態のハッシュ値を保持
         open = [cls.robot_hash(start_robot)]
         # 走行体について、状態のハッシュ値をキーに状態、遷移するための動作群、予測コスト、ロボットの推移を保持
+        # ToDo: エッジを保持する
         state_table = {
             open[0]: {"robot": copy.deepcopy(start_robot),
                       "motions": CompositeGameMotion(),
@@ -58,9 +58,6 @@ class OptimalMotionSearcher:
 
         # 設置先ノードがブロックエリア外周の上下(y座標が0か6)/左右どちらにあるか(True:上下, False:左右)
         is_border_y = goal_node.coord.y % 6 == 0
-
-        # ToDo: 既存の経路内、経路の前半部分についてよりよいルートが見つかっても、その部分だけを更新できない問題（効率が悪いだけで問題はないはず）
-        # ToDo: 探索不可能なパターンの検証
 
         # 最適動作を探索する
         while state_table[open[0]]["robot"].coord != goal_node.coord:
@@ -101,7 +98,7 @@ class OptimalMotionSearcher:
                 else:
                     continue
                 open.append(hash)
-            # 遷移できる状態がない
+            # 遷移できる状態がない場合
             if open == []:
                 print("ERROR: Impossible move (%d,%d,%s) to (%d,%d)." %
                       (start_robot.coord.x, start_robot.coord.y,
@@ -117,8 +114,10 @@ class OptimalMotionSearcher:
                     min_hash = op
             open.remove(min_hash)
             open.insert(0, min_hash)
-        # 探索した最適動作を返す
+
+        # 探索した移動経路を表示する
         print(state_table[open[0]]["logs"])
+        # 探索した最適動作を返す
         return state_table[open[0]]["motions"]
 
     @classmethod
@@ -147,7 +146,7 @@ class OptimalMotionSearcher:
         # 各方位に進んだ際の移動ベクトルを求める
         dxs = np.round(-np.cos(np.radians(angs)))
         dys = np.round(-np.sin(np.radians(angs)))
-        # 到達可能な座標を取得する
+        # 各方位に進んだ際に到達可能な座標を取得する
         coords = np.array([current_robot.coord.x, current_robot.coord.y]) + \
             np.stack([dxs, dys], 1).astype(int)
 
@@ -155,12 +154,15 @@ class OptimalMotionSearcher:
         no_rotate_directions = GameAreaInfo.get_no_rotate_direction(current_robot)
         # 走行禁止座標を取得する
         no_entry_coordinates = GameAreaInfo.get_no_entry_coordinate(current_robot)
-        # 遷移可能な走行体の状態を生成する
-        # ToDo: 綺麗にする
+
+        # 遷移可能な走行体を生成する
         robots = np.array([Robot(Coordinate(*coords[direction.value]), direction)
                            for direction in Direction
+                           # 回頭禁止方向を除外する
                            if direction not in no_rotate_directions
+                           # 走行禁止座標を除外する
                            and Coordinate(*coords[direction.value]) not in no_entry_coordinates
+                           # 無効な座標を除外する
                            and 0 <= Coordinate(*coords[direction.value]).x < 7
                            and 0 <= Coordinate(*coords[direction.value]).y < 7
                            ])
@@ -181,8 +183,8 @@ class OptimalMotionSearcher:
 if __name__ == "__main__":
     start_time = time.time()
 
+    # コースを初期化する
     robo = Robot(Coordinate(3, 3), Direction.N)
-
     GameAreaInfo.block_id_list = [
         Color.RED.value, Color.YELLOW.value,
         Color.GREEN.value, Color.BLUE.value,
@@ -195,24 +197,25 @@ if __name__ == "__main__":
     ]
     GameAreaInfo.end_id = Color.RED.value
 
+    # 全ブロックをブロックID順に運搬する
     for block_id, block_color_id in enumerate(GameAreaInfo.block_id_list):
         node = [node for node in GameAreaInfo.node_list if node.block_id == block_id][0]
-        # 取得の探索
+        # 取得動作を探索する
         OptimalMotionSearcher.search(robo, node)
-        # 候補ノード取得
+        # 設置先候補ノードを取得する
         candidate_coords = GameAreaInfo.get_candidate_node(block_color_id)
         costs = []
+        # 各設置先候補ノードについて設置動作を探索する
         for candidate_coord in candidate_coords:
             candidate_node = GameAreaInfo.node_list[candidate_coord.y*7+candidate_coord.x]
             motions = OptimalMotionSearcher.search(robo, candidate_node)
+            # 推移不可能な動作のコストを大きく設定する
             cost = motions.get_cost()
             costs += [cost if cost > 0 else 100000000000]
-        # マップの更新
+        # マップを更新する
         mindex = costs.index(min(costs))
-        candidate_node = GameAreaInfo.node_list[candidate_coords[mindex].y *
-                                                7+candidate_coords[mindex].x]
-        print(candidate_node.block_id, block_id)
-        GameAreaInfo.move_block(block_id, candidate_node)
-        print(candidate_node.block_id)
+        set_node = GameAreaInfo.node_list[candidate_coords[mindex].y *
+                                          7+candidate_coords[mindex].x]
+        GameAreaInfo.move_block(block_id, set_node)
 
     print(time.time() - start_time)
