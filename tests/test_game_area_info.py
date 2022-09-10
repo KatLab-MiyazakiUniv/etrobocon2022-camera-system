@@ -49,8 +49,8 @@ class TestGameAreaInfo(unittest.TestCase):
     def test_get_no_entry_coordinate(self):
         robo = Robot(Coordinate(1, 2), Direction.NE.value)
         expected = [
-            Coordinate(1, 3), Coordinate(0, 3), Coordinate(2, 3),
-            Coordinate(1, 1), Coordinate(0, 1), Coordinate(2, 1)
+            Coordinate(0, 3), Coordinate(2, 3),
+            Coordinate(0, 1), Coordinate(2, 1)
         ]
         actual = GameAreaInfo.get_no_entry_coordinate(robo)
 
@@ -58,8 +58,7 @@ class TestGameAreaInfo(unittest.TestCase):
 
     # 回頭禁止方向を取得するテスト
     def test_get_no_rotate_direction(self):
-        robo = Robot(Coordinate(1, 4), Direction.E.value)
+        robo = Robot(Coordinate(1, 4), Direction.E)
         expected = [0, 4, 5, 6, 7]
-        actual = GameAreaInfo.get_no_rotate_direction(robo)
-
-        self.assertEqual(expected, actual)
+        actual = [direction.value for direction in GameAreaInfo.get_no_rotate_direction(robo)]
+        self.assertCountEqual(expected, actual)
