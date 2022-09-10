@@ -15,9 +15,9 @@ class GameAreaInfo:
     """ゲームエリア情報を保持するクラス.
 
     Attributes:
-        block_color_list (List[int]): ブロックの色のリスト
-        base_color_list (List[int]): ベースブロックの色のリスト
-        bonus_color (List[int]): ボーナスブロックの色
+        block_color_list (List[Color]): ブロックの色のリスト
+        base_color_list (List[Color]): ベースブロックの色のリスト
+        bonus_color (List[Color]): ボーナスブロックの色
         node_list (List[Node]): ノードリスト(ノード)
         __east_cand_list = (List[Node]): 東の候補ノードになりうる座標リスト
         __south_cand_list = (List[Node]): 南の候補ノードになりうる座標リスト
