@@ -27,7 +27,7 @@ class TestCompositeGameMotion(unittest.TestCase):
 
         for robot_x in robot_coord_elm:
             for robot_y in robot_coord_elm:
-                # ブロック取得
+                # ブロック取得について探索する
                 for node_x in get_coord_elm:
                     for node_y in get_coord_elm:
                         if node_x == node_y == 3:
@@ -37,7 +37,9 @@ class TestCompositeGameMotion(unittest.TestCase):
                         with redirect_stdout(open(os.devnull, 'w')) as redirect:
                             OptimalMotionSearcher.search(robot, node)
                             redirect.close()
-                # ブロック設置
+
+                # ブロック設置について探索する
+                # 東西への設置について探索する
                 for node_x in [0, 6]:
                     for node_y in set_coord_elm:
                         node = GameAreaInfo.node_list[node_y * 7 + node_x]
@@ -45,6 +47,7 @@ class TestCompositeGameMotion(unittest.TestCase):
                         with redirect_stdout(open(os.devnull, 'w')) as redirect:
                             OptimalMotionSearcher.search(robot, node)
                             redirect.close()
+                # 南北への設置について探索する
                 for node_x in set_coord_elm:
                     for node_y in [0, 6]:
                         node = GameAreaInfo.node_list[node_y * 7 + node_x]
