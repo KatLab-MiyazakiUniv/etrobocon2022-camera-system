@@ -20,7 +20,7 @@ class TestGameAreaInfo(unittest.TestCase):
         expected = [Coordinate(2, 0), Coordinate(3, 0), Coordinate(4, 0)]
         actual = GameAreaInfo.get_candidate_node(color)
 
-        self.assertEqual(expected, actual)
+        self.assertEqual(str(expected), str(actual))
 
     # 未運搬のブロック置き場があるブロック置き場を取得するテスト
     def test_get_no_transported_block(self):
@@ -33,7 +33,7 @@ class TestGameAreaInfo(unittest.TestCase):
         actual = GameAreaInfo.get_no_transported_block()
         for i in range(len(actual)):
             self.assertEqual(expected[i].block_id, actual[i].block_id)
-            self.assertEqual(expected[i].coord, actual[i].coord)
+            self.assertEqual(str(expected[i].coord), str(actual[i].coord))
             self.assertEqual(expected[i].node_type, actual[i].node_type)
 
     # 走行禁止座標を取得するテスト
@@ -45,7 +45,7 @@ class TestGameAreaInfo(unittest.TestCase):
         ]
         actual = GameAreaInfo.get_no_entry_coordinate(robo)
 
-        self.assertEqual(expected, actual)
+        self.assertEqual(str(expected), str(actual))
 
     # 回頭禁止方向を取得するテスト
     def test_get_no_rotate_direction(self):
@@ -53,4 +53,4 @@ class TestGameAreaInfo(unittest.TestCase):
         expected = [0, 4, 5, 6, 7]
         actual = GameAreaInfo.get_no_rotate_direction(robo)
 
-        self.assertEqual(expected, actual)
+        self.assertEqual(str(expected), str(actual))
