@@ -2,7 +2,7 @@
 
 現在の走行体と次の走行体からゲーム動作を生成する
 @author mutotaka0426
-@note 調整動作の有無の判定については https://x.gd/1Ckbi を参照
+@note 調整動作の有無の判定については https://qr.paps.jp/RFEkV を参照
 """
 
 from robot import Robot, Direction
