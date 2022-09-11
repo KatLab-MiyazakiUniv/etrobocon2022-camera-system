@@ -265,30 +265,6 @@ class GameAreaInfo:
 
         return no_rotate_directions
 
-    @staticmethod
-    def move_block(move_block_id: int, goal_node: Node) -> None:
-        """指定したブロックを移動する関数.
-
-        Args:
-            block_id: 移動させるブロックのID
-            goal_node: 移動後ブロックのノード
-        """
-        if goal_node.block_id != -1:
-            print(goal_node.block_id)
-            print("Block on destination")
-            return
-
-        if not 0 <= move_block_id <= 7:
-            print("Block ID is abnormal.")
-            return
-
-        for node in GameAreaInfo.node_list:
-            if node.block_id == move_block_id:  # 指定したブロックがあるノード
-                node.block_id = -1
-        goal_node.block_id = move_block_id
-
-        return
-
 
 if __name__ == "__main__":
     robo = Robot(Coordinate(1, 2), Direction.N)
