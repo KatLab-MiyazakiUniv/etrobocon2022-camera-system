@@ -9,6 +9,7 @@ from pathlib import Path
 import sys
 sys.path.append(str(Path(__file__).parent.parent))
 sys.path.append(str(Path(__file__).parent.parent / "camera_system"))
+from color_changer import Color  # noqa
 from camera_system.game_motion import Edge, GameMotion  # noqa
 from camera_system.middle_to_intersection import MiddleToIntersection  # noqa
 
@@ -18,7 +19,7 @@ class TestMiddleToIntersection(unittest.TestCase):
 
     def test_midlle_to_intersection_at_blue(self):
         angle = 225
-        target_color = "BLUE"
+        target_color = Color.BLUE
         m2i = MiddleToIntersection(angle, target_color)
         m2i.current_edge = "left"  # 初期エッジを左エッジにする
 
@@ -43,7 +44,7 @@ class TestMiddleToIntersection(unittest.TestCase):
 
     def test_midlle_to_intersection_at_green(self):
         angle = 270
-        target_color = "GREEN"
+        target_color = Color.GREEN
         m2i = MiddleToIntersection(angle, target_color)
         m2i.current_edge = "left"  # 初期エッジを左エッジにする
 
@@ -67,7 +68,7 @@ class TestMiddleToIntersection(unittest.TestCase):
 
     def test_midlle_to_intersection_at_yellow(self):
         angle = 90
-        target_color = "YELLOW"
+        target_color = Color.YELLOW
         m2i = MiddleToIntersection(angle, target_color)
         m2i.current_edge = "right"  # 初期エッジを右エッジにする
 
@@ -91,7 +92,7 @@ class TestMiddleToIntersection(unittest.TestCase):
 
     def test_midlle_to_intersection_at_yellow(self):
         angle = 135
-        target_color = "RED"
+        target_color = Color.RED
         m2i = MiddleToIntersection(angle, target_color)
         m2i.current_edge = "right"  # 初期エッジを右エッジにする
 
@@ -118,5 +119,5 @@ class TestMiddleToIntersection(unittest.TestCase):
         """交点の色以外を指定された場合のテスト"""
         with self.assertRaises(ValueError):
             angle = 90
-            target_color = "WHITE"
+            target_color = Color.WHITE
             m2i = MiddleToIntersection(angle, target_color)

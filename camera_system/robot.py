@@ -40,7 +40,9 @@ class Robot:
     Attributes:
         coord: 座標
         direct: 方位
+        edge: エッジ "left" or "right" or "none"
     """
 
     coord: Coordinate
     direct: Direction
+    edge: str

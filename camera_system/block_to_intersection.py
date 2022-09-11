@@ -6,12 +6,13 @@
 """
 
 from game_motion import GameMotion
+from color_changer import Color
 
 
 class BlockToIntersection(GameMotion):
     """ブロック置き場→交点のゲーム動作クラス."""
 
-    def __init__(self, angle: int, target_color: str) -> None:
+    def __init__(self, angle: int, target_color: Color) -> None:
         """BlockToIntersectionのコンストラクタ.
 
         Args:
@@ -24,10 +25,10 @@ class BlockToIntersection(GameMotion):
         self.__motion_time = 1.0700
         self.__success_rate = 1.0
 
-        expected_color = ["BLUE", "GREEN", "YELLOW", "RED"]
+        expected_color = [Color.BLUE, Color.GREEN, Color.YELLOW, Color.RED]
         # 交点の色以外を指定された場合エラーを出す
         if self.__target_color not in expected_color:
-            raise ValueError('"%s" is an Unexpected Color' % self.__target_color)
+            raise ValueError('"%s" is an Unexpected Color' % self.__target_color.name)
 
     def generate_command(self) -> str:
         """ブロック置き場→交点のゲーム動作に必要なコマンドを生成するメソッド.
@@ -43,7 +44,7 @@ class BlockToIntersection(GameMotion):
             command_list += "RT,%d,%d,%s\n" % (abs(self.__angle),
                                                GameMotion.ROTATION_PWM, clockwise)
 
-        command_list += "CS,%s,70\n" % self.__target_color  # エッジを認識するまで直進
+        command_list += "CS,%s,70\n" % self.__target_color.name  # エッジを認識するまで直進
         command_list += "DS,42,60\n"  # 走行体がエッジに乗るまで直進
 
         # エッジ切り替えのコマンドは生成しないが，計算上はエッジをnoneにする

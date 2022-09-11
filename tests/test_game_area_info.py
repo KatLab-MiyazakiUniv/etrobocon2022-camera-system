@@ -18,21 +18,21 @@ from coordinate import Coordinate  # noqa
 
 
 class TestGameAreaInfo(unittest.TestCase):
-    # 候補ノードを取得するテスト
     def test_get_candidate_node(self):
-        color = Color.BLUE.value  # 北
+        """候補ノードを取得するテスト."""
+        GameAreaInfo.base_color_list = [
+            Color.RED, Color.YELLOW,
+            Color.GREEN, Color.BLUE
+        ]
+        color = Color.BLUE  # 北
         expected = [Coordinate(2, 0), Coordinate(3, 0), Coordinate(4, 0)]
-        actual = GameAreaInfo.get_candidate_node(color)
+        node_list = GameAreaInfo.get_candidate_node(color)
+        actual = [node.coord for node in node_list]
 
         self.assertEqual(expected, actual)
 
-    # 未運搬のブロック置き場があるブロック置き場を取得するテスト
-
     def test_get_no_transported_block(self):
-        color = Color.BLUE.value
-        cross = NodeType.CROSS.value
-        middle = NodeType.MIDDLE.value
-        block_storage = NodeType.BLOCK.value
+        """未運搬のブロック置き場があるブロック置き場を取得するテスト."""
         expected = [
             Node(0, Coordinate(1, 1)), Node(1, Coordinate(3, 1)),
             Node(2, Coordinate(5, 1)), Node(3, Coordinate(1, 3)),
@@ -43,11 +43,11 @@ class TestGameAreaInfo(unittest.TestCase):
         for i in range(len(actual)):
             self.assertEqual(expected[i].block_id, actual[i].block_id)
             self.assertEqual(expected[i].coord, actual[i].coord)
-            self.assertEqual(expected[i].node_type, actual[i].node_type)
+            self.assertEqual(expected[i].node_type.value, actual[i].node_type.value)
 
-    # 走行禁止座標を取得するテスト
     def test_get_no_entry_coordinate(self):
-        robo = Robot(Coordinate(1, 2), Direction.NE.value)
+        """走行禁止座標を取得するテスト."""
+        robo = Robot(Coordinate(1, 2), Direction.NE, "left")
         expected = [
             Coordinate(1, 3), Coordinate(0, 3), Coordinate(2, 3),
             Coordinate(1, 1), Coordinate(0, 1), Coordinate(2, 1)
@@ -56,10 +56,9 @@ class TestGameAreaInfo(unittest.TestCase):
 
         self.assertEqual(expected, actual)
 
-    # 回頭禁止方向を取得するテスト
     def test_get_no_rotate_direction(self):
-        robo = Robot(Coordinate(1, 4), Direction.E.value)
+        """回頭禁止方向を取得するテスト."""
+        robo = Robot(Coordinate(1, 4), Direction.E, "left")
         expected = [0, 4, 5, 6, 7]
-        actual = GameAreaInfo.get_no_rotate_direction(robo)
-
+        actual = [direction.value for direction in GameAreaInfo.get_no_rotate_direction(robo)]
         self.assertEqual(expected, actual)
