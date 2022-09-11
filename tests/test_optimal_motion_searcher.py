@@ -14,10 +14,12 @@ from robot import Robot, Direction
 from coordinate import Coordinate
 
 
-class TestCompositeGameMotion(unittest.TestCase):
-    """CompositeGameMotionのテスト."""
+class TestOptimalMotionSearcher(unittest.TestCase):
+    """OptimalMotionSearcherのテスト."""
 
     def test_optiaml_motion_search(self):
+        """全ブロック置き場への取得動作と全設置先ノードへの設置動作を探索する."""
+
         # ブロック取得ノードの座標を構成する値
         get_coord_elm = [1, 3, 5]
         # ブロック設置ノードの座標を構成する値
