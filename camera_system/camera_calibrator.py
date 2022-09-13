@@ -103,8 +103,8 @@ if __name__ == "__main__":
 
     # カメラIDがない時、接続されているカメラを取得し、表示する
     if args.camera_id is None:
-       CameraInterface.check_camera_connection()
-       exit(0)
+        CameraInterface.check_camera_connection()
+        exit(0)
 
     camera_calibration = CameraCalibrator(camera_id=args.camera_id)
     camera_calibration.start_camera_calibration()
