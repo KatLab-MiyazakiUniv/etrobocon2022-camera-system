@@ -45,12 +45,12 @@ class BlockSelector:
 
         # 優先順位3: 設置先までのマンハッタン距離が小さいブロック
         if(len(cand_nodes) > 1):  # 候補が複数ある場合
-            # 最も小さい(ブロック→設置先)のマンハッタン距離を求める
+            # 設置先までのマンハッタン距離が最も小さいブロックを求める
             min_distance = min([self.__calculate_distance(node.coord, destination.coord)
                                 for node in cand_nodes
                                 for destination in GameAreaInfo.get_candidate_node(
                                     GameAreaInfo.block_color_list[node.block_id])])
-            # 設置先のマンハッタン距離が最も小さいブロックを持つノードに絞り込む
+            # 設置先までのマンハッタン距離が最も小さいブロックを持つノードに絞り込む
             cand_nodes = [node for node in cand_nodes
                           for destination
                           in GameAreaInfo.get_candidate_node(

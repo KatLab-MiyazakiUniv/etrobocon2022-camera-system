@@ -102,12 +102,11 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     # カメラIDがない時、接続されているカメラを取得し、表示する
-    # if args.camera_id is None:
-    #    CameraInterface.check_camera_connection()
-    #    exit(0)
+    if args.camera_id is None:
+       CameraInterface.check_camera_connection()
+       exit(0)
 
-    # camera_calibration = CameraCalibrator(camera_id=args.camera_id)
-    camera_calibration = CameraCalibrator(camera_id=0)
+    camera_calibration = CameraCalibrator(camera_id=args.camera_id)
     camera_calibration.start_camera_calibration()
     camera_calibration.make_game_area_info()
 
