@@ -37,12 +37,11 @@ class OptimalMotionSearcher:
         # 探索する走行体のハッシュ値を保持
         open = [cls.__robot_hash(start_robot)]
         # 走行体のハッシュ値をキーに探索情報を保持
-        # ToDo: エッジを保持する
         transition_table = {
-            open[0]: {"robot": copy.deepcopy(start_robot),                      # 走行体
-                      "motions": CompositeGameMotion(),                         # 開始時からの動作群
-                      "cost": cls.__predict_cost(start_robot, goal_node.coord),   # 推定コスト
-                      "logs": [copy.deepcopy(start_robot)]}                     # 走行体の推移
+            open[0]: {"robot": copy.deepcopy(start_robot),                       # 走行体
+                      "game_motions": CompositeGameMotion(),                     # 開始時からの動作群
+                      "cost": cls.__predict_cost(start_robot, goal_node.coord),  # 推定コスト
+                      "logs": [copy.deepcopy(start_robot)]}                      # 走行体の推移
         }
 
         # 探索対象がブロック設置動作か、ブロック取得動作か(True:設置, False:取得)
@@ -55,39 +54,48 @@ class OptimalMotionSearcher:
 
         # 最適動作を探索する
         while transition_table[open[0]]["robot"].coord != goal_node.coord:
-            # openの先頭(推定コストが最小)を取り出す
-            min_cost_transition = transition_table[open.pop(0)]
+            # 推定コストが最小な走行体のハッシュ値(推定コスト = 初期状態からの実コスト + ゴールまでの予測コスト)
+            min_cost_hash = open.pop(0)
+            # 推定コストが最小な走行体についての探索情報
+            min_cost_transition = transition_table[min_cost_hash]
+
+            # 現状の走行体
+            current_robot = min_cost_transition["robot"]
             # 遷移可能な走行体を取得する
             next_robots = cls.__next_robots(
-                min_cost_transition["robot"], goal_node.coord, is_set_motion)
+                current_robot, goal_node.coord, is_set_motion)
 
             # 遷移可能な走行体について探索する
-            for robot in next_robots:
-                # 走行体のハッシュ値を求める
-                hash = cls.__robot_hash(robot)
+            for next_robot in next_robots:
                 # 開始時の走行体 -> 1ゲーム動作前の走行体 の動作群
-                motions = copy.deepcopy(min_cost_transition["motions"])
+                game_motions = copy.deepcopy(min_cost_transition["game_motions"])
                 # 1ゲーム動作前の走行体 -> 探索対象の走行体 の動作
-                motion = MotionConverterMock.convert(min_cost_transition["robot"], robot)
+                game_motion = MotionConverterMock.convert(current_robot, next_robot)
                 # 開始時の走行体 -> 探索対象の走行体 の動作群
-                motions.append_game_motion(motion)
+                game_motions.append_game_motion(game_motion)
+                # 推定コスト = 開始状態からの実コスト + ゴールまでの予測コスト
+                cost = game_motions.get_cost() + cls.__predict_cost(next_robot, goal_node.coord)
 
                 # 運搬対象の走行体に関する探索情報を生成する
-                transition = {"robot": robot,
-                              "motions": motions,
-                              "cost": motions.get_cost() + cls.__predict_cost(robot, goal_node.coord),  # noqa
-                              "logs": min_cost_transition["logs"] + [robot]}
+                transition = {"robot": next_robot,
+                              "game_motions": game_motions,
+                              "cost": cost,
+                              "logs": min_cost_transition["logs"] + [next_robot]}
+
+                # 走行体のハッシュ値を求める
+                next_hash = cls.__robot_hash(next_robot)
+
                 # 探索情報がテーブルにない場合は探索情報を登録する
-                if hash not in transition_table.keys():
-                    transition_table[hash] = transition
+                if next_hash not in transition_table.keys():
+                    transition_table[next_hash] = transition
                 # 探索情報がテーブルにあり、より低コストで遷移できる場合は探索情報を更新する
-                elif transition["cost"] < transition_table[hash]["cost"]:
-                    transition_table[hash] = transition
+                elif transition["cost"] < transition_table[next_hash]["cost"]:
+                    transition_table[next_hash] = transition
                 # それ以外の場合、探索情報を破棄する
                 else:
                     continue
                 # 遷移できる状態として追加する
-                open.append(hash)
+                open.append(next_hash)
 
             # 遷移できる走行体がない場合
             if open == []:
@@ -107,7 +115,7 @@ class OptimalMotionSearcher:
             open.insert(0, min_hash)
 
         # 探索した最適動作を返す
-        return transition_table[open[0]]["motions"]
+        return transition_table[open[0]]["game_motions"]
 
     @classmethod
     def __predict_cost(cls, start_robot: Robot, goal_coord: Coordinate) -> int:
@@ -212,13 +220,11 @@ class OptimalMotionSearcher:
                   # 走行禁止座標を持つ走行体を除外する
                   and robot.coord not in no_entry_coordinates
                   # 設置時、ゴール座標以外でゴール座標がある外周上の座標を持つ走行体を除外する
-                  and (
-                      (is_set_motion and robot.coord == goal_coord)
-                      or robot.coord not in goal_line_coordinates)
+                  and ((is_set_motion and robot.coord == goal_coord)
+                       or (robot.coord not in goal_line_coordinates))
                   # 取得時、ゴール座標以外でブロックがある座標を持つ走行体を除外する
-                  and (
-                      ((not is_set_motion) and robot.coord == goal_coord)
-                      or robot.coord not in on_block_coordinates)]
+                  and (((not is_set_motion) and robot.coord == goal_coord)
+                       (or robot.coord not in on_block_coordinates))]
 
         return robots
 
