@@ -6,8 +6,6 @@
 
 import unittest
 
-from pathlib import Path
-import sys
 from camera_system.block_selector import BlockSelector
 from game_area_info import GameAreaInfo
 from robot import Robot, Direction
