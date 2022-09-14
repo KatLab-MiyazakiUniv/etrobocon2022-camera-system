@@ -5,7 +5,7 @@
 @author mutotaka0426
 """
 
-from game_motion import Edge, GameMotion
+from game_motion import GameMotion
 
 
 class MiddleToIntersection(GameMotion):
