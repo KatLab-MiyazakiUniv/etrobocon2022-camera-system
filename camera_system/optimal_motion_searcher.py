@@ -224,7 +224,7 @@ class OptimalMotionSearcher:
                        or (robot.coord not in goal_line_coordinates))
                   # 取得時、ゴール座標以外でブロックがある座標を持つ走行体を除外する
                   and (((not is_set_motion) and robot.coord == goal_coord)
-                       (or robot.coord not in on_block_coordinates))]
+                       or (robot.coord not in on_block_coordinates))]
 
         return robots
 
