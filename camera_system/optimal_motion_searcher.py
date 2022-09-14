@@ -35,13 +35,13 @@ class OptimalMotionSearcher:
             目標ノードに遷移するためのゲーム動作群: CompositeGameMotion
         """
         # 探索する走行体のハッシュ値を保持
-        open = [cls.robot_hash(start_robot)]
+        open = [cls.__robot_hash(start_robot)]
         # 走行体のハッシュ値をキーに探索情報を保持
         # ToDo: エッジを保持する
         transition_table = {
             open[0]: {"robot": copy.deepcopy(start_robot),                      # 走行体
                       "motions": CompositeGameMotion(),                         # 開始時からの動作群
-                      "cost": cls.predict_cost(start_robot, goal_node.coord),   # 推定コスト
+                      "cost": cls.__predict_cost(start_robot, goal_node.coord),   # 推定コスト
                       "logs": [copy.deepcopy(start_robot)]}                     # 走行体の推移
         }
 
@@ -58,13 +58,13 @@ class OptimalMotionSearcher:
             # openの先頭(推定コストが最小)を取り出す
             min_cost_transition = transition_table[open.pop(0)]
             # 遷移可能な走行体を取得する
-            next_robots = cls.next_robots(
+            next_robots = cls.__next_robots(
                 min_cost_transition["robot"], goal_node.coord, is_set_motion)
 
             # 遷移可能な走行体について探索する
             for robot in next_robots:
                 # 走行体のハッシュ値を求める
-                hash = cls.robot_hash(robot)
+                hash = cls.__robot_hash(robot)
                 # 開始時の走行体 -> 1ゲーム動作前の走行体 の動作群
                 motions = copy.deepcopy(min_cost_transition["motions"])
                 # 1ゲーム動作前の走行体 -> 探索対象の走行体 の動作
@@ -75,17 +75,18 @@ class OptimalMotionSearcher:
                 # 運搬対象の走行体に関する探索情報を生成する
                 transition = {"robot": robot,
                               "motions": motions,
-                              "cost": motions.get_cost() + cls.predict_cost(robot, goal_node.coord),
+                              "cost": motions.get_cost() + cls.__predict_cost(robot, goal_node.coord),  # noqa
                               "logs": min_cost_transition["logs"] + [robot]}
                 # 探索情報がテーブルにない場合は探索情報を登録する
                 if hash not in transition_table.keys():
                     transition_table[hash] = transition
-                # 探索情報がテーブルにあり、より低コストで遷移できる場合は探索情報更新する
+                # 探索情報がテーブルにあり、より低コストで遷移できる場合は探索情報を更新する
                 elif transition["cost"] < transition_table[hash]["cost"]:
                     transition_table[hash] = transition
                 # それ以外の場合、探索情報を破棄する
                 else:
                     continue
+                # 遷移できる状態として追加する
                 open.append(hash)
 
             # 遷移できる走行体がない場合
@@ -109,7 +110,7 @@ class OptimalMotionSearcher:
         return transition_table[open[0]]["motions"]
 
     @classmethod
-    def predict_cost(cls, start_robot: Robot, goal_coord: Coordinate) -> int:
+    def __predict_cost(cls, start_robot: Robot, goal_coord: Coordinate) -> int:
         """予測コストを算出する.
 
         Args:
@@ -164,7 +165,7 @@ class OptimalMotionSearcher:
         return move_cost + rotate_cost
 
     @classmethod
-    def next_robots(cls, current_robot: Robot, goal_coord: Coordinate, is_set_motion: bool) -> List[Robot]:  # noqa
+    def __next_robots(cls, current_robot: Robot, goal_coord: Coordinate, is_set_motion: bool) -> List[Robot]:  # noqa
         """1つのゲーム動作で遷移可能な走行体を返す.
 
         Args:
@@ -222,7 +223,7 @@ class OptimalMotionSearcher:
         return robots
 
     @classmethod
-    def robot_hash(cls, robot: Robot) -> int:
+    def __robot_hash(cls, robot: Robot) -> int:
         """走行体の状態ごとのハッシュ値を計算する.
 
         Args:
