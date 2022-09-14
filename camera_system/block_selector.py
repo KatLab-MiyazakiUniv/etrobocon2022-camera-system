@@ -25,7 +25,7 @@ class BlockSelector:
         cand_nodes = GameAreaInfo.get_no_transported_block()  # ブロックID順に候補ブロックを持つノードを格納
 
         # 優先順位1: 走行体からマンハッタン距離が近いブロック
-        if(len(cand_nodes) > 1):  # 候補が複数ある場合
+        if len(cand_nodes) > 1:  # 候補が複数ある場合
             # 最も小さい(走行体→ブロック)のマンハッタン距離を求める
             min_distance = min([self.__calculate_distance(robot.coord, node.coord)
                                for node in cand_nodes])
@@ -34,7 +34,7 @@ class BlockSelector:
                           self.__calculate_distance(robot.coord, node.coord)]
 
         # 優先順位2: ダブルアップボーナスとなるブロック
-        if(len(cand_nodes) > 1):  # 候補が複数ある場合
+        if len(cand_nodes) > 1:  # 候補が複数ある場合
             # ボーナスブロックと同じ色のブロックを持つノードに絞り込む
             double_up_nodes = [
                 node for node in cand_nodes
@@ -44,7 +44,7 @@ class BlockSelector:
                 cand_nodes = double_up_nodes
 
         # 優先順位3: 設置先までのマンハッタン距離が小さいブロック
-        if(len(cand_nodes) > 1):  # 候補が複数ある場合
+        if len(cand_nodes) > 1:  # 候補が複数ある場合
             # 設置先までのマンハッタン距離が最も小さいブロックを求める
             min_distance = min([self.__calculate_distance(node.coord, destination.coord)
                                 for node in cand_nodes

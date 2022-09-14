@@ -8,14 +8,12 @@ import unittest
 
 from pathlib import Path
 import sys
-sys.path.append(str(Path(__file__).parent.parent))
-sys.path.append(str(Path(__file__).parent.parent / "camera_system"))
-from camera_system.block_selector import BlockSelector  # noqa
-from game_area_info import GameAreaInfo  # noqa
-from robot import Robot, Direction  # noqa
-from coordinate import Coordinate  # noqa
-from color_changer import Color  # noqa
-from node import Node  # noqa
+from camera_system.block_selector import BlockSelector
+from game_area_info import GameAreaInfo
+from robot import Robot, Direction
+from coordinate import Coordinate
+from color_changer import Color
+from node import Node
 
 
 class TestBlockSelector(unittest.TestCase):
