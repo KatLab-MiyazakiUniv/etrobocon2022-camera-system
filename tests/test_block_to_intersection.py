@@ -5,12 +5,8 @@
 
 import unittest
 
-from pathlib import Path
-import sys
-sys.path.append(str(Path(__file__).parent.parent))
-sys.path.append(str(Path(__file__).parent.parent / "camera_system"))
-from camera_system.game_motion import GameMotion  # noqa
-from camera_system.block_to_intersection import BlockToIntersection  # noqa
+from camera_system.game_motion import GameMotion
+from camera_system.block_to_intersection import BlockToIntersection
 
 
 class TestBlockToIntersection(unittest.TestCase):

@@ -28,7 +28,7 @@ jobs:
       - name: Generage coverage report
         id: generate_coverage_report
         run: |
-          poetry run python -m coverage run --source=camera_system/ -m unittest discover -s tests/
+          poetry run python -m coverage run --source=camera_system/ -m unittest discover
           
           # Job Summaries にカバレッジの概要を設定する
           echo '## Coverage'                   >> ${GITHUB_STEP_SUMMARY}
