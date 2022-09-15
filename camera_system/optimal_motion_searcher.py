@@ -35,13 +35,13 @@ class OptimalMotionSearcher:
             目標ノードに遷移するためのゲーム動作群: CompositeGameMotion
         """
         # 探索する走行体のハッシュ値を保持
-        open = [cls.__robot_hash(start_robot)]
+        open_hashs = [cls.__robot_hash(start_robot)]
         # 走行体のハッシュ値をキーに探索情報を保持
         transition_table = {
-            open[0]: {"robot": copy.deepcopy(start_robot),                       # 走行体
-                      "game_motions": CompositeGameMotion(),                     # 開始時からの動作群
-                      "cost": cls.__predict_cost(start_robot, goal_node.coord),  # 推定コスト
-                      "logs": [copy.deepcopy(start_robot)]}                      # 走行体の推移
+            open_hashs[0]: {"robot": copy.deepcopy(start_robot),                       # 走行体
+                            "game_motions": CompositeGameMotion(),                     # 開始時からの動作群
+                            "cost": cls.__predict_cost(start_robot, goal_node.coord),  # 推定コスト
+                            "logs": [copy.deepcopy(start_robot)]}                      # 走行体の推移
         }
 
         # 探索対象がブロック設置動作か、ブロック取得動作か(True:設置, False:取得)
@@ -53,9 +53,9 @@ class OptimalMotionSearcher:
             return CompositeGameMotion()
 
         # 最適動作を探索する
-        while transition_table[open[0]]["robot"].coord != goal_node.coord:
+        while transition_table[open_hashs[0]]["robot"].coord != goal_node.coord:
             # 推定コストが最小な走行体のハッシュ値(推定コスト = 初期状態からの実コスト + ゴールまでの予測コスト)
-            min_cost_hash = open.pop(0)
+            min_cost_hash = open_hashs.pop(0)
             # 推定コストが最小な走行体についての探索情報
             min_cost_transition = transition_table[min_cost_hash]
 
@@ -95,10 +95,10 @@ class OptimalMotionSearcher:
                 else:
                     continue
                 # 遷移できる状態として追加する
-                open.append(next_hash)
+                open_hashs.append(next_hash)
 
             # 遷移できる走行体がない場合
-            if open == []:
+            if open_hashs == []:
                 print("Impossible move (%d,%d,%s) to (%d,%d)." %
                       (start_robot.coord.x, start_robot.coord.y, start_robot.direct.name,
                        goal_node.coord.x, goal_node.coord.y))
@@ -106,16 +106,16 @@ class OptimalMotionSearcher:
                 return CompositeGameMotion()
 
             # 最小コストのハッシュ値をリストの先頭に持ってくる
-            list(set(open))
-            min_hash = open[0]
-            for op in open:
+            list(set(open_hashs))
+            min_hash = open_hashs[0]
+            for op in open_hashs:
                 if transition_table[op]["cost"] < transition_table[min_hash]["cost"]:
                     min_hash = op
-            open.remove(min_hash)
-            open.insert(0, min_hash)
+            open_hashs.remove(min_hash)
+            open_hashs.insert(0, min_hash)
 
         # 探索した最適動作を返す
-        return transition_table[open[0]]["game_motions"]
+        return transition_table[open_hashs[0]]["game_motions"]
 
     @classmethod
     def __predict_cost(cls, start_robot: Robot, goal_coord: Coordinate) -> int:
