@@ -216,8 +216,8 @@ class GameAreaInfo:
 
         # 走行体の東のノード
         east_coord = Coordinate(robot.coord.x+1, robot.coord.y)
-        node_id = int(east_coord.y * 7 + east_coord.x)
-        if 0 <= node_id < 49:
+        if 0 <= east_coord.x < 7 and 0 <= east_coord.y < 7:
+            node_id = int(east_coord.y * 7 + east_coord.x)
             east_node = GameAreaInfo.node_list[node_id]
             # ノードにブロックが存在する場合、西を回頭禁止方向に追加
             if east_node.block_id != -1:
@@ -225,8 +225,8 @@ class GameAreaInfo:
 
         # 走行体の南のノード
         south_coord = Coordinate(robot.coord.x, robot.coord.y+1)
-        node_id = int(south_coord.y * 7 + south_coord.x)
-        if 0 <= node_id < 49:
+        if 0 <= south_coord.x < 7 and 0 <= south_coord.y < 7:
+            node_id = int(south_coord.y * 7 + south_coord.x)
             south_node = GameAreaInfo.node_list[node_id]
             # ノードにブロックが存在する場合、北を回頭禁止方向に追加
             if south_node.block_id != -1:
@@ -234,8 +234,8 @@ class GameAreaInfo:
 
         # 走行体の西のノード
         west_coord = Coordinate(robot.coord.x-1, robot.coord.y)
-        node_id = int(west_coord.y * 7 + west_coord.x)
-        if 0 <= node_id < 49:
+        if 0 <= west_coord.x < 7 and 0 <= west_coord.y < 7:
+            node_id = int(west_coord.y * 7 + west_coord.x)
             west_node = GameAreaInfo.node_list[node_id]
             # ノードにブロックが存在する場合、東を回頭禁止方向に追加
             if west_node.block_id != -1:
@@ -243,8 +243,8 @@ class GameAreaInfo:
 
         # 走行体の北のノード
         north_coord = Coordinate(robot.coord.x, robot.coord.y-1)
-        node_id = int(north_coord.y * 7 + north_coord.x)
-        if 0 <= node_id < 49:
+        if 0 <= north_coord.x < 7 and 0 <= north_coord.y < 7:
+            node_id = int(north_coord.y * 7 + north_coord.x)
             north_node = GameAreaInfo.node_list[node_id]
             # ノードにブロックが存在する場合、南を回頭禁止方向に追加
             if north_node.block_id != -1:
