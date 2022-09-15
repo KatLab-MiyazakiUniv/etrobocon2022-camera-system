@@ -184,19 +184,6 @@ class OptimalMotionSearcher:
         Returns:
             遷移可能な走行体: List[Robot]
         """
-        # ゲームエリアを初期化
-        GameAreaInfo.block_color_list = [
-            Color.RED, Color.RED, Color.YELLOW,
-            Color.YELLOW, Color.GREEN, Color.GREEN,
-            Color.BLUE, Color.BLUE
-        ]
-        GameAreaInfo.base_color_list = [
-            Color.RED, Color.YELLOW,
-            Color.GREEN, Color.BLUE
-        ]
-        GameAreaInfo.bonus_color = Color.RED
-        GameAreaInfo.intersection_list = [Color.RED, Color.BLUE, Color.YELLOW, Color.GREEN]
-
         # 8方位の角度を求める
         angs = np.array([direction.value * 45 + 90 for direction in Direction])
         # 各方位に進んだ際の移動ベクトルを求める
