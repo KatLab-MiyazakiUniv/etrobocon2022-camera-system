@@ -4,7 +4,7 @@
 @author: kodama0720
 """
 
-from typing import List, Tuple, Dict
+from typing import List
 from robot import Robot, Direction
 from color_changer import Color
 from node import Node, NodeType
@@ -17,7 +17,7 @@ class GameAreaInfo:
     Attributes:
         block_color_list (List[Color]): ブロックの色のリスト
         base_color_list (List[Color]): ベースブロックの色のリスト
-        bonus_color (List[Color]): ボーナスブロック(色ID)
+        bonus_color (List[Color]): ボーナスブロックの色
         intersection_list (List[Color]): 交点の色のリスト
         node_list (List[Node]): ノードリスト(ノード)
         __east_cand_list = (List[Node]): 東の候補ノードになりうる座標リスト
@@ -117,15 +117,15 @@ class GameAreaInfo:
         Returns:
             List[Node]: 運搬していないブロックがあるブロック置き場のノード
         """
-        no_trans_block_list = []
+        no_trans_block_color_list = []
 
         # ブロックがブロック置き場にあるノードをリストに格納する
         for node in GameAreaInfo.node_list:
             if node.block_id != -1:  # ブロックがあるノード
-                if node.node_type == NodeType.BLOCK.value:  # ブロック置き場のノード
-                    no_trans_block_list.append(node)
+                if node.node_type == NodeType.BLOCK:  # ブロック置き場のノード
+                    no_trans_block_color_list.append(node)
 
-        return no_trans_block_list
+        return no_trans_block_color_list
 
     @staticmethod
     def get_no_entry_coordinate(robot) -> List[Coordinate]:

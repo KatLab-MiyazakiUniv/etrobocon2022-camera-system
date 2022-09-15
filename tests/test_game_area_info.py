@@ -6,15 +6,11 @@
 
 import unittest
 
-from pathlib import Path
-import sys
-sys.path.append(str(Path(__file__).parent.parent))
-sys.path.append(str(Path(__file__).parent.parent / "camera_system"))
-from camera_system.game_area_info import GameAreaInfo  # noqa
-from camera_system.color_changer import Color  # noqa
-from camera_system.robot import Direction, Robot  # noqa
-from camera_system.node import NodeType, Node  # noqa
-from coordinate import Coordinate  # noqa
+from camera_system.game_area_info import GameAreaInfo
+from camera_system.color_changer import Color
+from camera_system.robot import Direction, Robot
+from camera_system.node import NodeType, Node
+from camera_system.coordinate import Coordinate
 
 
 class TestGameAreaInfo(unittest.TestCase):
@@ -29,7 +25,7 @@ class TestGameAreaInfo(unittest.TestCase):
         node_list = GameAreaInfo.get_candidate_node(color)
         actual = [node.coord for node in node_list]
 
-        self.assertEqual(expected, actual)
+        self.assertEqual(str(expected), str(actual))
 
     def test_get_no_transported_block(self):
         """未運搬のブロック置き場があるブロック置き場を取得するテスト."""
@@ -42,7 +38,7 @@ class TestGameAreaInfo(unittest.TestCase):
         actual = GameAreaInfo.get_no_transported_block()
         for i in range(len(actual)):
             self.assertEqual(expected[i].block_id, actual[i].block_id)
-            self.assertEqual(expected[i].coord, actual[i].coord)
+            self.assertEqual(str(expected[i].coord), str(actual[i].coord))
             self.assertEqual(expected[i].node_type.value, actual[i].node_type.value)
 
     def test_get_no_entry_coordinate(self):
@@ -54,7 +50,7 @@ class TestGameAreaInfo(unittest.TestCase):
         ]
         actual = GameAreaInfo.get_no_entry_coordinate(robo)
 
-        self.assertEqual(expected, actual)
+        self.assertEqual(str(expected), str(actual))
 
     def test_get_no_rotate_direction(self):
         """回頭禁止方向を取得するテスト."""
@@ -62,3 +58,4 @@ class TestGameAreaInfo(unittest.TestCase):
         expected = [0, 4, 5, 6, 7]
         actual = [direction.value for direction in GameAreaInfo.get_no_rotate_direction(robo)]
         self.assertEqual(expected, actual)
+        self.assertEqual(str(expected), str(actual))

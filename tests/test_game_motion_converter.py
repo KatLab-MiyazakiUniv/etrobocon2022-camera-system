@@ -4,22 +4,18 @@
 """
 import unittest
 
-from pathlib import Path
-import sys
-sys.path.append(str(Path(__file__).parent.parent))
-sys.path.append(str(Path(__file__).parent.parent / "camera_system"))
-from camera_system.game_motion_converter import GameMotionConverter  # noqa
-from color_changer import Color  # noqa
-from robot import Robot, Direction  # noqa
-from coordinate import Coordinate  # noqa
-from game_area_info import GameAreaInfo  # noqa
-from block_to_intersection import BlockToIntersection  # noqa
-from block_to_middle import BlockToMiddle  # noqa
-from intersection_to_block import IntersectionToBlock   # noqa
-from intersection_to_middle import IntersectionToMiddle  # noqa
-from middle_to_block import MiddleToBlock  # noqa
-from middle_to_intersection import MiddleToIntersection  # noqa
-from middle_to_middle import MiddleToMiddle  # noqa
+from camera_system.game_motion_converter import GameMotionConverter
+from color_changer import Color
+from robot import Robot, Direction
+from coordinate import Coordinate
+from game_area_info import GameAreaInfo
+from block_to_intersection import BlockToIntersection
+from block_to_middle import BlockToMiddle
+from intersection_to_block import IntersectionToBlock
+from intersection_to_middle import IntersectionToMiddle
+from middle_to_block import MiddleToBlock
+from middle_to_intersection import MiddleToIntersection
+from middle_to_middle import MiddleToMiddle
 
 
 class TestGameMotionConverter(unittest.TestCase):

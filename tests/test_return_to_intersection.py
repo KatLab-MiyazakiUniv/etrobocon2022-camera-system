@@ -5,13 +5,9 @@
 
 import unittest
 
-from pathlib import Path
-import sys
-sys.path.append(str(Path(__file__).parent.parent))
-sys.path.append(str(Path(__file__).parent.parent / "camera_system"))
-from color_changer import Color  # noqa
-from camera_system.game_motion import GameMotion  # noqa
-from camera_system.return_to_intersection import ReturnToIntersection  # noqa
+from camera_system.game_motion import GameMotion
+from camera_system.return_to_intersection import ReturnToIntersection
+from color_changer import Color
 
 
 class TestReturnToIntersection(unittest.TestCase):

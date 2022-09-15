@@ -5,22 +5,18 @@
 
 import unittest
 
-from pathlib import Path
-import sys
-sys.path.append(str(Path(__file__).parent.parent))
-sys.path.append(str(Path(__file__).parent.parent / "camera_system"))
-from camera_system.composite_game_motion import CompositeGameMotion  # noqa
-from color_changer import Color  # noqa
-from block_to_intersection import BlockToIntersection  # noqa
-from block_to_middle import BlockToMiddle  # noqa
-from intersection_to_block import IntersectionToBlock  # noqa
-from intersection_to_middle import IntersectionToMiddle  # noqa
-from middle_to_block import MiddleToBlock  # noqa
-from middle_to_intersection import MiddleToIntersection  # noqa
-from middle_to_middle import MiddleToMiddle  # noqa
-from return_to_intersection import ReturnToIntersection  # noqa
-from return_to_middle import ReturnToMiddle  # noqa
-from return_to_block import ReturnToBlock  # noqa
+from camera_system.composite_game_motion import CompositeGameMotion
+from camera_system.block_to_intersection import BlockToIntersection
+from camera_system.block_to_middle import BlockToMiddle
+from camera_system.intersection_to_block import IntersectionToBlock
+from camera_system.intersection_to_middle import IntersectionToMiddle
+from camera_system.middle_to_block import MiddleToBlock
+from camera_system.middle_to_intersection import MiddleToIntersection
+from camera_system.middle_to_middle import MiddleToMiddle
+from camera_system.return_to_intersection import ReturnToIntersection
+from camera_system.return_to_middle import ReturnToMiddle
+from camera_system.return_to_block import ReturnToBlock
+from color_changer import Color
 
 
 class TestCompositeGameMotion(unittest.TestCase):

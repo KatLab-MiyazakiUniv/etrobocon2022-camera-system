@@ -55,9 +55,9 @@ class CameraCalibrator:
         self.__color_changer.change_color(game_area_img, color_save_path)
 
         # カラーIDを格納する配列を宣言
-        block_id_list = []
-        base_id_list = []
-        end_id = []
+        block_color_list = []
+        base_color_list = []
+        bonus_color = []
 
         # ブロック置き場
         for i, point in enumerate(self.__coord.block_point):
@@ -66,7 +66,7 @@ class CameraCalibrator:
                                                                  point[1],
                                                                  CameraCalibrator.MODE_AREA_XSIZE,
                                                                  CameraCalibrator.MODE_AREA_YSIZE)
-            block_id_list.append(color_id)
+            block_color_list.append(Color(color_id))
             print("ブロック置き場%d:%s" % (i, Color(color_id).name))
         # ベースサークル置き場
         for i, base in enumerate(self.__coord.base_circle):
@@ -75,20 +75,20 @@ class CameraCalibrator:
                                                                  base[1],
                                                                  CameraCalibrator.MODE_AREA_XSIZE,
                                                                  CameraCalibrator.MODE_AREA_YSIZE)
-            base_id_list.append(color_id)
+            base_color_list.append(Color(color_id))
             print("ベースサークル置き場%d:%s" % (i, Color(color_id).name))
         # 端点サークル置き場
         # 最頻値を求めてブロックの色を判定
         color_id = self.__color_changer.calculate_mode_color(
             self.__coord.end_point[0][0], self.__coord.end_point[0][1],
             CameraCalibrator.MODE_AREA_XSIZE, CameraCalibrator.MODE_AREA_YSIZE)
-        end_id.append(color_id)
+        bonus_color.append(Color(color_id))
         print("ボーナスブロック置き場%d:%s" % (i, Color(color_id).name))
 
         # ゲームエリア情報を作成
-        GameAreaInfo.block_id_list = block_id_list
-        GameAreaInfo.base_id_list = base_id_list
-        GameAreaInfo.end_id = end_id
+        GameAreaInfo.block_color_list = block_color_list
+        GameAreaInfo.base_color_list = base_color_list
+        GameAreaInfo.bonus_color = bonus_color
         # コースに応じて交点の色をセットする
         if is_left_course:
             GameAreaInfo.intersection_list = [Color.RED, Color.BLUE, Color.YELLOW, Color.GREEN]
@@ -115,4 +115,9 @@ if __name__ == "__main__":
     camera_calibration = CameraCalibrator(camera_id=args.camera_id)
     camera_calibration.start_camera_calibration()
     camera_calibration.make_game_area_info()
+
+    print(GameAreaInfo.block_color_list)
+    print(GameAreaInfo.base_color_list)
+    print(GameAreaInfo.bonus_color)
+
     print("CameraCalibrator 終了")
