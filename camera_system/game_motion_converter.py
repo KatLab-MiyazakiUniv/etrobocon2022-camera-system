@@ -164,8 +164,8 @@ class GameMotionConverter:
         """二つの走行体の方位から回頭角度を求める.
 
         Args:
-            current_direct: 現在の走行体
-            next_direct: 次の走行体
+            current_robot: 現在の走行体
+            next_robot: 次の走行体
 
         Returns:
             int: 回頭角度
@@ -192,6 +192,11 @@ class GameMotionConverter:
         direct_list = [Direction((current_value-diff) % 8) for diff in range(1, direct_diff+1)]
         if set(direct_list) & set(no_rotate_list) == set():  # 反時計回りする時に回頭禁止方向に当たらない場合(同じ方位がない場合)
             anticlockwise_angle = direct_diff * -45
+
+        # 時計回りも反時計回りも角度が360の場合，目的の方位まで回頭できないためエラーを出す
+        if abs(clockwise_angle) == abs(anticlockwise_angle) == 360:
+            raise ValueError('Cannot transition from "%s, %s" to "%s, %s"' % (
+                current_robot.coord, current_robot.direct, next_robot.coord, next_robot.direct))
 
         # 時計回りと反時計回りで回頭角度が小さいほうを採用する
         if abs(clockwise_angle) <= abs(anticlockwise_angle):

@@ -45,6 +45,7 @@ class CameraCalibrator:
         """ゲームエリア情報作成を行う関数.
 
         Args:
+            is_left_course (bool): 左コースの場合 True. Defaults to True.
             game_save_path (str): ゲームエリア画像保存パス
         """
         # ゲームエリア画像を取得

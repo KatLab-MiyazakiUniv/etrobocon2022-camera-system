@@ -356,6 +356,17 @@ class TestGameMotionConverter(unittest.TestCase):
         actual_edge = next_robot.edge
         self.assertEqual(expected_edge, actual_edge)  # 次の走行体のエッジを正しくセットできているかテスト
 
+    def test_convert_game_motion_failure(self):
+        """遷移できない場合のテスト."""
+        with self.assertRaises(ValueError):
+            self.__init_game_area_info()  # ゲームエリア情報の初期化
+            game_motion_converter = GameMotionConverter()  # インスタンス化
+            current_robot = Robot(Coordinate(2, 1), Direction.N, "left")  # 現在の走行体
+            next_robot = Robot(Coordinate(2, 2), Direction.S, "none")  # 次の走行体
+
+            # 両隣にブロックがあるため回頭できず，エラーを返す
+            actual = game_motion_converter.convert_game_motion(current_robot, next_robot)
+
     def __init_game_area_info(self):
         """テスト用にゲームエリア情報を初期化する."""
         # ノードリストを初期化
