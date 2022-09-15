@@ -97,7 +97,7 @@ class GameAreaInfo:
                     if node.coord == east_cand.coord and node.block_id == -1]
         elif base_color_dict[color_id] == "南":
             cand = [south_cand for node in GameAreaInfo.node_list
-                    for southt_cand in GameAreaInfo.__south_cand_list
+                    for south_cand in GameAreaInfo.__south_cand_list
                     if node.coord == south_cand.coord and node.block_id == -1]
         elif base_color_dict[color_id] == "西":
             cand = [west_cand for node in GameAreaInfo.node_list
