@@ -24,12 +24,12 @@ class BlockSelector:
         """
         cand_nodes = GameAreaInfo.get_no_transported_block()  # ブロックID順に候補ブロックを持つノードを格納
 
-        # 優先順位1: 走行体からマンハッタン距離が近いブロック
+        # 優先順位1: 走行体からのマンハッタン距離が小さいブロック
         if len(cand_nodes) > 1:  # 候補が複数ある場合
-            # 最も小さい(走行体→ブロック)のマンハッタン距離を求める
+            # 走行体からのマンハッタン距離が最も小さいブロックを求める
             min_distance = min([self.__calculate_distance(robot.coord, node.coord)
                                for node in cand_nodes])
-            # マンハッタン距離が最も小さいブロックを持つノードに絞り込む
+            # 走行体からのマンハッタン距離が最も小さいブロックを持つノードに絞り込む
             cand_nodes = [node for node in cand_nodes if min_distance ==
                           self.__calculate_distance(robot.coord, node.coord)]
 
