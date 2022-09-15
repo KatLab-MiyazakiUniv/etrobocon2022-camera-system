@@ -13,7 +13,7 @@ from node import Node, NodeType
 from robot import Robot, Direction
 from coordinate import Coordinate
 from composite_game_motion import CompositeGameMotion
-from motion_converter_mock import MotionConverterMock  # ToDo: 動作変換が実装でき次第差し替える.
+from game_motion_converter import GameMotionConverter
 
 
 class OptimalMotionSearcher:
@@ -45,7 +45,7 @@ class OptimalMotionSearcher:
         }
 
         # 探索対象がブロック設置動作か、ブロック取得動作か(True:設置, False:取得)
-        is_set_motion = goal_node.node_type != NodeType.BLOCK.value
+        is_set_motion = goal_node.node_type != NodeType.BLOCK
         # 設置動作探索時、ゴールノードにブロックがある場合
         if is_set_motion and goal_node.block_id != -1:
             print("A block already exists at the goal node.")
@@ -67,10 +67,11 @@ class OptimalMotionSearcher:
 
             # 遷移可能な走行体について探索する
             for next_robot in next_robots:
+                game_motion_converter = GameMotionConverter()
                 # 開始時の走行体 -> 1ゲーム動作前の走行体 の動作群
                 game_motions = copy.deepcopy(min_cost_transition["game_motions"])
                 # 1ゲーム動作前の走行体 -> 探索対象の走行体 の動作
-                game_motion = MotionConverterMock.convert(current_robot, next_robot)
+                game_motion = game_motion_converter.convert_game_motion(current_robot, next_robot)
                 # 開始時の走行体 -> 探索対象の走行体 の動作群
                 game_motions.append_game_motion(game_motion)
                 # 推定コスト = 開始状態からの実コスト + ゴールまでの予測コスト
@@ -192,7 +193,8 @@ class OptimalMotionSearcher:
         xys = np.array([current_robot.coord.x, current_robot.coord.y]) \
             + np.stack([dxs, dys], 1).astype(int)
         # 1つのゲーム動作で遷移可能な走行体を生成する
-        robots = [Robot(Coordinate(*xys[direction.value]), direction) for direction in Direction]
+        robots = [Robot(Coordinate(*xys[direction.value]), direction, "none")
+                  for direction in Direction]
 
         # 回頭禁止方向を取得する
         no_rotate_directions = GameAreaInfo.get_no_rotate_direction(current_robot)

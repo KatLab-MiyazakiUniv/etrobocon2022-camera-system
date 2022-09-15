@@ -31,7 +31,7 @@ class TestOptimalMotionSearcher(unittest.TestCase):
         for robot_coord in robot_coords:
             # ブロック取得について探索する
             for get_coord in get_coords:
-                start_robot = Robot(robot_coord, Direction.N)
+                start_robot = Robot(robot_coord, Direction.N, "left")
                 goal_node = GameAreaInfo.node_list[get_coord.y * 7 + get_coord.x]
                 # 探索する
                 get_game_motions = OptimalMotionSearcher.search(start_robot, goal_node)
@@ -57,7 +57,7 @@ class TestOptimalMotionSearcher(unittest.TestCase):
 
         # 各ブロック置き場について
         for get_coord in get_coords:
-            getted_robot = Robot(get_coord, Direction.N)
+            getted_robot = Robot(get_coord, Direction.N, "left")
             actual_success_count = 0        # 探索成功数
             unexpected_success_count = 0    # 期待しない探索成功数
             # ブロック設置について探索する
