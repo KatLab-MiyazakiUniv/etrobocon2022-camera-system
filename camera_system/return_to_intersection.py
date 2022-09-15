@@ -6,12 +6,13 @@
 """
 
 from game_motion import GameMotion
+from color_changer import Color
 
 
 class ReturnToIntersection(GameMotion):
     """設置後復帰(→交点)のゲーム動作クラス."""
 
-    def __init__(self, angle: int,  target_color: str) -> None:
+    def __init__(self, angle: int,  target_color: Color) -> None:
         """ReturnToIntersectionのコンストラクタ.
 
         Args:
@@ -22,10 +23,10 @@ class ReturnToIntersection(GameMotion):
         self.__angle = angle
         self.__target_color = target_color
 
-        expected_color = ["BLUE", "GREEN", "YELLOW", "RED"]
+        expected_color = [Color.BLUE, Color.GREEN, Color.YELLOW, Color.RED]
         # 交点の色以外を指定された場合エラーを出す
         if self.__target_color not in expected_color:
-            raise ValueError('"%s" is an Unexpected Color' % self.__target_color)
+            raise ValueError('"%s" is an Unexpected Color' % self.__target_color.name)
 
     def generate_command(self) -> str:
         """設置後復帰(→交点)のゲーム動作に必要なコマンドを生成するメソッド.
@@ -47,7 +48,7 @@ class ReturnToIntersection(GameMotion):
             self.current_edge = next_edge  # 現在のエッジを更新する
 
         command_list += "DS,70,-40\n"  # 黒を認識するための後退
-        command_list += "CL,%s,0,-40,0.1,0.08,0.08\n" % self.__target_color  # 交点までライントレース
+        command_list += "CL,%s,0,-40,0.1,0.08,0.08\n" % self.__target_color.name  # 交点までライントレース
         command_list += "DS,15,60\n"  # 走行体が交差点に乗るように調整
 
         return command_list.replace("\n", ",設置後復帰(→交点)\n", 1)  # 最初の行の末尾に",設置後復帰(→交点)"を追加する

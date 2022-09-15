@@ -12,12 +12,12 @@ class NodeType(Enum):
     """ノードタイプの列挙体.
 
     Attributes:
-        CROSS: 交点
+        INTERSECTION: 交点
         MIDDLE: 中点
         BLOCK: ブロック置き場
     """
 
-    CROSS = 0
+    INTERSECTION = 0
     MIDDLE = 1
     BLOCK = 2
 
@@ -33,11 +33,47 @@ class Node:
             coord(Coordinate): 座標
             node_type(NodeType): ノードの型
         """
-        self.block_id = block_id
-        self.coord = coord
+        self.__block_id = block_id
+        self.__coord = coord
         if coord.x % 2 != 0 and coord.y % 2 != 0:
-            self.node_type = NodeType.BLOCK.value
+            self.__node_type = NodeType.BLOCK
         elif coord.x % 2 == 0 and coord.y % 2 == 0:
-            self.node_type = NodeType.CROSS.value
+            self.__node_type = NodeType.INTERSECTION
         else:
-            self.node_type = NodeType.MIDDLE.value
+            self.__node_type = NodeType.MIDDLE
+
+    @property
+    def block_id(self) -> int:
+        """Getter.
+
+        Returns:
+            int: ブロックID
+        """
+        return self.__block_id
+
+    @block_id.setter
+    def block_id(self, block_id: int) -> None:
+        """Setter.
+
+        Args:
+            block_id(int): ブロックID
+        """
+        self.__block_id = block_id
+
+    @property
+    def coord(self) -> Coordinate:
+        """Getter.
+
+        Returns:
+            Coordinate: 座標
+        """
+        return self.__coord
+
+    @property
+    def node_type(self) -> NodeType:
+        """Getter.
+
+        Returns:
+            NodeType: ノードの型
+        """
+        return self.__node_type

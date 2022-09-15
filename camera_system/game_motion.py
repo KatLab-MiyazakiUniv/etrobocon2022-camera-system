@@ -51,6 +51,14 @@ class GameMotion(metaclass=ABCMeta):
     VERTICAL_TIME = 0.2558
     DIAGONAL_TIME = 0.2620
 
+    def __eq__(self, other) -> bool:
+        """オブジェクトの等価比較をする.
+
+        Returns:
+            bool: 等価比較の結果
+        """
+        return self.__dict__ == other.__dict__  # 全てのインスタンス変数を比較
+
     @abstractmethod
     def generate_command(self) -> str:
         """ゲーム動作に必要なコマンドを生成する抽象メソッド.
@@ -78,22 +86,22 @@ class GameMotion(metaclass=ABCMeta):
         Returns:
             str: 次のエッジ("left" or "right" or "none")
         """
-        angle = angle % 360  # 時計回りの場合の角度に直す（0~360）
+        conv_angle = angle % 360  # 時計回りの場合の角度に直す（0~360）
         current_edge = self.current_edge
         if current_edge == "left":
-            if angle >= 90 and angle <= 225:  # 後方に回頭する場合エッジを反転する
+            if conv_angle >= 90 and conv_angle <= 225:  # 後方に回頭する場合エッジを反転する
                 return "right"
             else:
                 return current_edge
         elif current_edge == "right":
-            if angle >= 135 and angle <= 270:  # 後方に回頭する場合エッジを反転する
+            if conv_angle >= 135 and conv_angle <= 270:  # 後方に回頭する場合エッジを反転する
                 return "left"
             else:
                 return current_edge
         else:  # current_edge == "none"
-            if angle >= 45 and angle <= 135:  # 右側に回頭する場合エッジを右にする
+            if conv_angle >= 45 and conv_angle <= 135:  # 右側に回頭する場合エッジを右にする
                 return "right"
-            elif angle >= 225 and angle <= 315:
+            elif conv_angle >= 225 and conv_angle <= 315:
                 return "left"  # 左側に回頭する場合エッジを左にする
             else:
                 return current_edge
