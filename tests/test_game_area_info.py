@@ -14,16 +14,21 @@ from camera_system.coordinate import Coordinate
 
 
 class TestGameAreaInfo(unittest.TestCase):
-    # 候補ノードを取得するテスト
     def test_get_candidate_node(self):
-        color = Color.BLUE.value  # 北
+        """候補ノードを取得するテスト."""
+        GameAreaInfo.base_color_list = [
+            Color.RED, Color.YELLOW,
+            Color.GREEN, Color.BLUE
+        ]
+        color = Color.BLUE  # 北
         expected = [Coordinate(2, 0), Coordinate(3, 0), Coordinate(4, 0)]
-        actual = GameAreaInfo.get_candidate_node(color)
+        node_list = GameAreaInfo.get_candidate_node(color)
+        actual = [node.coord for node in node_list]
 
         self.assertEqual(str(expected), str(actual))
 
-    # 未運搬のブロック置き場があるブロック置き場を取得するテスト
     def test_get_no_transported_block(self):
+        """未運搬のブロック置き場があるブロック置き場を取得するテスト."""
         expected = [
             Node(0, Coordinate(1, 1)), Node(1, Coordinate(3, 1)),
             Node(2, Coordinate(5, 1)), Node(3, Coordinate(1, 3)),
@@ -34,10 +39,10 @@ class TestGameAreaInfo(unittest.TestCase):
         for i in range(len(actual)):
             self.assertEqual(expected[i].block_id, actual[i].block_id)
             self.assertEqual(str(expected[i].coord), str(actual[i].coord))
-            self.assertEqual(expected[i].node_type, actual[i].node_type)
+            self.assertEqual(expected[i].node_type.value, actual[i].node_type.value)
 
-    # 走行禁止座標を取得するテスト
     def test_get_no_entry_coordinate(self):
+        """走行禁止座標を取得するテスト."""
         robo = Robot(Coordinate(1, 2), Direction.NE.value)
         expected = [
             Coordinate(1, 3), Coordinate(0, 3), Coordinate(2, 3),
@@ -47,8 +52,8 @@ class TestGameAreaInfo(unittest.TestCase):
 
         self.assertEqual(str(expected), str(actual))
 
-    # 回頭禁止方向を取得するテスト
     def test_get_no_rotate_direction(self):
+        """回頭禁止方向を取得するテスト."""
         robo = Robot(Coordinate(1, 4), Direction.E.value)
         expected = [0, 4, 5, 6, 7]
         actual = GameAreaInfo.get_no_rotate_direction(robo)
