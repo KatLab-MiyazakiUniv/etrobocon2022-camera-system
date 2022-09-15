@@ -51,6 +51,15 @@ class Node:
         """
         return self.__block_id
 
+    @block_id.setter
+    def block_id(self, block_id: int) -> None:
+        """Setter.
+
+        Args:
+            block_id(int): ブロックID
+        """
+        self.__block_id = block_id
+
     @property
     def coord(self) -> Coordinate:
         """Getter.

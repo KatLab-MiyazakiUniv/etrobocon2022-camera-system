@@ -32,7 +32,7 @@ class CameraSystem:
         # 開始合図を受け取るまで待機する.
         client.wait_for_start_signal()
         # ゲームエリア情報の作成
-        camera_calibrator.make_game_area_info()
+        camera_calibrator.make_game_area_info(self.__is_left_course)
         # ToDo: 計画する.
         game_motion_list = CompositeGameMotion()  # TODO: 計画した結果のゲーム動作のリストをセットする
 

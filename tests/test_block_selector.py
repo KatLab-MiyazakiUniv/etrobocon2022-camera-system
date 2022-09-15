@@ -17,7 +17,7 @@ from node import Node
 class TestBlockSelector(unittest.TestCase):
     def test_select_block_priority1(self):
         """優先順位1で決定するパターン."""
-        robot = Robot(Coordinate(6, 6), Direction.N.value)
+        robot = Robot(Coordinate(6, 6), Direction.N, "left")
         GameAreaInfo.block_color_list = [
             Color.RED, Color.RED, Color.YELLOW,
             Color.YELLOW, Color.GREEN,
@@ -42,7 +42,7 @@ class TestBlockSelector(unittest.TestCase):
 
     def test_select_block_priority2(self):
         """優先順位2で決定するパターン."""
-        robot = Robot(Coordinate(2, 2), Direction.N.value)
+        robot = Robot(Coordinate(2, 2), Direction.N, "left")
         GameAreaInfo.block_color_list = [
             Color.RED, Color.GREEN, Color.YELLOW,
             Color.YELLOW, Color.RED,
@@ -67,7 +67,7 @@ class TestBlockSelector(unittest.TestCase):
 
     def test_select_block_priority3(self):
         """優先順位3で決定するパターン."""
-        robot = Robot(Coordinate(4, 4), Direction.N.value)
+        robot = Robot(Coordinate(4, 4), Direction.N, "left")
         GameAreaInfo.block_color_list = [
             Color.RED, Color.GREEN, Color.YELLOW,
             Color.YELLOW, Color.BLUE,
@@ -92,7 +92,7 @@ class TestBlockSelector(unittest.TestCase):
 
     def test_select_block_priority4(self):
         """優先順位4で決定するパターン."""
-        robot = Robot(Coordinate(4, 4), Direction.N.value)
+        robot = Robot(Coordinate(4, 4), Direction.N, "left")
         GameAreaInfo.block_color_list = [
             Color.RED, Color.GREEN, Color.YELLOW,
             Color.RED, Color.BLUE,

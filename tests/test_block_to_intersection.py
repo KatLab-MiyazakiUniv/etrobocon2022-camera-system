@@ -7,6 +7,7 @@ import unittest
 
 from camera_system.game_motion import GameMotion
 from camera_system.block_to_intersection import BlockToIntersection
+from color_changer import Color
 
 
 class TestBlockToIntersection(unittest.TestCase):
@@ -14,7 +15,7 @@ class TestBlockToIntersection(unittest.TestCase):
 
     def test_block_to_intersection_at_blue(self):
         angle = -180
-        target_color = "BLUE"
+        target_color = Color.BLUE
         b2i = BlockToIntersection(angle, target_color)
         b2i.current_edge = "right"  # 初期エッジを右エッジにする
 
@@ -43,7 +44,7 @@ class TestBlockToIntersection(unittest.TestCase):
 
     def test_block_to_intersection_at_green(self):
         angle = -215
-        target_color = "GREEN"
+        target_color = Color.GREEN
         b2i = BlockToIntersection(angle, target_color)
         b2i.current_edge = "left"  # 初期エッジを左エッジにする
 
@@ -72,7 +73,7 @@ class TestBlockToIntersection(unittest.TestCase):
 
     def test_block_to_intersection_at_yellow(self):
         angle = -270
-        target_color = "YELLOW"
+        target_color = Color.YELLOW
         b2i = BlockToIntersection(angle, target_color)
         b2i.current_edge = "left"  # 初期エッジを左エッジにする
 
@@ -101,7 +102,7 @@ class TestBlockToIntersection(unittest.TestCase):
 
     def test_block_to_intersection_at_red(self):
         angle = -315
-        target_color = "RED"
+        target_color = Color.RED
         b2i = BlockToIntersection(angle, target_color)
         b2i.current_edge = "none"  # 初期エッジを左エッジにする
 
@@ -132,5 +133,5 @@ class TestBlockToIntersection(unittest.TestCase):
         """交点の色以外を指定された場合のテスト"""
         with self.assertRaises(ValueError):
             angle = 90
-            target_color = "BLACK"
+            target_color = Color.BLACK
             b2i = BlockToIntersection(angle, target_color)

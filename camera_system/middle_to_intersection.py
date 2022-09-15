@@ -6,12 +6,13 @@
 """
 
 from game_motion import GameMotion
+from color_changer import Color
 
 
 class MiddleToIntersection(GameMotion):
     """中点→交点のゲーム動作クラス."""
 
-    def __init__(self, angle: int, target_color: str) -> None:
+    def __init__(self, angle: int, target_color: Color) -> None:
         """MiddleToIntersectionのコンストラクタ.
 
         Args:
@@ -24,10 +25,10 @@ class MiddleToIntersection(GameMotion):
         self.__motion_time = 0.5560
         self.__success_rate = 0.8
 
-        expected_color = ["BLUE", "GREEN", "YELLOW", "RED"]
+        expected_color = [Color.BLUE, Color.GREEN, Color.YELLOW, Color.RED]
         # 交点の色以外を指定された場合エラーを出す
         if self.__target_color not in expected_color:
-            raise ValueError('"%s" is an Unexpected Color' % self.__target_color)
+            raise ValueError('"%s" is an Unexpected Color' % self.__target_color.name)
 
     def generate_command(self) -> str:
         """中点→交点のゲーム動作に必要なコマンドを生成するメソッド.
@@ -48,7 +49,7 @@ class MiddleToIntersection(GameMotion):
             command_list += "EC,%s\n" % next_edge
             self.current_edge = next_edge  # 現在のエッジを更新する
 
-        command_list += "CL,%s,0,60,0.1,0.08,0.08\n" % self.__target_color  # 指定した色のノードまでライントレース
+        command_list += "CL,%s,0,60,0.1,0.08,0.08\n" % self.__target_color.name  # 指定色のノードまでライントレース
         command_list += "DS,20,60\n"  # 交差点まで直進
 
         return command_list.replace("\n", ",中点→交点\n", 1)  # 最初の行の末尾に",中点→交点"を追加する

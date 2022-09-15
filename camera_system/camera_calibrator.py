@@ -41,10 +41,11 @@ class CameraCalibrator:
         # GUIから座標取得
         self.__coord.show_window()
 
-    def make_game_area_info(self, game_save_path="game_course.png") -> None:
+    def make_game_area_info(self, is_left_course: bool, game_save_path="game_course.png") -> None:
         """ゲームエリア情報作成を行う関数.
 
         Args:
+            is_left_course (bool): 左コースの場合 True. Defaults to True.
             game_save_path (str): ゲームエリア画像保存パス
         """
         # ゲームエリア画像を取得
@@ -88,6 +89,11 @@ class CameraCalibrator:
         GameAreaInfo.block_color_list = block_color_list
         GameAreaInfo.base_color_list = base_color_list
         GameAreaInfo.bonus_color = bonus_color
+        # コースに応じて交点の色をセットする
+        if is_left_course:
+            GameAreaInfo.intersection_list = [Color.RED, Color.BLUE, Color.YELLOW, Color.GREEN]
+        else:
+            GameAreaInfo.intersection_list = [Color.BLUE, Color.RED, Color.GREEN, Color.YELLOW]
 
 
 if __name__ == "__main__":

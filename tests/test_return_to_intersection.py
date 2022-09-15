@@ -7,6 +7,7 @@ import unittest
 
 from camera_system.game_motion import GameMotion
 from camera_system.return_to_intersection import ReturnToIntersection
+from color_changer import Color
 
 
 class TestReturnToIntersection(unittest.TestCase):
@@ -15,7 +16,7 @@ class TestReturnToIntersection(unittest.TestCase):
     def test_return_to_intersection_from_block(self):
         """ブロック置き場から設置した想定のテスト."""
         angle = 45
-        target_color = "GREEN"
+        target_color = Color.GREEN
         r2i = ReturnToIntersection(angle, target_color)
         r2i.current_edge = "none"  # 初期エッジをnoneにする
 
@@ -39,7 +40,7 @@ class TestReturnToIntersection(unittest.TestCase):
     def test_return_to_intersection_from_middle(self):
         """中点から設置した想定のテスト."""
         angle = 0
-        target_color = "RED"
+        target_color = Color.RED
         r2i = ReturnToIntersection(angle, target_color)
         r2i.current_edge = "left"  # 初期エッジを左エッジにする
 
@@ -62,6 +63,6 @@ class TestReturnToIntersection(unittest.TestCase):
         """交点の色以外を指定された場合のテスト"""
         with self.assertRaises(ValueError):
             angle = 0
-            target_color = "BLACK"
+            target_color = Color.BLACK
             r2i = ReturnToIntersection(angle, target_color)
             r2i.current_edge = "left"  # 初期エッジを左エッジにする
