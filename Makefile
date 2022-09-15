@@ -26,7 +26,7 @@ test:
 	poetry run python -m unittest
 
 coverage:
-	poetry run python -m coverage run --source=camera_system/ -m unittest discover -s tests/
+	poetry run python -m coverage run --source=camera_system/ -m unittest discover
 	poetry run python -m coverage report
 
 # NOTE: htmlcovディレクトリが生成され、index.htmlをブラウザで開くことでカバレッジを視覚的に確認できる
