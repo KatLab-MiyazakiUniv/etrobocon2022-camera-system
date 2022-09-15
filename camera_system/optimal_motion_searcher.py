@@ -14,7 +14,6 @@ from robot import Robot, Direction
 from coordinate import Coordinate
 from composite_game_motion import CompositeGameMotion
 from game_motion_converter import GameMotionConverter
-from color_changer import Color
 
 
 class OptimalMotionSearcher:
@@ -117,7 +116,6 @@ class OptimalMotionSearcher:
             open_hashs.insert(0, min_hash)
 
         # 探索した最適動作を返す
-        print(transition_table[open_hashs[0]]["logs"])
         return transition_table[open_hashs[0]]["game_motions"]
 
     @classmethod
@@ -255,73 +253,3 @@ class OptimalMotionSearcher:
             ハッシュ値: int
         """
         return int(100 * robot.coord.x + 10 * robot.coord.y + robot.direct.value)
-
-    @staticmethod
-    def move_block(move_block_id: int, goal_node: Node) -> None:
-        """指定したブロックを移動する関数.
-
-        Args:
-            block_id: 移動させるブロックのID
-            goal_node: 移動後ブロックのノード
-        """
-        if goal_node.block_id != -1:
-            print(goal_node.block_id)
-            print("Block on destination")
-            return
-
-        if not 0 <= move_block_id <= 7:
-            print("Block ID is abnormal.")
-            return
-
-        for node in GameAreaInfo.node_list:
-            if node.block_id == move_block_id:  # 指定したブロックがあるノード
-                node.block_id = -1
-        goal_node.block_id = move_block_id
-
-
-if __name__ == "__main__":
-    # コースを初期化する
-    robo = Robot(Coordinate(3, 3), Direction.N, "left")
-    GameAreaInfo.block_id_list = [
-        Color.RED.value, Color.YELLOW.value,
-        Color.GREEN.value, Color.BLUE.value,
-        Color.RED.value, Color.YELLOW.value,
-        Color.GREEN.value, Color.BLUE.value
-    ]
-    GameAreaInfo.base_id_list = [
-        Color.RED.value, Color.YELLOW.value,
-        Color.GREEN.value, Color.BLUE.value
-    ]
-    GameAreaInfo.end_id = Color.RED.value
-
-    # 全ブロックをブロックID順に運搬する
-    for block_id, block_color_id in enumerate(GameAreaInfo.block_id_list):
-        node = [node for node in GameAreaInfo.node_list if node.block_id == block_id][0]
-        # 復帰時の座標を(3,3)と仮定する
-        robo.coord = Coordinate(3, 3)
-        # 取得動作を探索する
-        OptimalMotionSearcher.search(robo, node)
-        print("get move Robot(%d,%d) to Block(%d,%d)" %
-              (robo.coord.x, robo.coord.y, node.coord.x, node.coord.y))
-        # 走行体の座標を更新する
-        robo.coord = node.coord
-        # 設置先候補ノードを取得する
-        candidate_nodes = GameAreaInfo.get_candidate_node(Color(block_color_id))
-        costs = []
-        # 各設置先候補ノードについて設置動作を探索する
-        for candidate_node in candidate_nodes:
-            candidate_coord = candidate_node.coord
-            print("pattern: Robot(%d,%d) to Candidate(%d,%d)" %
-                  (robo.coord.x, robo.coord.y, candidate_coord.x, candidate_coord.y))
-            motions = OptimalMotionSearcher.search(robo, candidate_node)
-            # 遷移不可能な動作のコストを大きく設定する
-            cost = motions.get_cost()
-            costs += [cost if cost > 0 else 100000000000]
-        # マップを更新する
-        mindex = costs.index(min(costs))
-        min_cost_coord = candidate_nodes[mindex].coord
-        print("set Block(%d,%d) to Goal(%d,%d)" %
-              (node.coord.x, node.coord.y, min_cost_coord.x, min_cost_coord.y))
-        set_node = GameAreaInfo.node_list[min_cost_coord.y *
-                                          7+min_cost_coord.x]
-        OptimalMotionSearcher.move_block(block_id, set_node)
