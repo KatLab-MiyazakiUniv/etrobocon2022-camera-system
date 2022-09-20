@@ -25,9 +25,10 @@ class TestGameMotionConverter(unittest.TestCase):
         game_motion_converter = GameMotionConverter()  # インスタンス化
         current_robot = Robot(Coordinate(5, 5), Direction.E, "none")  # 現在の走行体
         next_robot = Robot(Coordinate(6, 4), Direction.NE, "none")  # 次の走行体
+        is_set_motion = True  # 設置動作(ブロックを持っている状態）
 
-        actual = game_motion_converter.convert_game_motion(current_robot, next_robot)
-        expected = BlockToIntersection(-45, Color.GREEN)
+        actual = game_motion_converter.convert_game_motion(current_robot, next_robot, is_set_motion)
+        expected = BlockToIntersection(-45, Color.GREEN, True)
 
         self.assertEqual(expected, actual)  # 期待したゲーム動作を取得しているかテスト
 
@@ -41,9 +42,10 @@ class TestGameMotionConverter(unittest.TestCase):
         game_motion_converter = GameMotionConverter()  # インスタンス化
         current_robot = Robot(Coordinate(3, 5), Direction.SE, "none")  # 現在の走行体
         next_robot = Robot(Coordinate(4, 5), Direction.E, "none")  # 次の走行体
+        is_set_motion = True  # 設置動作(ブロックを持っている状態）
 
-        actual = game_motion_converter.convert_game_motion(current_robot, next_robot)
-        expected = BlockToMiddle(-45)
+        actual = game_motion_converter.convert_game_motion(current_robot, next_robot, is_set_motion)
+        expected = BlockToMiddle(-45, True)
 
         self.assertEqual(expected, actual)  # 期待したゲーム動作を取得しているかテスト
 
@@ -57,9 +59,10 @@ class TestGameMotionConverter(unittest.TestCase):
         game_motion_converter = GameMotionConverter()  # インスタンス化
         current_robot = Robot(Coordinate(2, 4), Direction.S, "left")  # 現在の走行体
         next_robot = Robot(Coordinate(3, 3), Direction.NE, "none")  # 次の走行体
+        is_set_motion = True  # 設置動作(ブロックを持っている状態）
 
-        actual = game_motion_converter.convert_game_motion(current_robot, next_robot)
-        expected = IntersectionToBlock(-135, False, False)
+        actual = game_motion_converter.convert_game_motion(current_robot, next_robot, is_set_motion)
+        expected = IntersectionToBlock(-135, False, False, True)
 
         self.assertEqual(expected, actual)  # 期待したゲーム動作を取得しているかテスト
 
@@ -75,9 +78,10 @@ class TestGameMotionConverter(unittest.TestCase):
         game_motion_converter = GameMotionConverter()  # インスタンス化
         current_robot = Robot(Coordinate(2, 4), Direction.S, "right")  # 現在の走行体
         next_robot = Robot(Coordinate(1, 5), Direction.SW, "none")  # 次の走行体
+        is_set_motion = True  # 設置動作(ブロックを持っている状態）
 
-        actual = game_motion_converter.convert_game_motion(current_robot, next_robot)
-        expected = IntersectionToBlock(45, True, False)
+        actual = game_motion_converter.convert_game_motion(current_robot, next_robot, is_set_motion)
+        expected = IntersectionToBlock(45, True, False, True)
 
         self.assertEqual(expected, actual)  # 期待したゲーム動作を取得しているかテスト
 
@@ -93,9 +97,10 @@ class TestGameMotionConverter(unittest.TestCase):
         game_motion_converter = GameMotionConverter()  # インスタンス化
         current_robot = Robot(Coordinate(2, 4), Direction.S, "right")  # 現在の走行体
         next_robot = Robot(Coordinate(3, 5), Direction.SE, "none")  # 次の走行体
+        is_set_motion = True  # 設置動作(ブロックを持っている状態）
 
-        actual = game_motion_converter.convert_game_motion(current_robot, next_robot)
-        expected = IntersectionToBlock(-45, False, True)
+        actual = game_motion_converter.convert_game_motion(current_robot, next_robot, is_set_motion)
+        expected = IntersectionToBlock(-45, False, True, True)
 
         self.assertEqual(expected, actual)  # 期待したゲーム動作を取得しているかテスト
 
@@ -111,9 +116,10 @@ class TestGameMotionConverter(unittest.TestCase):
         game_motion_converter = GameMotionConverter()  # インスタンス化
         current_robot = Robot(Coordinate(2, 4), Direction.SE, "none")  # 現在の走行体
         next_robot = Robot(Coordinate(3, 5), Direction.SE, "none")  # 次の走行体
+        is_set_motion = True  # 設置動作(ブロックを持っている状態）
 
-        actual = game_motion_converter.convert_game_motion(current_robot, next_robot)
-        expected = IntersectionToBlock(0, False, True)
+        actual = game_motion_converter.convert_game_motion(current_robot, next_robot, is_set_motion)
+        expected = IntersectionToBlock(0, False, True, True)
 
         self.assertEqual(expected, actual)  # 期待したゲーム動作を取得しているかテスト
 
@@ -127,9 +133,10 @@ class TestGameMotionConverter(unittest.TestCase):
         game_motion_converter = GameMotionConverter()  # インスタンス化
         current_robot = Robot(Coordinate(4, 2), Direction.E, "right")  # 現在の走行体
         next_robot = Robot(Coordinate(3, 2), Direction.W, "none")  # 次の走行体
+        is_set_motion = True  # 設置動作(ブロックを持っている状態）
 
-        actual = game_motion_converter.convert_game_motion(current_robot, next_robot)
-        expected = IntersectionToMiddle(180, False)
+        actual = game_motion_converter.convert_game_motion(current_robot, next_robot, is_set_motion)
+        expected = IntersectionToMiddle(180, False, True)
 
         self.assertEqual(expected, actual)  # 期待したゲーム動作を取得しているかテスト
 
@@ -145,9 +152,10 @@ class TestGameMotionConverter(unittest.TestCase):
         game_motion_converter = GameMotionConverter()  # インスタンス化
         current_robot = Robot(Coordinate(4, 2), Direction.E, "right")  # 現在の走行体
         next_robot = Robot(Coordinate(4, 1), Direction.N, "none")  # 次の走行体
+        is_set_motion = True  # 設置動作(ブロックを持っている状態）
 
-        actual = game_motion_converter.convert_game_motion(current_robot, next_robot)
-        expected = IntersectionToMiddle(-90, True)
+        actual = game_motion_converter.convert_game_motion(current_robot, next_robot, is_set_motion)
+        expected = IntersectionToMiddle(-90, True, True)
 
         self.assertEqual(expected, actual)  # 期待したゲーム動作を取得しているかテスト
 
@@ -163,9 +171,10 @@ class TestGameMotionConverter(unittest.TestCase):
         game_motion_converter = GameMotionConverter()  # インスタンス化
         current_robot = Robot(Coordinate(4, 2), Direction.NE, "none")  # 現在の走行体
         next_robot = Robot(Coordinate(5, 2), Direction.E, "none")  # 次の走行体
+        is_set_motion = True  # 設置動作(ブロックを持っている状態）
 
-        actual = game_motion_converter.convert_game_motion(current_robot, next_robot)
-        expected = IntersectionToMiddle(45, True)
+        actual = game_motion_converter.convert_game_motion(current_robot, next_robot, is_set_motion)
+        expected = IntersectionToMiddle(45, True, True)
 
         self.assertEqual(expected, actual)  # 期待したゲーム動作を取得しているかテスト
 
@@ -179,9 +188,10 @@ class TestGameMotionConverter(unittest.TestCase):
         game_motion_converter = GameMotionConverter()  # インスタンス化
         current_robot = Robot(Coordinate(3, 4), Direction.NE, "right")  # 現在の走行体
         next_robot = Robot(Coordinate(3, 5), Direction.S, "none")  # 次の走行体
+        is_set_motion = True  # 設置動作(ブロックを持っている状態）
 
-        actual = game_motion_converter.convert_game_motion(current_robot, next_robot)
-        expected = MiddleToBlock(135, False)
+        actual = game_motion_converter.convert_game_motion(current_robot, next_robot, is_set_motion)
+        expected = MiddleToBlock(135, False, True)
 
         self.assertEqual(expected, actual)  # 期待したゲーム動作を取得しているかテスト
 
@@ -198,9 +208,10 @@ class TestGameMotionConverter(unittest.TestCase):
         game_motion_converter = GameMotionConverter()  # インスタンス化
         current_robot = Robot(Coordinate(3, 4), Direction.S, "none")  # 現在の走行体
         next_robot = Robot(Coordinate(3, 5), Direction.S, "none")  # 次の走行体
+        is_set_motion = True  # 設置動作(ブロックを持っている状態）
 
-        actual = game_motion_converter.convert_game_motion(current_robot, next_robot)
-        expected = MiddleToBlock(0, True)
+        actual = game_motion_converter.convert_game_motion(current_robot, next_robot, is_set_motion)
+        expected = MiddleToBlock(0, True, True)
 
         self.assertEqual(expected, actual)  # 期待したゲーム動作を取得しているかテスト
 
@@ -216,12 +227,13 @@ class TestGameMotionConverter(unittest.TestCase):
         game_motion_converter = GameMotionConverter()  # インスタンス化
         current_robot = Robot(Coordinate(3, 4), Direction.SW, "left")  # 現在の走行体
         next_robot = Robot(Coordinate(3, 3), Direction.N, "none")  # 次の走行体
+        is_set_motion = False  # 取得動作(ブロックを持っていない状態）
 
         # 反時計回りで45度回頭できる状況にする
         GameAreaInfo.node_list[3+5*7].block_id = -1  # x+y*7
 
-        actual = game_motion_converter.convert_game_motion(current_robot, next_robot)
-        expected = MiddleToBlock(135, True)
+        actual = game_motion_converter.convert_game_motion(current_robot, next_robot, is_set_motion)
+        expected = MiddleToBlock(135, True, False)
 
         self.assertEqual(expected, actual)  # 期待したゲーム動作を取得しているかテスト
 
@@ -237,12 +249,13 @@ class TestGameMotionConverter(unittest.TestCase):
         game_motion_converter = GameMotionConverter()  # インスタンス化
         current_robot = Robot(Coordinate(3, 4), Direction.NE, "right")  # 現在の走行体
         next_robot = Robot(Coordinate(3, 3), Direction.N, "none")  # 次の走行体
+        is_set_motion = False  # 取得動作(ブロックを持っていない状態）
 
         # 反時計回りで45度回頭できる状況にする
         GameAreaInfo.node_list[3+5*7].block_id = -1  # x+y*7
 
-        actual = game_motion_converter.convert_game_motion(current_robot, next_robot)
-        expected = MiddleToBlock(-45, True)
+        actual = game_motion_converter.convert_game_motion(current_robot, next_robot, is_set_motion)
+        expected = MiddleToBlock(-45, True, False)
 
         self.assertEqual(expected, actual)  # 期待したゲーム動作を取得しているかテスト
 
@@ -256,12 +269,13 @@ class TestGameMotionConverter(unittest.TestCase):
         game_motion_converter = GameMotionConverter()  # インスタンス化
         current_robot = Robot(Coordinate(3, 2), Direction.N, "none")  # 現在の走行体
         next_robot = Robot(Coordinate(2, 2), Direction.W, "none")  # 次の走行体
+        is_set_motion = False  # 取得動作(ブロックを持っていない状態）
 
         # 反時計回りで90度回頭できる状況にする
         GameAreaInfo.node_list[3+3*7].block_id = -1  # x+y*7
 
-        actual = game_motion_converter.convert_game_motion(current_robot, next_robot)
-        expected = MiddleToIntersection(-90, Color.RED)
+        actual = game_motion_converter.convert_game_motion(current_robot, next_robot, is_set_motion)
+        expected = MiddleToIntersection(-90, Color.RED, False)
 
         self.assertEqual(expected, actual)  # 期待したゲーム動作を取得しているかテスト
 
@@ -275,13 +289,14 @@ class TestGameMotionConverter(unittest.TestCase):
         game_motion_converter = GameMotionConverter()  # インスタンス化
         current_robot = Robot(Coordinate(1, 2), Direction.W, "left")  # 現在の走行体
         next_robot = Robot(Coordinate(2, 3), Direction.SE, "none")  # 次の走行体
+        is_set_motion = False  # 取得動作(ブロックを持っていない状態）
 
         # 反時計回りで135度回頭できる状況にする
         GameAreaInfo.node_list[1+1*7].block_id = -1  # x+y*7
         GameAreaInfo.node_list[1+3*7].block_id = -1  # x+y*7
 
-        actual = game_motion_converter.convert_game_motion(current_robot, next_robot)
-        expected = MiddleToMiddle(-135, False)
+        actual = game_motion_converter.convert_game_motion(current_robot, next_robot, is_set_motion)
+        expected = MiddleToMiddle(-135, False, False)
 
         self.assertEqual(expected, actual)  # 期待したゲーム動作を取得しているかテスト
 
@@ -297,12 +312,13 @@ class TestGameMotionConverter(unittest.TestCase):
         game_motion_converter = GameMotionConverter()  # インスタンス化
         current_robot = Robot(Coordinate(2, 3), Direction.E, "none")  # 現在の走行体
         next_robot = Robot(Coordinate(3, 2), Direction.NE, "none")  # 次の走行体
+        is_set_motion = False  # 取得動作(ブロックを持っていない状態）
 
         # 反時計回りで45度回頭しないといけない状況にする
         GameAreaInfo.node_list[1+3*7].block_id = -1  # x+y*7
 
-        actual = game_motion_converter.convert_game_motion(current_robot, next_robot)
-        expected = MiddleToMiddle(-45, True)
+        actual = game_motion_converter.convert_game_motion(current_robot, next_robot, is_set_motion)
+        expected = MiddleToMiddle(-45, True, False)
 
         self.assertEqual(expected, actual)  # 期待したゲーム動作を取得しているかテスト
 
@@ -318,12 +334,13 @@ class TestGameMotionConverter(unittest.TestCase):
         game_motion_converter = GameMotionConverter()  # インスタンス化
         current_robot = Robot(Coordinate(1, 2), Direction.W, "right")  # 現在の走行体
         next_robot = Robot(Coordinate(2, 3), Direction.SE, "none")  # 次の走行体
+        is_set_motion = False  # 取得動作(ブロックを持っていない状態）
 
         # 時計回りで225度回頭しないといけない状況にする
         GameAreaInfo.node_list[1+3*7].block_id = -1  # x+y*7
 
-        actual = game_motion_converter.convert_game_motion(current_robot, next_robot)
-        expected = MiddleToMiddle(225, True)
+        actual = game_motion_converter.convert_game_motion(current_robot, next_robot, is_set_motion)
+        expected = MiddleToMiddle(225, True, False)
 
         self.assertEqual(expected, actual)  # 期待したゲーム動作を取得しているかテスト
 
@@ -339,12 +356,13 @@ class TestGameMotionConverter(unittest.TestCase):
         game_motion_converter = GameMotionConverter()  # インスタンス化
         current_robot = Robot(Coordinate(2, 3), Direction.NE, "left")  # 現在の走行体
         next_robot = Robot(Coordinate(3, 4), Direction.SE, "none")  # 次の走行体
+        is_set_motion = False  # 取得動作(ブロックを持っていない状態）
 
         # 時計回りで225度回頭しないといけない状況にする
         GameAreaInfo.node_list[1+3*7].block_id = -1  # x+y*7
 
-        actual = game_motion_converter.convert_game_motion(current_robot, next_robot)
-        expected = MiddleToMiddle(90, True)
+        actual = game_motion_converter.convert_game_motion(current_robot, next_robot, is_set_motion)
+        expected = MiddleToMiddle(90, True, False)
 
         self.assertEqual(expected, actual)  # 期待したゲーム動作を取得しているかテスト
 
@@ -359,9 +377,11 @@ class TestGameMotionConverter(unittest.TestCase):
             game_motion_converter = GameMotionConverter()  # インスタンス化
             current_robot = Robot(Coordinate(2, 1), Direction.N, "left")  # 現在の走行体
             next_robot = Robot(Coordinate(2, 2), Direction.S, "none")  # 次の走行体
+            is_set_motion = False  # 取得動作(ブロックを持っていない状態）
 
             # 両隣にブロックがあるため回頭できず，エラーを返す
-            actual = game_motion_converter.convert_game_motion(current_robot, next_robot)
+            actual = game_motion_converter.convert_game_motion(
+                current_robot, next_robot, is_set_motion)
 
     def __init_game_area_info(self):
         """テスト用にゲームエリア情報を初期化する."""

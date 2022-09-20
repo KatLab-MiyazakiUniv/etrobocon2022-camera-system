@@ -12,17 +12,27 @@ from color_changer import Color
 class ReturnToIntersection(GameMotion):
     """設置後復帰(→交点)のゲーム動作クラス."""
 
-    def __init__(self, angle: int,  target_color: Color) -> None:
+    def __init__(self, angle: int,  target_color: Color, have_block: bool) -> None:
         """ReturnToIntersectionのコンストラクタ.
 
         Args:
             angle: 方向転換の角度
+            have_block: ブロックを保持している場合True
             target_color: 目標となる交点の色（target_node=="intersection"の場合のみ使用）
 
         """
         self.__angle = angle
+        # setting_angleは指定角度に対して実際に回頭する角度
+        if have_block:  # ブロックを保持している場合
+            self.__setting_angle = GameMotion.ROTATION_BLOCK_TABLE[abs(angle)]["angle"]
+            self.__rotation_pwm = GameMotion.ROTATION_BLOCK_PWM
+            self.__rotation_time = GameMotion.ROTATION_BLOCK_TABLE[abs(angle)]["time"]
+        else:  # ブロックを保持していない場合
+            self.__setting_angle = GameMotion.ROTATION_NO_BLOCK_TABLE[abs(angle)]["angle"]
+            self.__rotation_pwm = GameMotion.ROTATION_NO_BLOCK_PWM
+            self.__rotation_time = GameMotion.ROTATION_NO_BLOCK_TABLE[abs(angle)]["time"]
+        self.__clockwise = "clockwise" if angle > 0 else "anticlockwise"
         self.__target_color = target_color
-
         expected_color = [Color.BLUE, Color.GREEN, Color.YELLOW, Color.RED]
         # 交点の色以外を指定された場合エラーを出す
         if self.__target_color not in expected_color:
@@ -36,11 +46,10 @@ class ReturnToIntersection(GameMotion):
         """
         command_list = ""  # コマンドのリストを格納する文字列
 
-        if self.__angle != 0:  # 回頭角度が0の場合はコマンドは生成しない
+        if self.__setting_angle != 0:  # 回頭角度が0の場合はコマンドは生成しない
             # 回頭角度が正の数の場合時計回り，負の数の場合反時計回りで回頭をセットする
-            clockwise = "clockwise" if self.__angle > 0 else "anticlockwise"
-            command_list += "RT,%d,%d,%s\n" % (abs(self.__angle),
-                                               GameMotion.ROTATION_PWM, clockwise)
+            command_list += "RT,%d,%d,%s\n" % (self.__setting_angle,
+                                               self.__rotation_pwm, self.__clockwise)
 
         # 回頭後にエッジが切り替わる場合，エッジ切り替えをセットする
         if (next_edge := self.get_next_edge(self.__angle)) != self.current_edge:
@@ -59,4 +68,4 @@ class ReturnToIntersection(GameMotion):
         Returns:
             float: コスト
         """
-        return GameMotion.ROTATION_TIME[abs(self.__angle) // 45]  # 設置後復帰は回頭時間だけコストとする
+        return self.__rotation_time

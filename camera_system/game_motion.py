@@ -39,15 +39,33 @@ class GameMotion(metaclass=ABCMeta):
 
     attributes:
         MAX_TIME: 最大計測時間
-        ROTATION_PWM: 回頭のPWM値
-        ROTATION_TIME: 回頭の動作時間(45度単位で0~360度)
+        ROTATION_BLOCK_PWM: ブロックを保持した時の回頭のPWM値
+        ROTATION_NO_BLOCK_PWM: ブロックを保持していない時の回頭のPWM値
+        ROTATION_TIME_BLOCK: ブロックを保持した時の回頭のパラメータ(45度単位で0~360度)
+        ROTATION_TIME__NO_BLOCK: ブロックを保持していない時の回頭のパラメータ(45度単位で0~360度)
         VERTICAL_TIME: 縦調整の動作時間
         DIAGONAL_TIME: 斜め調整の動作時間
     """
 
     MAX_TIME = 120
-    ROTATION_PWM = 100
-    ROTATION_TIME = [0, 45, 90, 135, 180, 225, 270, 315]  # TODO: 回頭の動作時間を測る
+    ROTATION_BLOCK_PWM = 100
+    ROTATION_NO_BLOCK_PWM = 90
+    ROTATION_BLOCK_TABLE = {0: {"angle": 0, "time": 0},
+                            45: {"angle": 45, "time": 2},
+                            90: {"angle": 90, "time": 4},
+                            135: {"angle": 135, "time": 6},
+                            180: {"angle": 180, "time": 8},
+                            225: {"angle": 225, "time": 10},
+                            270: {"angle": 270, "time": 12},
+                            315: {"angle": 225, "time": 14}}  # ToDo: 計測したパラメータに変更する
+    ROTATION_NO_BLOCK_TABLE = {0: {"angle": 0, "time": 0},
+                               45: {"angle": 46, "time": 3},
+                               90: {"angle": 91, "time": 5},
+                               135: {"angle": 136, "time": 7},
+                               180: {"angle": 181, "time": 9},
+                               225: {"angle": 226, "time": 11},
+                               270: {"angle": 271, "time": 13},
+                               315: {"angle": 226, "time": 15}}  # ToDo: 計測したパラメータに変更する
     VERTICAL_TIME = 0.2558
     DIAGONAL_TIME = 0.2620
 

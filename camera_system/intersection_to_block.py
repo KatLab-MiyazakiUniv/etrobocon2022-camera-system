@@ -11,23 +11,42 @@ from game_motion import GameMotion
 class IntersectionToBlock(GameMotion):
     """交点→ブロック置き場のゲーム動作クラス."""
 
-    def __init__(self, angle: int, vertical_flag: bool, diagonal_flag: bool) -> None:
+    def __init__(self, angle: int, vertical_flag: bool, diagonal_flag: bool,
+                 have_block: bool) -> None:
         """IntersectionToBlockのコンストラクタ.
 
         Args:
             angle: 方向転換の角度
             vertical_flag: 縦調整動作の有無
             diagonal_flag: 斜め調整動作の有無
+            have_block: ブロックを保持している場合True
 
         """
         # 最後の45度は2回目の回頭で実行するため，angleを2つに分ける
         if angle == 0:
-            self.__first_angle = 0
-            self.__second_angle = 0
+            first_angle = 0
+            second_angle = 0
         else:
-            self.__first_angle = angle - 45 if angle > 0 else angle + 45
-            self.__second_angle = 45 if angle > 0 else -45
+            first_angle = angle - 45 if angle > 0 else angle + 45
+            second_angle = 45 if angle > 0 else -45
 
+        if have_block:  # ブロックを保持している場合
+            self.__first_angle = GameMotion.ROTATION_BLOCK_TABLE[abs(first_angle)]["angle"]
+            self.__second_angle = GameMotion.ROTATION_BLOCK_TABLE[abs(second_angle)]["angle"]
+            self.__rotation_pwm = GameMotion.ROTATION_BLOCK_PWM
+            self.__first_rotation_time = GameMotion.ROTATION_BLOCK_TABLE[abs(
+                first_angle)]["time"]
+            self.__second_rotation_time = GameMotion.ROTATION_BLOCK_TABLE[abs(
+                second_angle)]["time"]
+        else:  # ブロックを保持していない場合
+            self.__first_angle = GameMotion.ROTATION_NO_BLOCK_TABLE[abs(first_angle)]["angle"]
+            self.__second_angle = GameMotion.ROTATION_NO_BLOCK_TABLE[abs(second_angle)]["angle"]
+            self.__rotation_pwm = GameMotion.ROTATION_NO_BLOCK_PWM
+            self.__first_rotation_time = GameMotion.ROTATION_NO_BLOCK_TABLE[abs(
+                first_angle)]["time"]
+            self.__second_rotation_time = GameMotion.ROTATION_NO_BLOCK_TABLE[abs(
+                second_angle)]["time"]
+        self.__clockwise = "clockwise" if angle > 0 else "anticlockwise"
         self.__vertical_flag = vertical_flag
         self.__diagonal_flag = diagonal_flag
         self.__motion_time = 0.7840
@@ -47,9 +66,8 @@ class IntersectionToBlock(GameMotion):
 
         if self.__first_angle != 0:  # 回頭角度が0の場合はコマンドは生成しない
             # 回頭角度が正の数の場合時計回り，負の数の場合反時計回りで回頭をセットする
-            clockwise = "clockwise" if self.__first_angle > 0 else "anticlockwise"
-            command_list += "RT,%d,%d,%s\n" % (abs(self.__first_angle),
-                                               GameMotion.ROTATION_PWM, clockwise)
+            command_list += "RT,%d,%d,%s\n" % (self.__first_angle,
+                                               self.__rotation_pwm, self.__clockwise)
 
         # 縦調整動作ありの場合，縦調整をセットする
         if self.__vertical_flag:
@@ -57,9 +75,8 @@ class IntersectionToBlock(GameMotion):
 
         if self.__second_angle != 0:  # 回頭角度が0の場合はコマンドは生成しない
             # 回頭角度が正の数の場合時計回り，負の数の場合反時計回りで回頭をセットする
-            clockwise = "clockwise" if self.__second_angle > 0 else "anticlockwise"
-            command_list += "RT,%d,%d,%s\n" % (abs(self.__second_angle),
-                                               GameMotion.ROTATION_PWM, clockwise)
+            command_list += "RT,%d,%d,%s\n" % (self.__second_angle,
+                                               self.__rotation_pwm, self.__clockwise)
 
         # 斜め調整動作ありの場合，斜め調整をセットする
         if self.__diagonal_flag:
@@ -81,8 +98,8 @@ class IntersectionToBlock(GameMotion):
         m_time = self.__motion_time  # m_time: 回頭や調整動作込みの動作時間
 
         # 動作時間に回頭時間を足す（成功率に変動はなし）
-        m_time += GameMotion.ROTATION_TIME[abs(self.__first_angle) // 45]
-        m_time += GameMotion.ROTATION_TIME[abs(self.__second_angle) // 45]
+        m_time += self.__first_rotation_time
+        m_time += self.__second_rotation_time
         # 調整動作ありの場合，調整の動作時間を足す（成功率に変動はなし）
         if self.__vertical_flag:  # 縦調整ありの場合
             m_time += GameMotion.VERTICAL_TIME

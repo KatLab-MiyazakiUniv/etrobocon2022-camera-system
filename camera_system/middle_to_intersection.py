@@ -12,15 +12,26 @@ from color_changer import Color
 class MiddleToIntersection(GameMotion):
     """中点→交点のゲーム動作クラス."""
 
-    def __init__(self, angle: int, target_color: Color) -> None:
+    def __init__(self, angle: int, target_color: Color, have_block: bool) -> None:
         """MiddleToIntersectionのコンストラクタ.
 
         Args:
             angle: 方向転換の角度
             target_color: 目標となる交点の色
+            have_block: ブロックを保持している場合True
 
         """
         self.__angle = angle
+        # setting_angleは指定角度に対して実際に回頭する角度
+        if have_block:  # ブロックを保持している場合
+            self.__setting_angle = GameMotion.ROTATION_BLOCK_TABLE[abs(angle)]["angle"]
+            self.__rotation_pwm = GameMotion.ROTATION_BLOCK_PWM
+            self.__rotation_time = GameMotion.ROTATION_BLOCK_TABLE[abs(angle)]["time"]
+        else:  # ブロックを保持していない場合
+            self.__setting_angle = GameMotion.ROTATION_NO_BLOCK_TABLE[abs(angle)]["angle"]
+            self.__rotation_pwm = GameMotion.ROTATION_NO_BLOCK_PWM
+            self.__rotation_time = GameMotion.ROTATION_NO_BLOCK_TABLE[abs(angle)]["time"]
+        self.__clockwise = "clockwise" if angle > 0 else "anticlockwise"
         self.__target_color = target_color
         self.__motion_time = 0.5560
         self.__success_rate = 0.8
@@ -40,9 +51,8 @@ class MiddleToIntersection(GameMotion):
 
         if self.__angle != 0:  # 回頭角度が0の場合はコマンドは生成しない
             # 回頭角度が正の数の場合時計回り，負の数の場合反時計回りで回頭をセットする
-            clockwise = "clockwise" if self.__angle > 0 else "anticlockwise"
-            command_list += "RT,%d,%d,%s\n" % (abs(self.__angle),
-                                               GameMotion.ROTATION_PWM, clockwise)
+            command_list += "RT,%d,%d,%s\n" % (self.__setting_angle,
+                                               self.__rotation_pwm, self.__clockwise)
 
         # 回頭後にエッジが切り替わる場合，エッジ切り替えをセットする
         if (next_edge := self.get_next_edge(self.__angle)) != self.current_edge:
@@ -63,7 +73,7 @@ class MiddleToIntersection(GameMotion):
         m_time = self.__motion_time  # m_time: 回頭や調整動作込みの動作時間
 
         # 動作時間に回頭時間を足す（成功率に変動はなし）
-        m_time += GameMotion.ROTATION_TIME[abs(self.__angle) // 45]
+        m_time += self.__rotation_time
 
         # 動作時間 * 成功率 + 最大計測時間 * 失敗率
         cost = m_time*self.__success_rate+GameMotion.MAX_TIME*(1-self.__success_rate)
