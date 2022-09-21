@@ -48,7 +48,7 @@ class GameMotionDecider:
         target_block_color = GameAreaInfo.block_color_list[target_block_id]
         candidate_nodes = GameAreaInfo.get_candidate_node(target_block_color)
         candidate_set_block_game_motions = []
-        candidate_robots = []
+        candidate_set_robots = []
         costs = []
         # 各設置先ノードの候補について設置動作を探索する
         for candidate_node in candidate_nodes:
