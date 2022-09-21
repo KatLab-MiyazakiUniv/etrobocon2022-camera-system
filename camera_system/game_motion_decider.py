@@ -30,7 +30,11 @@ class GameMotionDecider:
         """
         # ブロックがあるノードを取得する
         on_block_node = [node for node in GameAreaInfo.node_list
-                         if node.block_id == target_block_id][0]
+                         if node.block_id == target_block_id]
+        if on_block_node == []:
+            print("Block %d is not exist." %(target_block_id))
+            return []
+        on_block_node = on_block_node[0]
         if on_block_node.node_type != NodeType.BLOCK:
             print("This block is alredy transported.")
             return []
@@ -90,20 +94,51 @@ class GameMotionDecider:
 
 if __name__ == "__main__":
     # ゲームエリア情報の初期化
-    robot = Robot(Coordinate(2, 2), Direction.S, "left")
-    GameAreaInfo.block_color_list = [
-        Color.RED, Color.RED, Color.YELLOW,
-        Color.YELLOW, Color.GREEN, Color.GREEN,
-        Color.BLUE, Color.BLUE
-    ]
-    GameAreaInfo.base_color_list = [
-        Color.RED, Color.YELLOW,
-        Color.GREEN, Color.BLUE
-    ]
-    GameAreaInfo.bonus_color = Color.RED
-    GameAreaInfo.intersection_list = [Color.RED, Color.BLUE, Color.YELLOW, Color.GREEN]
-    motions = []
-    print("block colors", [color.value for color in GameAreaInfo.block_color_list])
-    # 運搬動作を決定する
-    for i in range(8):
-        motions += [GameMotionDecider.decide(robot, i)]
+        robot = Robot(Coordinate(4, 4), Direction.E, "left")
+        node_list = [
+            Node(-1, Coordinate(0, 0)), Node(-1, Coordinate(1, 0)),
+            Node(-1, Coordinate(2, 0)), Node(-1, Coordinate(3, 0)),
+            Node(-1, Coordinate(4, 0)), Node(-1, Coordinate(5, 0)),
+            Node(-1, Coordinate(6, 0)),
+            Node(-1, Coordinate(0, 1)), Node(0, Coordinate(1, 1)),
+            Node(-1, Coordinate(2, 1)), Node(1, Coordinate(3, 1)),
+            Node(-1, Coordinate(4, 1)), Node(2, Coordinate(5, 1)),
+            Node(-1, Coordinate(6, 1)),
+            Node(-1, Coordinate(0, 2)), Node(-1, Coordinate(1, 2)),
+            Node(-1, Coordinate(2, 2)), Node(-1, Coordinate(3, 2)),
+            Node(-1, Coordinate(4, 2)), Node(-1, Coordinate(5, 2)),
+            Node(-1, Coordinate(6, 2)),
+            Node(-1, Coordinate(0, 3)), Node(3, Coordinate(1, 3)),
+            Node(-1, Coordinate(2, 3)), Node(-1, Coordinate(3, 3)),
+            Node(-1, Coordinate(4, 3)), Node(4, Coordinate(5, 3)),
+            Node(-1, Coordinate(6, 3)),
+            Node(-1, Coordinate(0, 4)), Node(-1, Coordinate(1, 4)),
+            Node(-1, Coordinate(2, 4)), Node(-1, Coordinate(3, 4)),
+            Node(-1, Coordinate(4, 4)), Node(-1, Coordinate(5, 4)),
+            Node(-1, Coordinate(6, 4)),
+            Node(-1, Coordinate(0, 5)), Node(5, Coordinate(1, 5)),
+            Node(-1, Coordinate(2, 5)), Node(6, Coordinate(3, 5)),
+            Node(-1, Coordinate(4, 5)), Node(7, Coordinate(5, 5)),
+            Node(-1, Coordinate(6, 5)),
+            Node(-1, Coordinate(0, 6)), Node(-1, Coordinate(1, 6)),
+            Node(-1, Coordinate(2, 6)), Node(-1, Coordinate(3, 6)),
+            Node(-1, Coordinate(4, 6)), Node(-1, Coordinate(5, 6)),
+            Node(-1, Coordinate(6, 6)),
+        ]
+        GameAreaInfo.block_color_list = [
+            Color.RED, Color.RED, Color.YELLOW,
+            Color.YELLOW, Color.GREEN,
+            Color.GREEN, Color.BLUE, Color.BLUE
+        ]
+        GameAreaInfo.base_color_list = [
+            Color.RED, Color.YELLOW,
+            Color.GREEN, Color.BLUE
+        ]
+        GameAreaInfo.bonus_color = Color.RED
+        GameAreaInfo.intersection_list = [Color.RED, Color.BLUE, Color.YELLOW, Color.GREEN]
+
+        # 運搬動作を決定する
+        game_motions = []
+        print("block colors", [color.value for color in GameAreaInfo.block_color_list])
+        for block_id in range(len(GameAreaInfo.block_color_list)):
+            game_motions += GameMotionDecider.decide(robot, block_id)
