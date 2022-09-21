@@ -60,18 +60,12 @@ class GameAreaInfo:
         Node(-1, Coordinate(4, 6)), Node(-1, Coordinate(5, 6)),
         Node(-1, Coordinate(6, 6)),
     ]
-    __east_cand_list = [
-        Node(-1, Coordinate(6, 2)), Node(-1, Coordinate(6, 3)), Node(-1, Coordinate(6, 4))
-    ]
-    __south_cand_list = [
-        Node(-1, Coordinate(2, 6)), Node(-1, Coordinate(3, 6)), Node(-1, Coordinate(4, 6))
-    ]
-    __west_cand_list = [
-        Node(-1, Coordinate(0, 2)), Node(-1, Coordinate(0, 3)), Node(-1, Coordinate(0, 4))
-    ]
-    __north_cand_list = [
-        Node(-1, Coordinate(2, 0)), Node(-1, Coordinate(3, 0)), Node(-1, Coordinate(4, 0))
-    ]
+
+    # [x座標 + y座標*7]
+    __east_cand_list = [node_list[6 + 2*7], node_list[6 + 3*7], node_list[6 + 4*7]]
+    __south_cand_list = [node_list[2 + 6*7], node_list[3 + 6*7], node_list[4 + 6*7]]
+    __west_cand_list = [node_list[0 + 2*7], node_list[0 + 3*7], node_list[0 + 4*7]]
+    __north_cand_list = [node_list[2 + 0*7], node_list[3 + 0*7], node_list[4 + 0*7]]
 
     @staticmethod
     def get_candidate_node(color: Color) -> List[Node]:
@@ -270,6 +264,27 @@ class GameAreaInfo:
                     no_rotate_directions += [Direction(direction_value)]
 
         return no_rotate_directions
+
+    @staticmethod
+    def move_block(target_block_id: int, target_node: Node) -> None:
+        """指定したブロックを指定したノードに移動する.
+
+        Args:
+            target_block_id: 移動するブロックのID
+            target_node: ブロックの移動先ノード
+        """
+        # 移動先ノードに既にブロックがある場合
+        if target_node.block_id != -1:
+            print("The block alredy exist on target node.")
+            return
+
+        on_target_block_node = [node for node in GameAreaInfo.node_list
+                                if node.block_id == target_block_id]
+        if len(on_target_block_node) == 0:
+            print("The block does not exist on game area.")
+            return
+        on_target_block_node[0].block_id = -1
+        target_node.block_id = target_block_id
 
 
 if __name__ == "__main__":

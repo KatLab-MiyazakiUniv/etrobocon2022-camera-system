@@ -115,8 +115,26 @@ class OptimalMotionSearcher:
             open_hashs.remove(min_hash)
             open_hashs.insert(0, min_hash)
 
-        # 探索した最適動作を返す
-        return transition_table[open_hashs[0]]["game_motions"]
+        min_cost_transition = transition_table[open_hashs[0]]
+
+        # 設置動作の場合、復帰動作を探索する
+        if is_set_motion:
+            on_block_node = GameAreaInfo.node_list[start_robot.coord.y * 7 + start_robot.coord.x]
+            # 仮にブロックを設置したとしてゲームエリア情報を更新する
+            GameAreaInfo.move_block(on_block_node.block_id, goal_node)
+            # 復帰動作を探索する
+            cls.__add_return_motion(min_cost_transition)
+            # 仮にブロックを設置したとしたゲームエリア情報を元に戻す
+            GameAreaInfo.move_block(goal_node.block_id, on_block_node)
+
+        # ToDo:後で消す
+        print(min_cost_transition["logs"])
+        # 動作を実行したとして、走行体を更新する
+        start_robot.coord = min_cost_transition["logs"][-1].coord
+        start_robot.direct = min_cost_transition["logs"][-1].direct
+        start_robot.edge = min_cost_transition["logs"][-1].edge
+        # 探索した最適動作と動作完了時の走行体を返す
+        return min_cost_transition["game_motions"]
 
     @classmethod
     def __predict_cost(cls, start_robot: Robot, goal_coord: Coordinate) -> int:
@@ -229,6 +247,62 @@ class OptimalMotionSearcher:
                        or (robot.coord not in on_block_coordinates))]
 
         return robots
+
+    @classmethod
+    def __add_return_motion(cls, transition) -> None:
+        """復帰動作を探索する.
+
+        Args:
+            transition: 探索情報(走行体,ゲーム動作群,推定コスト,走行体の推移リスト)
+        """
+        # ブロック設置後の走行体
+        setted_robot = copy.deepcopy(transition["logs"][-1])
+        # 復帰動作後の走行体
+        returned_robot = copy.deepcopy(setted_robot)
+
+        dx = 0  # 復帰時に後退するx
+        dy = 0  # 復帰時に後退するy
+        target_direction = []   # 復帰後に90度回頭した際の方位
+        rotatable_directions = []  # 復帰後に回頭できる方位
+
+        # 東西への設置の場合
+        if setted_robot.coord.x % 6 == 0:
+            target_direction = [Direction.N, Direction.S]
+            if setted_robot.coord.x == 0:
+                dx = 1
+                setted_robot.direct = Direction.E
+            else:
+                dx = -1
+                setted_robot.direct = Direction.W
+        # 南北への設置の場合
+        elif setted_robot.coord.y % 6 == 0:
+            target_direction = [Direction.E, Direction.W]
+            if setted_robot.coord.y == 0:
+                dy = 1
+                setted_robot.direct = Direction.N
+            else:
+                dy = -1
+                setted_robot.direct = Direction.S
+        # ゴール座標の値が外周でない場合
+        else:
+            print("Goal Node does not have coordinate for set block.")
+            return
+
+        # 回頭可能な方位が見つかるまで後退する
+        while rotatable_directions == []:
+            # 走行体の座標を後退した座標に更新する
+            returned_robot.coord.x += dx
+            returned_robot.coord.y += dy
+            # 回頭可能な方位を求める
+            no_rotate_directions = GameAreaInfo.get_no_rotate_direction(returned_robot)
+            rotatable_directions = [direction for direction in target_direction
+                                    if direction not in no_rotate_directions]
+        # 復帰動作を取得する
+        game_motion_converter = GameMotionConverter()
+        return_motion = game_motion_converter.convert_return_motion(setted_robot, returned_robot)
+        # 探索情報に復帰動作を追加する
+        transition["logs"] += [returned_robot]
+        transition["game_motions"].append_game_motion(return_motion)
 
     @classmethod
     def __robot_hash(cls, robot: Robot) -> int:

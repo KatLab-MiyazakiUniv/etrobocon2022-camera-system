@@ -18,6 +18,9 @@ from intersection_to_middle import IntersectionToMiddle
 from middle_to_block import MiddleToBlock
 from middle_to_intersection import MiddleToIntersection
 from middle_to_middle import MiddleToMiddle
+from return_to_block import ReturnToBlock
+from return_to_intersection import ReturnToIntersection
+from return_to_middle import ReturnToMiddle
 
 
 class GameMotionConverter:
@@ -144,6 +147,58 @@ class GameMotionConverter:
                 adjustment_flag = True if any(adjust_conditions) else False  # いずれかの条件を満たしたとき調整有
 
                 game_motion = MiddleToMiddle(angle, adjustment_flag)
+
+        return game_motion  # ゲーム動作を返す
+
+    def convert_return_motion(self, current_robot: Robot, next_robot: Robot) -> GameMotion:
+        """現在の走行体から次の走行体に至るのに必要な復帰動作を生成する.
+
+        Args:
+            current_robot: 現在の走行体
+            next_robot: 次の走行体
+
+        Returns:
+            GameAreaInfo: ゲーム動作
+        """
+        game_motion = None  # 戻り値となるゲーム動作
+
+        # 現在の走行体と次の走行体のノードタイプを求める
+        current_node_type = self.__convert_to_node_type(current_robot.coord)
+        next_node_type = self.__convert_to_node_type(next_robot.coord)
+
+        # 回頭角度を求める
+        angle = self.__get_rotation_angle(current_robot, next_robot)
+
+        # 次の走行体のエッジをセットする
+        if next_node_type == NodeType.BLOCK:
+            next_robot.edge = "none"  # →ブロック置き場 or ブロック置き場→ の場合はエッジは"none"になる
+        else:
+            next_robot.edge = self.__get_next_edge(angle, current_robot.edge)
+
+        # ゲーム動作を生成する
+        if next_node_type == NodeType.BLOCK:  # 次の地点がブラック置き場の場合
+            clockwise_angle = angle % 360  # 時計回りの場合の角度に直す
+            adjust_conditions = []  # 調整動作の有無を判定する条件のリスト
+            adjust_conditions.append((current_robot.edge == "none")
+                                     and (clockwise_angle == 0))
+            adjust_conditions.append((current_robot.edge == "left")
+                                     and (45 <= clockwise_angle <= 135))
+            adjust_conditions.append((current_robot.edge == "right")
+                                     and (225 <= clockwise_angle <= 315))
+            adjustment_flag = True if any(adjust_conditions) else False  # いずれかの条件を満たしたとき調整有
+
+            game_motion = ReturnToBlock(angle, adjustment_flag)
+
+        elif next_node_type == NodeType.INTERSECTION:  # 次の地点が交点の場合
+            # 交点座標をintersection_listの座標(2*2)に直す
+            conv_x = (next_robot.coord.x // 2) // 2
+            conv_y = (next_robot.coord.y // 2) // 2
+            target_color = GameAreaInfo.intersection_list[conv_x+conv_y*2]  # 交点の色をセットする
+
+            game_motion = ReturnToIntersection(angle, target_color)
+
+        elif next_node_type == NodeType.MIDDLE:  # 次の地点が中点の場合
+            game_motion = ReturnToMiddle(angle)
 
         return game_motion  # ゲーム動作を返す
 

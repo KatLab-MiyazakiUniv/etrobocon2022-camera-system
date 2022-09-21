@@ -1,0 +1,109 @@
+"""運搬動作決定モジュール.
+
+あるブロックの運搬のためのゲーム動作を決定する
+@author: miyashita64
+"""
+
+import copy
+from typing import List
+from game_area_info import GameAreaInfo
+from node import Node, NodeType
+from robot import Robot, Direction
+from color_changer import Color
+from coordinate import Coordinate
+from optimal_motion_searcher import OptimalMotionSearcher
+from composite_game_motion import CompositeGameMotion
+
+
+class GameMotionDecider:
+    """運搬動作決定クラス."""
+
+    @classmethod
+    def decide(cls, current_robot: Robot, target_block_id: int) -> List[CompositeGameMotion]:
+        """指定されたブロックの運搬動作を決定して返す.
+
+        Args:
+            current_robot:   現在の走行体
+            target_block_id: 運搬対象ブロックのID
+        Returns:
+            運搬動作後の走行体: Robot
+        """
+        # ブロックがあるノードを取得する
+        on_block_node = [node for node in GameAreaInfo.node_list
+                         if node.block_id == target_block_id][0]
+        if on_block_node.node_type != NodeType.BLOCK:
+            print("This block is alredy transported.")
+            return []
+
+        # 探索用ロボット
+        get_robot = copy.deepcopy(current_robot)
+        # ブロック取得動作を探索する
+        get_block_motion = OptimalMotionSearcher.search(get_robot, on_block_node)
+
+        # ToDo: 検証後に消す
+        print("get Start(%d,%d,%s) to Goal(%d,%d,%s)" %
+              (current_robot.coord.x, current_robot.coord.y, current_robot.direct,
+               get_robot.coord.x, get_robot.coord.y, get_robot.direct))
+
+        # 設置先候補ノードを取得する
+        target_block_color = GameAreaInfo.block_color_list[target_block_id]
+        candidate_nodes = GameAreaInfo.get_candidate_node(target_block_color)
+        candidate_set_block_motions = []
+        candidate_robots = []
+        costs = []
+        # 各設置先候補ノードについて設置動作を探索する
+        for candidate_node in candidate_nodes:
+            # ToDo: 検証後に消す
+            print("pattern: Robot(%d,%d) to Candidate(%d,%d)" %
+                  (get_robot.coord.x, get_robot.coord.y,
+                   candidate_node.coord.x, candidate_node.coord.y))
+            # 探索用ロボット
+            candidate_robot = copy.deepcopy(get_robot)
+            # ブロック設置動作を探索する
+            candidate_set_block_motion = OptimalMotionSearcher.search(
+                candidate_robot, candidate_node)
+            candidate_set_block_motions += [candidate_set_block_motion]
+            candidate_robots += [candidate_robot]
+            # 動作が探索できなかった場合、コストを無限大にする
+            cost = candidate_set_block_motion.get_cost()
+            costs += [cost if cost > 0 else float("inf")]
+        # コストが最小なブロック設置動作を採用する
+        mindex = costs.index(min(costs))
+        set_block_node = candidate_nodes[mindex]
+        set_block_motion = candidate_set_block_motions[mindex]
+        set_robot = candidate_robots[mindex]
+
+        # ToDo: 検証後に消す
+        print("set Start(%d,%d,%s) to Goal(%d,%d,%s)" %
+              (get_robot.coord.x, get_robot.coord.y, get_robot.direct,
+               set_block_node.coord.x, set_block_node.coord.y, set_robot.direct))
+
+        # 運搬対象のブロックを更新する
+        GameAreaInfo.move_block(target_block_id, set_block_node)
+        # ブロックを取得したとして、走行体の座標を更新する
+        current_robot.coord = set_robot.coord
+        current_robot.direct = set_robot.direct
+        current_robot.edge = set_robot.edge
+        # 運搬動作を返す
+        return [get_block_motion, set_block_motion]
+
+
+if __name__ == "__main__":
+    # ゲームエリア情報の初期化
+    robot = Robot(Coordinate(2, 2), Direction.S, "left")
+    GameAreaInfo.block_color_list = [
+        Color.RED, Color.RED, Color.YELLOW,
+        Color.YELLOW, Color.GREEN, Color.GREEN,
+        Color.BLUE, Color.BLUE
+    ]
+    GameAreaInfo.base_color_list = [
+        Color.RED, Color.YELLOW,
+        Color.GREEN, Color.BLUE
+    ]
+    GameAreaInfo.bonus_color = Color.RED
+    GameAreaInfo.intersection_list = [Color.RED, Color.BLUE, Color.YELLOW, Color.GREEN]
+    motions = []
+    print("block colors", [color.value for color in GameAreaInfo.block_color_list])
+    # 運搬動作を決定する
+    for i in range(8):
+        motions += [GameMotionDecider.decide(robot, i)]
