@@ -33,8 +33,8 @@ class GamePlanner:
             GameAreaInfo.base_color_list[3].value: Robot(Coordinate(4, 2), Direction.N, "left")}
         robot = setted_bonus_robots[GameAreaInfo.bonus_color.value]
 
-        block_selector = BlockSelector()
         # 全てのカラーブロックについて、運搬動作を決定する
+        block_selector = BlockSelector()
         while GameAreaInfo.get_no_transported_block() != []:
             on_block_node = block_selector.select_block(robot)
             game_motions_list += GameMotionDecider.decide(robot, on_block_node.block_id)

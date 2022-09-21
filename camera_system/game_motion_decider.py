@@ -39,26 +39,26 @@ class GameMotionDecider:
             print("This block is alredy transported.")
             return []
 
-        # 探索用ロボット
+        # ブロック取得動作の探索用ロボット
         get_robot = copy.deepcopy(current_robot)
         # ブロック取得動作を探索する
         get_block_game_motion = OptimalMotionSearcher.search(get_robot, on_block_node)
 
-        # 設置先候補ノードを取得する
+        # 設置先ノードの候補を取得する
         target_block_color = GameAreaInfo.block_color_list[target_block_id]
         candidate_nodes = GameAreaInfo.get_candidate_node(target_block_color)
         candidate_set_block_game_motions = []
         candidate_robots = []
         costs = []
-        # 各設置先候補ノードについて設置動作を探索する
+        # 各設置先ノードの候補について設置動作を探索する
         for candidate_node in candidate_nodes:
-            # 探索用ロボット
-            candidate_robot = copy.deepcopy(get_robot)
+            # ブロック設置動作の探索用ロボット
+            candidate_set_robot = copy.deepcopy(get_robot)
             # ブロック設置動作を探索する
             candidate_set_block_game_motion = OptimalMotionSearcher.search(
-                candidate_robot, candidate_node)
+                candidate_set_robot, candidate_node)
             candidate_set_block_game_motions += [candidate_set_block_game_motion]
-            candidate_robots += [candidate_robot]
+            candidate_set_robots += [candidate_set_robot]
             # 動作が探索できなかった場合、コストを無限大にする
             cost = candidate_set_block_game_motion.get_cost()
             costs += [cost if cost > 0 else float("inf")]
@@ -66,7 +66,7 @@ class GameMotionDecider:
         mindex = costs.index(min(costs))
         set_block_node = candidate_nodes[mindex]
         set_block_game_motion = candidate_set_block_game_motions[mindex]
-        set_robot = candidate_robots[mindex]
+        set_robot = candidate_set_robots[mindex]
 
         # 運搬対象のブロックを更新する
         GameAreaInfo.move_block(target_block_id, set_block_node)
