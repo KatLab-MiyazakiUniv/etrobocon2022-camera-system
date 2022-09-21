@@ -66,7 +66,6 @@ class TestGameMotionDecider(unittest.TestCase):
 
         # 運搬動作を決定する
         game_motions = []
-        # ToDo: なぜかテストでのみ、block_idが3なブロックが見つからないバグの検証
         for block_id in range(len(GameAreaInfo.block_color_list)):
             game_motions += GameMotionDecider.decide(robot, block_id)
         # 探索動作は、ブロックの数 * 2(取得と設置) だけあるはず

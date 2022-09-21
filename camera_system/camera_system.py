@@ -36,13 +36,13 @@ class CameraSystem:
         # ゲームエリア情報を作成する
         camera_calibrator.make_game_area_info(self.__is_left_course)
         # ゲームエリア攻略を計画する
-        motion_command = GamePlanner.plan()
+        motion_commands = GamePlanner.plan()
 
         # コマンドファイルを生成する
         os.makedirs("command_files", exist_ok=True)
         file_name = "GameAreaLeft.csv" if self.is_left_course else "GamereaRight.csv"  # ファイル名をセット
         f = open("command_files/" + file_name, 'w')
-        f.write(motion_command)  # 計画したコマンドを書き込む
+        f.write(motion_commands)  # 計画したコマンドを書き込む
         f.close()
         print("Create %s\n" % file_name)
 

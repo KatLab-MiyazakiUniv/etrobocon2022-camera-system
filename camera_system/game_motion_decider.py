@@ -42,45 +42,31 @@ class GameMotionDecider:
         # 探索用ロボット
         get_robot = copy.deepcopy(current_robot)
         # ブロック取得動作を探索する
-        get_block_motion = OptimalMotionSearcher.search(get_robot, on_block_node)
-
-        # # ToDo: 検証後に消す
-        # print("get Start(%d,%d,%s) to Goal(%d,%d,%s)" %
-        #       (current_robot.coord.x, current_robot.coord.y, current_robot.direct,
-        #        get_robot.coord.x, get_robot.coord.y, get_robot.direct))
+        get_block_game_motion = OptimalMotionSearcher.search(get_robot, on_block_node)
 
         # 設置先候補ノードを取得する
         target_block_color = GameAreaInfo.block_color_list[target_block_id]
         candidate_nodes = GameAreaInfo.get_candidate_node(target_block_color)
-        candidate_set_block_motions = []
+        candidate_set_block_game_motions = []
         candidate_robots = []
         costs = []
         # 各設置先候補ノードについて設置動作を探索する
         for candidate_node in candidate_nodes:
-            # # ToDo: 検証後に消す
-            # print("pattern: Robot(%d,%d) to Candidate(%d,%d)" %
-            #       (get_robot.coord.x, get_robot.coord.y,
-            #        candidate_node.coord.x, candidate_node.coord.y))
             # 探索用ロボット
             candidate_robot = copy.deepcopy(get_robot)
             # ブロック設置動作を探索する
-            candidate_set_block_motion = OptimalMotionSearcher.search(
+            candidate_set_block_game_motion = OptimalMotionSearcher.search(
                 candidate_robot, candidate_node)
-            candidate_set_block_motions += [candidate_set_block_motion]
+            candidate_set_block_game_motions += [candidate_set_block_game_motion]
             candidate_robots += [candidate_robot]
             # 動作が探索できなかった場合、コストを無限大にする
-            cost = candidate_set_block_motion.get_cost()
+            cost = candidate_set_block_game_motion.get_cost()
             costs += [cost if cost > 0 else float("inf")]
         # コストが最小なブロック設置動作を採用する
         mindex = costs.index(min(costs))
         set_block_node = candidate_nodes[mindex]
-        set_block_motion = candidate_set_block_motions[mindex]
+        set_block_game_motion = candidate_set_block_game_motions[mindex]
         set_robot = candidate_robots[mindex]
-
-        # # ToDo: 検証後に消す
-        # print("set Start(%d,%d,%s) to Goal(%d,%d,%s)" %
-        #       (get_robot.coord.x, get_robot.coord.y, get_robot.direct,
-        #        set_block_node.coord.x, set_block_node.coord.y, set_robot.direct))
 
         # 運搬対象のブロックを更新する
         GameAreaInfo.move_block(target_block_id, set_block_node)
@@ -89,7 +75,7 @@ class GameMotionDecider:
         current_robot.direct = set_robot.direct
         current_robot.edge = set_robot.edge
         # 運搬動作を返す
-        return [get_block_motion, set_block_motion]
+        return [get_block_game_motion, set_block_game_motion]
 
 
 if __name__ == "__main__":

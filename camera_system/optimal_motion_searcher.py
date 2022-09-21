@@ -129,8 +129,6 @@ class OptimalMotionSearcher:
             # 仮にブロックを設置したとしたゲームエリア情報を元に戻す
             GameAreaInfo.move_block(goal_node.block_id, on_block_node)
 
-        # # ToDo:後で消す
-        # print(min_cost_transition["logs"])
         # 動作を実行したとして、走行体を更新する
         start_robot.coord = min_cost_transition["logs"][-1].coord
         start_robot.direct = min_cost_transition["logs"][-1].direct

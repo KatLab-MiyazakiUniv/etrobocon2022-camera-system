@@ -61,7 +61,6 @@ if __name__ == "__main__":
     ]
     GameAreaInfo.bonus_color = Color.RED
     GameAreaInfo.intersection_list = [Color.RED, Color.BLUE, Color.YELLOW, Color.GREEN]
-    motions = []
     print("block colors", [color.value for color in GameAreaInfo.block_color_list])
     # 運搬動作を決定する
     motion_commands = GamePlanner.plan()
