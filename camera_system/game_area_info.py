@@ -20,10 +20,10 @@ class GameAreaInfo:
         bonus_color (List[Color]): ボーナスブロックの色
         intersection_list (List[Color]): 交点の色のリスト
         node_list (List[Node]): ノードリスト(ノード)
-        __east_cand_list = (List[Node]): 東の候補ノードになりうる座標リスト
-        __south_cand_list = (List[Node]): 南の候補ノードになりうる座標リスト
-        __west_cand_list = (List[Node]): 西の候補ノードになりうる座標リスト
-        __north_cand_list = (List[Node]): 北の候補ノードになりうる座標リスト
+        __east_cand_coordinates = (List[Node]): 東の候補ノードになりうる座標リスト
+        __south_cand_coordinates = (List[Node]): 南の候補ノードになりうる座標リスト
+        __west_cand_coordinates = (List[Node]): 西の候補ノードになりうる座標リスト
+        __north_cand_coordinates = (List[Node]): 北の候補ノードになりうる座標リスト
     """
 
     block_color_list = []
@@ -61,11 +61,11 @@ class GameAreaInfo:
         Node(-1, Coordinate(6, 6)),
     ]
 
-    # [x座標 + y座標*7]
-    __east_cand_list = [node_list[6 + 2*7], node_list[6 + 3*7], node_list[6 + 4*7]]
-    __south_cand_list = [node_list[2 + 6*7], node_list[3 + 6*7], node_list[4 + 6*7]]
-    __west_cand_list = [node_list[0 + 2*7], node_list[0 + 3*7], node_list[0 + 4*7]]
-    __north_cand_list = [node_list[2 + 0*7], node_list[3 + 0*7], node_list[4 + 0*7]]
+    # 方位ごとの設置先の座標
+    __east_cand_coordinates = [Coordinate(6, 2), Coordinate(6, 3), Coordinate(6, 4)]
+    __south_cand_coordinates = [Coordinate(2, 6), Coordinate(3, 6), Coordinate(4, 6)]
+    __west_cand_coordinates = [Coordinate(0, 2), Coordinate(0, 3), Coordinate(0, 4)]
+    __north_cand_coordinates = [Coordinate(2, 0), Coordinate(3, 0), Coordinate(4, 0)]
 
     @staticmethod
     def get_candidate_node(color: Color) -> List[Node]:
@@ -86,21 +86,17 @@ class GameAreaInfo:
         color_id = color.value  # colorをidに直す
         # 一致する要素(候補ノードになりうるノードの中で設置済みのブロックが無いノード)を返す
         if base_color_dict[color_id] == "東":
-            cand = [east_cand for node in GameAreaInfo.node_list
-                    for east_cand in GameAreaInfo.__east_cand_list
-                    if node.coord == east_cand.coord and node.block_id == -1]
+            cand = [node for node in GameAreaInfo.node_list
+                    if node.coord in GameAreaInfo.__east_cand_coordinates and node.block_id == -1]
         elif base_color_dict[color_id] == "南":
-            cand = [south_cand for node in GameAreaInfo.node_list
-                    for south_cand in GameAreaInfo.__south_cand_list
-                    if node.coord == south_cand.coord and node.block_id == -1]
+            cand = [node for node in GameAreaInfo.node_list
+                    if node.coord in GameAreaInfo.__south_cand_coordinates and node.block_id == -1]
         elif base_color_dict[color_id] == "西":
-            cand = [west_cand for node in GameAreaInfo.node_list
-                    for west_cand in GameAreaInfo.__west_cand_list
-                    if node.coord == west_cand.coord and node.block_id == -1]
+            cand = [node for node in GameAreaInfo.node_list
+                    if node.coord in GameAreaInfo.__west_cand_coordinates and node.block_id == -1]
         else:
-            cand = [north_cand for node in GameAreaInfo.node_list
-                    for north_cand in GameAreaInfo.__north_cand_list
-                    if node.coord == north_cand.coord and node.block_id == -1]
+            cand = [node for node in GameAreaInfo.node_list
+                    if node.coord in GameAreaInfo.__north_cand_coordinates and node.block_id == -1]
 
         return cand
 

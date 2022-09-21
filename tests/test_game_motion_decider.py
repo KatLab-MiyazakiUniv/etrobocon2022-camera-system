@@ -22,7 +22,7 @@ class TestGameMotionDecider(unittest.TestCase):
         """1つのカラーブロックについて運搬動作決定を実行する."""
         # ゲームエリア情報の初期化
         robot = Robot(Coordinate(4, 4), Direction.E, "left")
-        node_list = [
+        GameAreaInfo.node_list = [
             Node(-1, Coordinate(0, 0)), Node(-1, Coordinate(1, 0)),
             Node(-1, Coordinate(2, 0)), Node(-1, Coordinate(3, 0)),
             Node(-1, Coordinate(4, 0)), Node(-1, Coordinate(5, 0)),
@@ -67,10 +67,8 @@ class TestGameMotionDecider(unittest.TestCase):
         # 運搬動作を決定する
         game_motions = []
         # ToDo: なぜかテストでのみ、block_idが3なブロックが見つからないバグの検証
-        # with redirect_stdout(open(os.devnull, 'w')) as redirect:
         for block_id in range(len(GameAreaInfo.block_color_list)):
             game_motions += GameMotionDecider.decide(robot, block_id)
-            # redirect.close()
         # 探索動作は、ブロックの数 * 2(取得と設置) だけあるはず
         expected_game_motions_count = len(GameAreaInfo.block_color_list) * 2
         actual_game_motions_count = len(game_motions)

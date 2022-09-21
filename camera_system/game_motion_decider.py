@@ -32,7 +32,7 @@ class GameMotionDecider:
         on_block_node = [node for node in GameAreaInfo.node_list
                          if node.block_id == target_block_id]
         if on_block_node == []:
-            print("Block %d is not exist." %(target_block_id))
+            print("Block %d is not exist." % (target_block_id))
             return []
         on_block_node = on_block_node[0]
         if on_block_node.node_type != NodeType.BLOCK:
@@ -44,10 +44,10 @@ class GameMotionDecider:
         # ブロック取得動作を探索する
         get_block_motion = OptimalMotionSearcher.search(get_robot, on_block_node)
 
-        # ToDo: 検証後に消す
-        print("get Start(%d,%d,%s) to Goal(%d,%d,%s)" %
-              (current_robot.coord.x, current_robot.coord.y, current_robot.direct,
-               get_robot.coord.x, get_robot.coord.y, get_robot.direct))
+        # # ToDo: 検証後に消す
+        # print("get Start(%d,%d,%s) to Goal(%d,%d,%s)" %
+        #       (current_robot.coord.x, current_robot.coord.y, current_robot.direct,
+        #        get_robot.coord.x, get_robot.coord.y, get_robot.direct))
 
         # 設置先候補ノードを取得する
         target_block_color = GameAreaInfo.block_color_list[target_block_id]
@@ -57,10 +57,10 @@ class GameMotionDecider:
         costs = []
         # 各設置先候補ノードについて設置動作を探索する
         for candidate_node in candidate_nodes:
-            # ToDo: 検証後に消す
-            print("pattern: Robot(%d,%d) to Candidate(%d,%d)" %
-                  (get_robot.coord.x, get_robot.coord.y,
-                   candidate_node.coord.x, candidate_node.coord.y))
+            # # ToDo: 検証後に消す
+            # print("pattern: Robot(%d,%d) to Candidate(%d,%d)" %
+            #       (get_robot.coord.x, get_robot.coord.y,
+            #        candidate_node.coord.x, candidate_node.coord.y))
             # 探索用ロボット
             candidate_robot = copy.deepcopy(get_robot)
             # ブロック設置動作を探索する
@@ -77,10 +77,10 @@ class GameMotionDecider:
         set_block_motion = candidate_set_block_motions[mindex]
         set_robot = candidate_robots[mindex]
 
-        # ToDo: 検証後に消す
-        print("set Start(%d,%d,%s) to Goal(%d,%d,%s)" %
-              (get_robot.coord.x, get_robot.coord.y, get_robot.direct,
-               set_block_node.coord.x, set_block_node.coord.y, set_robot.direct))
+        # # ToDo: 検証後に消す
+        # print("set Start(%d,%d,%s) to Goal(%d,%d,%s)" %
+        #       (get_robot.coord.x, get_robot.coord.y, get_robot.direct,
+        #        set_block_node.coord.x, set_block_node.coord.y, set_robot.direct))
 
         # 運搬対象のブロックを更新する
         GameAreaInfo.move_block(target_block_id, set_block_node)
@@ -94,51 +94,50 @@ class GameMotionDecider:
 
 if __name__ == "__main__":
     # ゲームエリア情報の初期化
-        robot = Robot(Coordinate(4, 4), Direction.E, "left")
-        node_list = [
-            Node(-1, Coordinate(0, 0)), Node(-1, Coordinate(1, 0)),
-            Node(-1, Coordinate(2, 0)), Node(-1, Coordinate(3, 0)),
-            Node(-1, Coordinate(4, 0)), Node(-1, Coordinate(5, 0)),
-            Node(-1, Coordinate(6, 0)),
-            Node(-1, Coordinate(0, 1)), Node(0, Coordinate(1, 1)),
-            Node(-1, Coordinate(2, 1)), Node(1, Coordinate(3, 1)),
-            Node(-1, Coordinate(4, 1)), Node(2, Coordinate(5, 1)),
-            Node(-1, Coordinate(6, 1)),
-            Node(-1, Coordinate(0, 2)), Node(-1, Coordinate(1, 2)),
-            Node(-1, Coordinate(2, 2)), Node(-1, Coordinate(3, 2)),
-            Node(-1, Coordinate(4, 2)), Node(-1, Coordinate(5, 2)),
-            Node(-1, Coordinate(6, 2)),
-            Node(-1, Coordinate(0, 3)), Node(3, Coordinate(1, 3)),
-            Node(-1, Coordinate(2, 3)), Node(-1, Coordinate(3, 3)),
-            Node(-1, Coordinate(4, 3)), Node(4, Coordinate(5, 3)),
-            Node(-1, Coordinate(6, 3)),
-            Node(-1, Coordinate(0, 4)), Node(-1, Coordinate(1, 4)),
-            Node(-1, Coordinate(2, 4)), Node(-1, Coordinate(3, 4)),
-            Node(-1, Coordinate(4, 4)), Node(-1, Coordinate(5, 4)),
-            Node(-1, Coordinate(6, 4)),
-            Node(-1, Coordinate(0, 5)), Node(5, Coordinate(1, 5)),
-            Node(-1, Coordinate(2, 5)), Node(6, Coordinate(3, 5)),
-            Node(-1, Coordinate(4, 5)), Node(7, Coordinate(5, 5)),
-            Node(-1, Coordinate(6, 5)),
-            Node(-1, Coordinate(0, 6)), Node(-1, Coordinate(1, 6)),
-            Node(-1, Coordinate(2, 6)), Node(-1, Coordinate(3, 6)),
-            Node(-1, Coordinate(4, 6)), Node(-1, Coordinate(5, 6)),
-            Node(-1, Coordinate(6, 6)),
-        ]
-        GameAreaInfo.block_color_list = [
-            Color.RED, Color.RED, Color.YELLOW,
-            Color.YELLOW, Color.GREEN,
-            Color.GREEN, Color.BLUE, Color.BLUE
-        ]
-        GameAreaInfo.base_color_list = [
-            Color.RED, Color.YELLOW,
-            Color.GREEN, Color.BLUE
-        ]
-        GameAreaInfo.bonus_color = Color.RED
-        GameAreaInfo.intersection_list = [Color.RED, Color.BLUE, Color.YELLOW, Color.GREEN]
+    robot = Robot(Coordinate(4, 4), Direction.E, "left")
+    node_list = [
+        Node(-1, Coordinate(0, 0)), Node(-1, Coordinate(1, 0)),
+        Node(-1, Coordinate(2, 0)), Node(-1, Coordinate(3, 0)),
+        Node(-1, Coordinate(4, 0)), Node(-1, Coordinate(5, 0)),
+        Node(-1, Coordinate(6, 0)),
+        Node(-1, Coordinate(0, 1)), Node(0, Coordinate(1, 1)),
+        Node(-1, Coordinate(2, 1)), Node(1, Coordinate(3, 1)),
+        Node(-1, Coordinate(4, 1)), Node(2, Coordinate(5, 1)),
+        Node(-1, Coordinate(6, 1)),
+        Node(-1, Coordinate(0, 2)), Node(-1, Coordinate(1, 2)),
+        Node(-1, Coordinate(2, 2)), Node(-1, Coordinate(3, 2)),
+        Node(-1, Coordinate(4, 2)), Node(-1, Coordinate(5, 2)),
+        Node(-1, Coordinate(6, 2)),
+        Node(-1, Coordinate(0, 3)), Node(3, Coordinate(1, 3)),
+        Node(-1, Coordinate(2, 3)), Node(-1, Coordinate(3, 3)),
+        Node(-1, Coordinate(4, 3)), Node(4, Coordinate(5, 3)),
+        Node(-1, Coordinate(6, 3)),
+        Node(-1, Coordinate(0, 4)), Node(-1, Coordinate(1, 4)),
+        Node(-1, Coordinate(2, 4)), Node(-1, Coordinate(3, 4)),
+        Node(-1, Coordinate(4, 4)), Node(-1, Coordinate(5, 4)),
+        Node(-1, Coordinate(6, 4)),
+        Node(-1, Coordinate(0, 5)), Node(5, Coordinate(1, 5)),
+        Node(-1, Coordinate(2, 5)), Node(6, Coordinate(3, 5)),
+        Node(-1, Coordinate(4, 5)), Node(7, Coordinate(5, 5)),
+        Node(-1, Coordinate(6, 5)),
+        Node(-1, Coordinate(0, 6)), Node(-1, Coordinate(1, 6)),
+        Node(-1, Coordinate(2, 6)), Node(-1, Coordinate(3, 6)),
+        Node(-1, Coordinate(4, 6)), Node(-1, Coordinate(5, 6)),
+        Node(-1, Coordinate(6, 6)),
+    ]
+    GameAreaInfo.block_color_list = [
+        Color.RED, Color.RED, Color.YELLOW,
+        Color.YELLOW, Color.GREEN,
+        Color.GREEN, Color.BLUE, Color.BLUE
+    ]
+    GameAreaInfo.base_color_list = [
+        Color.RED, Color.YELLOW,
+        Color.GREEN, Color.BLUE
+    ]
+    GameAreaInfo.bonus_color = Color.RED
+    GameAreaInfo.intersection_list = [Color.RED, Color.BLUE, Color.YELLOW, Color.GREEN]
 
-        # 運搬動作を決定する
-        game_motions = []
-        print("block colors", [color.value for color in GameAreaInfo.block_color_list])
-        for block_id in range(len(GameAreaInfo.block_color_list)):
-            game_motions += GameMotionDecider.decide(robot, block_id)
+    # 運搬動作を決定する
+    game_motions = []
+    for block_id in range(len(GameAreaInfo.block_color_list)):
+        game_motions += GameMotionDecider.decide(robot, block_id)

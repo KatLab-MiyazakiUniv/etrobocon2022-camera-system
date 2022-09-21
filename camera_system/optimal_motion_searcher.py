@@ -48,7 +48,8 @@ class OptimalMotionSearcher:
         is_set_motion = goal_node.node_type != NodeType.BLOCK
         # 設置動作探索時、ゴールノードにブロックがある場合
         if is_set_motion and goal_node.block_id != -1:
-            print("A block already exists at the goal node.")
+            print("A block %d already exists at the goal node(%d,%d)." %
+                  (goal_node.block_id, goal_node.coord.x, goal_node.coord.y))
             # 空のCompositeGameMotionを返す
             return CompositeGameMotion()
 
@@ -100,9 +101,10 @@ class OptimalMotionSearcher:
 
             # 遷移できる走行体がない場合
             if open_hashs == []:
-                print("Impossible move (%d,%d,%s) to (%d,%d)." %
-                      (start_robot.coord.x, start_robot.coord.y, start_robot.direct.name,
-                       goal_node.coord.x, goal_node.coord.y))
+                # # 検証後に消す
+                # print("Impossible move (%d,%d,%s) to (%d,%d)." %
+                #       (start_robot.coord.x, start_robot.coord.y, start_robot.direct.name,
+                #        goal_node.coord.x, goal_node.coord.y))
                 # 空のCompositeGameMotionを返す
                 return CompositeGameMotion()
 
@@ -127,8 +129,8 @@ class OptimalMotionSearcher:
             # 仮にブロックを設置したとしたゲームエリア情報を元に戻す
             GameAreaInfo.move_block(goal_node.block_id, on_block_node)
 
-        # ToDo:後で消す
-        print(min_cost_transition["logs"])
+        # # ToDo:後で消す
+        # print(min_cost_transition["logs"])
         # 動作を実行したとして、走行体を更新する
         start_robot.coord = min_cost_transition["logs"][-1].coord
         start_robot.direct = min_cost_transition["logs"][-1].direct
@@ -270,10 +272,10 @@ class OptimalMotionSearcher:
             target_direction = [Direction.N, Direction.S]
             if setted_robot.coord.x == 0:
                 dx = 1
-                setted_robot.direct = Direction.E
+                setted_robot.direct = Direction.W
             else:
                 dx = -1
-                setted_robot.direct = Direction.W
+                setted_robot.direct = Direction.E
         # 南北への設置の場合
         elif setted_robot.coord.y % 6 == 0:
             target_direction = [Direction.E, Direction.W]

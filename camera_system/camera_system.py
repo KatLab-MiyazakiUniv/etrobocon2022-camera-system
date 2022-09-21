@@ -7,7 +7,7 @@ import os
 from camera_calibrator import CameraCalibrator
 
 from client import Client
-from composite_game_motion import CompositeGameMotion
+from game_planner import GamePlanner
 
 
 class CameraSystem:
@@ -25,22 +25,24 @@ class CameraSystem:
         """ゲーム攻略を計画する."""
         # カメラキャリブレーションを開始する
         camera_calibrator = CameraCalibrator(camera_id)
-        # GUIから座標取得
+        # GUIから座標を取得する
         camera_calibrator.start_camera_calibration()
-        # 通信を開始する.
+
+        # 通信を開始する
         client = Client("127.0.0.1", 8080)
-        # 開始合図を受け取るまで待機する.
+        # 開始合図を受け取るまで待機する
         client.wait_for_start_signal()
-        # ゲームエリア情報の作成
+
+        # ゲームエリア情報を作成する
         camera_calibrator.make_game_area_info(self.__is_left_course)
-        # ToDo: 計画する.
-        game_motion_list = CompositeGameMotion()  # TODO: 計画した結果のゲーム動作のリストをセットする
+        # ゲームエリア攻略を計画する
+        motion_command = GamePlanner.plan()
 
         # コマンドファイルを生成する
         os.makedirs("command_files", exist_ok=True)
         file_name = "GameAreaLeft.csv" if self.is_left_course else "GamereaRight.csv"  # ファイル名をセット
         f = open("command_files/" + file_name, 'w')
-        f.write(game_motion_list.generate_command())  # ゲーム動作リストからコマンドを生成して書き込む
+        f.write(motion_command)  # 計画したコマンドを書き込む
         f.close()
         print("Create %s\n" % file_name)
 

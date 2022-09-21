@@ -7,9 +7,10 @@ import unittest
 import os
 from contextlib import redirect_stdout
 
-from fame_planner import GamePlanner
+from game_planner import GamePlanner
 from game_area_info import GameAreaInfo
 from robot import Robot, Direction
+from node import Node
 from coordinate import Coordinate
 from color_changer import Color
 
@@ -21,7 +22,7 @@ class TestGamePlanner(unittest.TestCase):
         """1つのカラーブロックについて運搬動作決定を実行する."""
         # ゲームエリア情報の初期化
         robot = Robot(Coordinate(4, 4), Direction.E, "left")
-        node_list = [
+        GameAreaInfo.node_list = [
             Node(-1, Coordinate(0, 0)), Node(-1, Coordinate(1, 0)),
             Node(-1, Coordinate(2, 0)), Node(-1, Coordinate(3, 0)),
             Node(-1, Coordinate(4, 0)), Node(-1, Coordinate(5, 0)),
@@ -66,9 +67,8 @@ class TestGamePlanner(unittest.TestCase):
         # ゲーム攻略を計画する
         unexpected_motion_commands = ""
         actual_motion_commands = ""
-        with redirect_stdout(open(os.devnull, 'w')) as redirect:
-            for block_id in range(len(GameAreaInfo.block_color_list)):
-                actual_motion_commands += GamePlanner.plan()
-            redirect.close()
+        # with redirect_stdout(open(os.devnull, 'w')) as redirect:
+        actual_motion_commands = GamePlanner.plan()
+        # redirect.close()
 
         self.assertNotEqual(unexpected_motion_commands, actual_motion_commands)
