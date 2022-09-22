@@ -26,16 +26,16 @@ class TestCompositeGameMotion(unittest.TestCase):
         game_motion_list = CompositeGameMotion()
 
         # 各ゲーム動作のインスタンスを生成
-        b2i = BlockToIntersection(45, Color.RED)
-        b2m = BlockToMiddle(90)
-        i2b = IntersectionToBlock(135, True, False)
-        i2m = IntersectionToMiddle(180, True)
-        m2b = MiddleToBlock(-45, True)
-        m2i = MiddleToIntersection(-90, Color.BLUE)
-        m2m = MiddleToMiddle(-135, True)
-        r2i = ReturnToIntersection(-45, Color.YELLOW)
-        r2m = ReturnToMiddle(0)
-        r2b = ReturnToBlock(45, True)
+        b2i = BlockToIntersection(45, Color.RED, True)
+        b2m = BlockToMiddle(90, True)
+        i2b = IntersectionToBlock(135, True, False, True)
+        i2m = IntersectionToMiddle(180, True, True)
+        m2b = MiddleToBlock(-45, True, True)
+        m2i = MiddleToIntersection(-90, Color.BLUE, False)
+        m2m = MiddleToMiddle(-135, True, False)
+        r2i = ReturnToIntersection(-45, Color.YELLOW, False)
+        r2m = ReturnToMiddle(0, False)
+        r2b = ReturnToBlock(45, True, False)
 
         b2i.current_edge = "left"  # current_edgeの初期値を合わせる
         # 各ゲーム動作のインスタンスから一つずつコストを計算する

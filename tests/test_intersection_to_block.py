@@ -19,13 +19,14 @@ class TestIntersectionToBlock(unittest.TestCase):
         angle = first_angle+second_angle
         vertical_flag = True
         diagonal_flag = False
-        i2b = IntersectionToBlock(angle, vertical_flag, diagonal_flag)
+        have_block = True  # ブロックを保持している
+        i2b = IntersectionToBlock(angle, vertical_flag, diagonal_flag, have_block)
         i2b.current_edge = "right"  # 初期エッジを右エッジにする
 
         # コストの期待値を求める
         motion_time = 0.7840
-        motion_time += GameMotion.ROTATION_TIME[abs(first_angle)//45]
-        motion_time += GameMotion.ROTATION_TIME[abs(second_angle)//45]
+        motion_time += GameMotion.ROTATION_BLOCK_TABLE[45]["time"]
+        motion_time += GameMotion.ROTATION_BLOCK_TABLE[45]["time"]
         motion_time += GameMotion.VERTICAL_TIME
         success_rate = 1.0
         expected_cost = motion_time*success_rate+GameMotion.MAX_TIME*(1-success_rate)
@@ -35,9 +36,11 @@ class TestIntersectionToBlock(unittest.TestCase):
         self.assertEqual(expected_cost, actual_cost)  # コスト計算のテスト
 
         # 期待するコマンドをセット
-        expected_commands = "RT,45,100,anticlockwise,交点→ブロック置き場\n"
+        expected_commands = "RT,%d,%d,anticlockwise,交点→ブロック置き場\n" % (
+            GameMotion.ROTATION_BLOCK_TABLE[45]["angle"], GameMotion.ROTATION_BLOCK_PWM)
         expected_commands += "DS,10,70\n"
-        expected_commands += "RT,45,100,anticlockwise\n"
+        expected_commands += "RT,%d,%d,anticlockwise\n" % (
+            GameMotion.ROTATION_BLOCK_TABLE[45]["angle"], GameMotion.ROTATION_BLOCK_PWM)
         expected_commands += "DS,150,70\n"
 
         actual_commands = i2b.generate_command()  # コマンドを生成する
@@ -56,13 +59,13 @@ class TestIntersectionToBlock(unittest.TestCase):
         angle = first_angle+second_angle
         vertical_flag = False
         diagonal_flag = True
-        i2b = IntersectionToBlock(angle, vertical_flag, diagonal_flag)
+        have_block = True  # ブロックを保持している
+        i2b = IntersectionToBlock(angle, vertical_flag, diagonal_flag, have_block)
         i2b.current_edge = "right"  # 初期エッジを右エッジにする
 
         # コストの期待値を求める
         motion_time = 0.7840
-        motion_time += GameMotion.ROTATION_TIME[abs(first_angle)//45]
-        motion_time += GameMotion.ROTATION_TIME[abs(second_angle)//45]
+        motion_time += GameMotion.ROTATION_BLOCK_TABLE[45]["time"]
         motion_time += GameMotion.DIAGONAL_TIME
         success_rate = 1.0
         expected_cost = motion_time*success_rate+GameMotion.MAX_TIME*(1-success_rate)
@@ -72,7 +75,8 @@ class TestIntersectionToBlock(unittest.TestCase):
         self.assertEqual(expected_cost, actual_cost)  # コスト計算のテスト
 
         # 期待するコマンドをセット
-        expected_commands = "RT,45,100,clockwise,交点→ブロック置き場\n"
+        expected_commands = "RT,%d,%d,clockwise,交点→ブロック置き場\n" % (
+            GameMotion.ROTATION_BLOCK_TABLE[45]["angle"], GameMotion.ROTATION_BLOCK_PWM)
         expected_commands += "DS,20,70\n"
         expected_commands += "DS,150,70\n"
 
@@ -92,13 +96,14 @@ class TestIntersectionToBlock(unittest.TestCase):
         angle = first_angle+second_angle
         vertical_flag = False
         diagonal_flag = False
-        i2b = IntersectionToBlock(angle, vertical_flag, diagonal_flag)
+        have_block = False  # ブロックを保持していない
+        i2b = IntersectionToBlock(angle, vertical_flag, diagonal_flag, have_block)
         i2b.current_edge = "left"  # 初期エッジを左エッジにする
 
         # コストの期待値を求める
-        motion_time = 0.7840 + \
-            GameMotion.ROTATION_TIME[abs(first_angle)//45] + \
-            GameMotion.ROTATION_TIME[abs(second_angle)//45]
+        motion_time = 0.7840
+        motion_time += GameMotion.ROTATION_NO_BLOCK_TABLE[180]["time"]
+        motion_time += GameMotion.ROTATION_NO_BLOCK_TABLE[45]["time"]
         success_rate = 1.0
         expected_cost = motion_time*success_rate+GameMotion.MAX_TIME*(1-success_rate)
 
@@ -107,8 +112,10 @@ class TestIntersectionToBlock(unittest.TestCase):
         self.assertEqual(expected_cost, actual_cost)  # コスト計算のテスト
 
         # 期待するコマンドをセット
-        expected_commands = "RT,180,100,clockwise,交点→ブロック置き場\n"
-        expected_commands += "RT,45,100,clockwise\n"
+        expected_commands = "RT,%d,%d,clockwise,交点→ブロック置き場\n" % (
+            GameMotion.ROTATION_NO_BLOCK_TABLE[180]["angle"], GameMotion.ROTATION_NO_BLOCK_PWM)
+        expected_commands += "RT,%d,%d,clockwise\n" % (
+            GameMotion.ROTATION_NO_BLOCK_TABLE[45]["angle"], GameMotion.ROTATION_NO_BLOCK_PWM)
         expected_commands += "DS,150,70\n"
 
         actual_commands = i2b.generate_command()  # コマンドを生成する
@@ -128,14 +135,16 @@ class TestIntersectionToBlock(unittest.TestCase):
             angle = first_angle+second_angle
             vertical_flag = True
             diagonal_flag = True
-            i2b = IntersectionToBlock(angle, vertical_flag, diagonal_flag)
+            have_block = False  # ブロックを保持していない
+            i2b = IntersectionToBlock(angle, vertical_flag, diagonal_flag, have_block)
 
     def test_intersection_to_block_no_rotation(self):
         """回頭しない場合のテスト."""
         angle = 0
         vertical_flag = False
         diagonal_flag = True
-        i2b = IntersectionToBlock(angle, vertical_flag, diagonal_flag)
+        have_block = False  # ブロックを保持していない
+        i2b = IntersectionToBlock(angle, vertical_flag, diagonal_flag, have_block)
         i2b.current_edge = "left"  # 初期エッジを左エッジにする
 
         # コストの期待値を求める

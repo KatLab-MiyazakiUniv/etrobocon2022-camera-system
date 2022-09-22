@@ -15,17 +15,19 @@ class TestReturnToMiddle(unittest.TestCase):
     def test_return_to_middle_from_block(self):
         """ブロック置き場から設置した想定のテスト."""
         angle = 45
-        r2m = ReturnToMiddle(angle)
+        have_block = True  # ブロックを保持している
+        r2m = ReturnToMiddle(angle, have_block)
         r2m.current_edge = "none"  # 初期エッジをnoneにする
 
         # コストの期待値を求める
-        expected_cost = GameMotion.ROTATION_TIME[abs(angle)//45]
+        expected_cost = GameMotion.ROTATION_BLOCK_TABLE[45]["time"]
         actual_cost = r2m.get_cost()  # 実際のコスト
 
         self.assertEqual(expected_cost, actual_cost)  # コスト計算のテスト
 
         # 期待するコマンドをセット
-        expected_commands = "RT,45,100,clockwise,設置後復帰(→中点)\n"
+        expected_commands = "RT,%d,%d,clockwise,設置後復帰(→中点)\n" % (
+            GameMotion.ROTATION_BLOCK_TABLE[45]["angle"], GameMotion.ROTATION_BLOCK_PWM)
         expected_commands += "EC,right\n"
         expected_commands += "DS,50,-40\n"
         expected_commands += "DL,50,0,-40,0.1,0.08,0.08\n"
@@ -37,11 +39,12 @@ class TestReturnToMiddle(unittest.TestCase):
     def test_return_to_middle_from_middle(self):
         """中点から設置した想定のテスト."""
         angle = 0
-        r2m = ReturnToMiddle(angle)
+        have_block = False  # ブロックを保持していない
+        r2m = ReturnToMiddle(angle, have_block)
         r2m.current_edge = "right"  # 初期エッジを右エッジにする
 
         # コストの期待値を求める
-        expected_cost = GameMotion.ROTATION_TIME[abs(angle)//45]
+        expected_cost = GameMotion.ROTATION_BLOCK_TABLE[0]["time"]
         actual_cost = r2m.get_cost()  # 実際のコスト
 
         self.assertEqual(expected_cost, actual_cost)  # コスト計算のテスト

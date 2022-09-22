@@ -16,12 +16,13 @@ class TestIntersectionToMiddle(unittest.TestCase):
         """調整動作ありのテスト."""
         angle = 270
         adjustment_flag = True
-        i2m = IntersectionToMiddle(angle, adjustment_flag)
+        have_block = True  # ブロックを保持している
+        i2m = IntersectionToMiddle(angle, adjustment_flag, have_block)
         i2m.current_edge = "right"  # 初期エッジを右エッジにする
 
         # コストの期待値を求める
         motion_time = 0.5480 + \
-            GameMotion.ROTATION_TIME[abs(angle)//45]+GameMotion.VERTICAL_TIME
+            GameMotion.ROTATION_BLOCK_TABLE[270]["time"]+GameMotion.VERTICAL_TIME
         success_rate = 0.8
         expected_cost = motion_time*success_rate+GameMotion.MAX_TIME*(1-success_rate)
 
@@ -30,7 +31,8 @@ class TestIntersectionToMiddle(unittest.TestCase):
         self.assertEqual(expected_cost, actual_cost)  # コスト計算のテスト
 
         # 期待するコマンドをセット
-        expected_commands = "RT,270,100,clockwise,交点→中点\n"
+        expected_commands = "RT,%d,%d,clockwise,交点→中点\n" % (
+            GameMotion.ROTATION_BLOCK_TABLE[270]["angle"], GameMotion.ROTATION_BLOCK_PWM)
         expected_commands += "EC,left\n"
         expected_commands += "DS,10,70\n"
         expected_commands += "DL,80,0,60,0.1,0.08,0.08\n"
@@ -43,11 +45,12 @@ class TestIntersectionToMiddle(unittest.TestCase):
         """調整動作なしのテスト."""
         angle = 315
         adjustment_flag = False
-        i2m = IntersectionToMiddle(angle, adjustment_flag)
+        have_block = True  # ブロックを保持している
+        i2m = IntersectionToMiddle(angle, adjustment_flag, have_block)
         i2m.current_edge = "right"  # 初期エッジを右エッジにする
 
         # コストの期待値を求める
-        motion_time = 0.5480 + GameMotion.ROTATION_TIME[abs(angle)//45]
+        motion_time = 0.5480 + GameMotion.ROTATION_BLOCK_TABLE[315]["time"]
         success_rate = 0.8
         expected_cost = motion_time*success_rate+GameMotion.MAX_TIME*(1-success_rate)
 
@@ -56,7 +59,8 @@ class TestIntersectionToMiddle(unittest.TestCase):
         self.assertEqual(expected_cost, actual_cost)  # コスト計算のテスト
 
         # 期待するコマンドをセット
-        expected_commands = "RT,315,100,clockwise,交点→中点\n"
+        expected_commands = "RT,%d,%d,clockwise,交点→中点\n" % (
+            GameMotion.ROTATION_BLOCK_TABLE[315]["angle"], GameMotion.ROTATION_BLOCK_PWM)
         expected_commands += "DL,80,0,60,0.1,0.08,0.08\n"
 
         actual_commands = i2m.generate_command()  # コマンドを生成する
@@ -67,11 +71,12 @@ class TestIntersectionToMiddle(unittest.TestCase):
         """エッジがnoneからleftとなるテスト."""
         angle = -45
         adjustment_flag = False
-        i2m = IntersectionToMiddle(angle, adjustment_flag)
+        have_block = True  # ブロックを保持している
+        i2m = IntersectionToMiddle(angle, adjustment_flag, have_block)
         i2m.current_edge = "none"  # 初期エッジを右エッジにする
 
         # コストの期待値を求める
-        motion_time = 0.5480 + GameMotion.ROTATION_TIME[abs(angle)//45]
+        motion_time = 0.5480 + GameMotion.ROTATION_BLOCK_TABLE[45]["time"]
         success_rate = 0.8
         expected_cost = motion_time*success_rate+GameMotion.MAX_TIME*(1-success_rate)
 
@@ -80,7 +85,8 @@ class TestIntersectionToMiddle(unittest.TestCase):
         self.assertEqual(expected_cost, actual_cost)  # コスト計算のテスト
 
         # 期待するコマンドをセット
-        expected_commands = "RT,45,100,anticlockwise,交点→中点\n"
+        expected_commands = "RT,%d,%d,anticlockwise,交点→中点\n" % (
+            GameMotion.ROTATION_BLOCK_TABLE[45]["angle"], GameMotion.ROTATION_BLOCK_PWM)
         expected_commands += "EC,left\n"
         expected_commands += "DL,80,0,60,0.1,0.08,0.08\n"
 
@@ -92,11 +98,12 @@ class TestIntersectionToMiddle(unittest.TestCase):
         """エッジがnoneからrightとなるテスト."""
         angle = 45
         adjustment_flag = False
-        i2m = IntersectionToMiddle(angle, adjustment_flag)
+        have_block = False  # ブロックを保持していない
+        i2m = IntersectionToMiddle(angle, adjustment_flag, have_block)
         i2m.current_edge = "none"  # 初期エッジを右エッジにする
 
         # コストの期待値を求める
-        motion_time = 0.5480 + GameMotion.ROTATION_TIME[abs(angle)//45]
+        motion_time = 0.5480 + GameMotion.ROTATION_NO_BLOCK_TABLE[45]["time"]
         success_rate = 0.8
         expected_cost = motion_time*success_rate+GameMotion.MAX_TIME*(1-success_rate)
 
@@ -105,7 +112,8 @@ class TestIntersectionToMiddle(unittest.TestCase):
         self.assertEqual(expected_cost, actual_cost)  # コスト計算のテスト
 
         # 期待するコマンドをセット
-        expected_commands = "RT,45,100,clockwise,交点→中点\n"
+        expected_commands = "RT,%d,%d,clockwise,交点→中点\n" % (
+            GameMotion.ROTATION_NO_BLOCK_TABLE[45]["angle"], GameMotion.ROTATION_NO_BLOCK_PWM)
         expected_commands += "EC,right\n"
         expected_commands += "DL,80,0,60,0.1,0.08,0.08\n"
 
@@ -117,11 +125,12 @@ class TestIntersectionToMiddle(unittest.TestCase):
         """エッジがnoneから変わらないテスト."""
         angle = 180
         adjustment_flag = False
-        i2m = IntersectionToMiddle(angle, adjustment_flag)
+        have_block = False  # ブロックを保持していない
+        i2m = IntersectionToMiddle(angle, adjustment_flag, have_block)
         i2m.current_edge = "none"  # 初期エッジを右エッジにする
 
         # コストの期待値を求める
-        motion_time = 0.5480 + GameMotion.ROTATION_TIME[abs(angle)//45]
+        motion_time = 0.5480 + GameMotion.ROTATION_NO_BLOCK_TABLE[180]["time"]
         success_rate = 0.8
         expected_cost = motion_time*success_rate+GameMotion.MAX_TIME*(1-success_rate)
 
@@ -130,7 +139,8 @@ class TestIntersectionToMiddle(unittest.TestCase):
         self.assertEqual(expected_cost, actual_cost)  # コスト計算のテスト
 
         # 期待するコマンドをセット
-        expected_commands = "RT,180,100,clockwise,交点→中点\n"
+        expected_commands = "RT,%d,%d,clockwise,交点→中点\n" % (
+            GameMotion.ROTATION_NO_BLOCK_TABLE[180]["angle"], GameMotion.ROTATION_NO_BLOCK_PWM)
         expected_commands += "DL,80,0,60,0.1,0.08,0.08\n"
 
         actual_commands = i2m.generate_command()  # コマンドを生成する

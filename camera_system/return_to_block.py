@@ -11,15 +11,24 @@ from game_motion import GameMotion
 class ReturnToBlock(GameMotion):
     """設置後復帰(→ブロック置き場)のゲーム動作クラス."""
 
-    def __init__(self, angle: int, adjustment_flag: bool) -> None:
+    def __init__(self, angle: int, adjustment_flag: bool, with_block: bool) -> None:
         """ReturnToBlockのコンストラクタ.
 
         Args:
             angle: 方向転換の角度
             adjustment_flag: 調整動作の有無
+            with_block: ブロックを保持している場合True
 
         """
-        self.__angle = angle
+        if with_block:  # ブロックを保持している場合
+            self.__rotation_angle = GameMotion.ROTATION_BLOCK_TABLE[abs(angle)]["angle"]
+            self.__rotation_pwm = GameMotion.ROTATION_BLOCK_PWM
+            self.__rotation_time = GameMotion.ROTATION_BLOCK_TABLE[abs(angle)]["time"]
+        else:  # ブロックを保持していない場合
+            self.__rotation_angle = GameMotion.ROTATION_NO_BLOCK_TABLE[abs(angle)]["angle"]
+            self.__rotation_pwm = GameMotion.ROTATION_NO_BLOCK_PWM
+            self.__rotation_time = GameMotion.ROTATION_NO_BLOCK_TABLE[abs(angle)]["time"]
+        self.__direct_rotation = "clockwise" if angle > 0 else "anticlockwise"
         self.__adjustment_flag = adjustment_flag
 
     def generate_command(self) -> str:
@@ -30,11 +39,10 @@ class ReturnToBlock(GameMotion):
         """
         command_list = ""  # コマンドのリストを格納する文字列
 
-        if self.__angle != 0:  # 回頭角度が0の場合はコマンドは生成しない
+        if self.__rotation_angle != 0:  # 回頭角度が0の場合は回頭のコマンドを生成しない
             # 回頭角度が正の数の場合時計回り，負の数の場合反時計回りで回頭をセットする
-            clockwise = "clockwise" if self.__angle > 0 else "anticlockwise"
-            command_list += "RT,%d,%d,%s\n" % (abs(self.__angle),
-                                               GameMotion.ROTATION_PWM, clockwise)
+            command_list += "RT,%d,%d,%s\n" % (self.__rotation_angle,
+                                               self.__rotation_pwm, self.__direct_rotation)
 
         # 調整動作ありの場合，縦調整をセットする
         if self.__adjustment_flag:
@@ -53,7 +61,7 @@ class ReturnToBlock(GameMotion):
             float: コスト
         """
         # 調整動作ありの場合，縦調整の動作時間を足す（成功率に変動はなし）
-        m_time = GameMotion.ROTATION_TIME[abs(self.__angle) // 45]
+        m_time = self.__rotation_time
         if self.__adjustment_flag:
             m_time += GameMotion.VERTICAL_TIME
 
