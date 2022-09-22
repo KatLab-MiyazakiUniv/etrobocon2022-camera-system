@@ -22,6 +22,10 @@ class IntersectionToBlock(GameMotion):
             with_block: ブロックを保持している場合True
 
         """
+        # 縦調整と斜め調整を両方実行することはない
+        if vertical_flag and diagonal_flag:
+            raise ValueError('Combining Vertical and Diagonal Adjustments is an Unexpected Motion')
+
         # 最後の45度は2回目の回頭で実行するため，angleを2つに分ける
         if angle == 0:
             first_angle = 0
@@ -51,10 +55,6 @@ class IntersectionToBlock(GameMotion):
         self.__diagonal_flag = diagonal_flag
         self.__motion_time = 0.7840
         self.__success_rate = 1.0
-
-        # 縦調整と斜め調整を両方実行することはない
-        if self.__vertical_flag and self.__diagonal_flag:
-            raise ValueError('Combining Vertical and Diagonal Adjustments is an Unexpected Motion')
 
     def generate_command(self) -> str:
         """交点→ブロック置き場のゲーム動作に必要なコマンドを生成するメソッド.

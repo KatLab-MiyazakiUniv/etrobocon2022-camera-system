@@ -20,6 +20,11 @@ class BlockToIntersection(GameMotion):
             target_color: 目標となる交点の色
             with_block: ブロックを保持している場合True
         """
+        expected_color = [Color.BLUE, Color.GREEN, Color.YELLOW, Color.RED]
+        # 交点の色以外を指定された場合エラーを出す
+        if target_color not in expected_color:
+            raise ValueError('"%s" is an Unexpected Color' % target_color.name)
+
         if with_block:  # ブロックを保持している場合
             self.__rotation_angle = GameMotion.ROTATION_BLOCK_TABLE[abs(angle)]["angle"]
             self.__rotation_pwm = GameMotion.ROTATION_BLOCK_PWM
@@ -32,11 +37,6 @@ class BlockToIntersection(GameMotion):
         self.__target_color = target_color
         self.__motion_time = 1.0700
         self.__success_rate = 1.0
-
-        expected_color = [Color.BLUE, Color.GREEN, Color.YELLOW, Color.RED]
-        # 交点の色以外を指定された場合エラーを出す
-        if self.__target_color not in expected_color:
-            raise ValueError('"%s" is an Unexpected Color' % self.__target_color.name)
 
     def generate_command(self) -> str:
         """ブロック置き場→交点のゲーム動作に必要なコマンドを生成するメソッド.

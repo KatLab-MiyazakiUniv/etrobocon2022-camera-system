@@ -21,6 +21,11 @@ class MiddleToIntersection(GameMotion):
             with_block: ブロックを保持している場合True
 
         """
+        expected_color = [Color.BLUE, Color.GREEN, Color.YELLOW, Color.RED]
+        # 交点の色以外を指定された場合エラーを出す
+        if target_color not in expected_color:
+            raise ValueError('"%s" is an Unexpected Color' % target_color.name)
+
         self.__angle = angle
         # rotation_angleは指定角度に対して実際に回頭する角度
         if with_block:  # ブロックを保持している場合
@@ -35,11 +40,6 @@ class MiddleToIntersection(GameMotion):
         self.__target_color = target_color
         self.__motion_time = 0.5560
         self.__success_rate = 0.8
-
-        expected_color = [Color.BLUE, Color.GREEN, Color.YELLOW, Color.RED]
-        # 交点の色以外を指定された場合エラーを出す
-        if self.__target_color not in expected_color:
-            raise ValueError('"%s" is an Unexpected Color' % self.__target_color.name)
 
     def generate_command(self) -> str:
         """中点→交点のゲーム動作に必要なコマンドを生成するメソッド.
