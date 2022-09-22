@@ -20,14 +20,14 @@ class BlockToMiddle(GameMotion):
 
         """
         if have_block:  # ブロックを保持している場合
-            self.__setting_angle = GameMotion.ROTATION_BLOCK_TABLE[abs(angle)]["angle"]
+            self.__rotation_angle = GameMotion.ROTATION_BLOCK_TABLE[abs(angle)]["angle"]
             self.__rotation_pwm = GameMotion.ROTATION_BLOCK_PWM
             self.__rotation_time = GameMotion.ROTATION_BLOCK_TABLE[abs(angle)]["time"]
         else:  # ブロックを保持していない場合
-            self.__setting_angle = GameMotion.ROTATION_NO_BLOCK_TABLE[abs(angle)]["angle"]
+            self.__rotation_angle = GameMotion.ROTATION_NO_BLOCK_TABLE[abs(angle)]["angle"]
             self.__rotation_pwm = GameMotion.ROTATION_NO_BLOCK_PWM
             self.__rotation_time = GameMotion.ROTATION_NO_BLOCK_TABLE[abs(angle)]["time"]
-        self.__clockwise = "clockwise" if angle > 0 else "anticlockwise"
+        self.__direct_rotation = "clockwise" if angle > 0 else "anticlockwise"
         self.__motion_time = 0.8094
         self.__success_rate = 0.9
 
@@ -39,9 +39,9 @@ class BlockToMiddle(GameMotion):
         """
         command_list = ""  # コマンドのリストを格納する文字列
 
-        if self.__setting_angle != 0:  # 回頭角度が0の場合はコマンドは生成しない
-            command_list += "RT,%d,%d,%s\n" % (self.__setting_angle,
-                                               self.__rotation_pwm, self.__clockwise)
+        if self.__rotation_angle != 0:  # 回頭角度が0の場合は回頭のコマンドを生成しない
+            command_list += "RT,%d,%d,%s\n" % (self.__rotation_angle,
+                                               self.__rotation_pwm, self.__direct_rotation)
 
         command_list += "CS,BLACK,70\n"  # エッジを認識するまで直進
         command_list += "DS,10,70\n"  # 走行体がエッジに乗るまで直進

@@ -21,14 +21,14 @@ class ReturnToBlock(GameMotion):
 
         """
         if have_block:  # ブロックを保持している場合
-            self.__setting_angle = GameMotion.ROTATION_BLOCK_TABLE[abs(angle)]["angle"]
+            self.__rotation_angle = GameMotion.ROTATION_BLOCK_TABLE[abs(angle)]["angle"]
             self.__rotation_pwm = GameMotion.ROTATION_BLOCK_PWM
             self.__rotation_time = GameMotion.ROTATION_BLOCK_TABLE[abs(angle)]["time"]
         else:  # ブロックを保持していない場合
-            self.__setting_angle = GameMotion.ROTATION_NO_BLOCK_TABLE[abs(angle)]["angle"]
+            self.__rotation_angle = GameMotion.ROTATION_NO_BLOCK_TABLE[abs(angle)]["angle"]
             self.__rotation_pwm = GameMotion.ROTATION_NO_BLOCK_PWM
             self.__rotation_time = GameMotion.ROTATION_NO_BLOCK_TABLE[abs(angle)]["time"]
-        self.__clockwise = "clockwise" if angle > 0 else "anticlockwise"
+        self.__direct_rotation = "clockwise" if angle > 0 else "anticlockwise"
         self.__adjustment_flag = adjustment_flag
 
     def generate_command(self) -> str:
@@ -39,10 +39,10 @@ class ReturnToBlock(GameMotion):
         """
         command_list = ""  # コマンドのリストを格納する文字列
 
-        if self.__setting_angle != 0:  # 回頭角度が0の場合はコマンドは生成しない
+        if self.__rotation_angle != 0:  # 回頭角度が0の場合は回頭のコマンドを生成しない
             # 回頭角度が正の数の場合時計回り，負の数の場合反時計回りで回頭をセットする
-            command_list += "RT,%d,%d,%s\n" % (self.__setting_angle,
-                                               self.__rotation_pwm, self.__clockwise)
+            command_list += "RT,%d,%d,%s\n" % (self.__rotation_angle,
+                                               self.__rotation_pwm, self.__direct_rotation)
 
         # 調整動作ありの場合，縦調整をセットする
         if self.__adjustment_flag:

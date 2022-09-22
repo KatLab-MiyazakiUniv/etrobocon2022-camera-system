@@ -21,16 +21,16 @@ class MiddleToMiddle(GameMotion):
 
         """
         self.__angle = angle
-        # setting_angleは指定角度に対して実際に回頭する角度
+        # rotation_angleは指定角度に対して実際に回頭する角度
         if have_block:  # ブロックを保持している場合
-            self.__setting_angle = GameMotion.ROTATION_BLOCK_TABLE[abs(angle)]["angle"]
+            self.__rotation_angle = GameMotion.ROTATION_BLOCK_TABLE[abs(angle)]["angle"]
             self.__rotation_pwm = GameMotion.ROTATION_BLOCK_PWM
             self.__rotation_time = GameMotion.ROTATION_BLOCK_TABLE[abs(angle)]["time"]
         else:  # ブロックを保持していない場合
-            self.__setting_angle = GameMotion.ROTATION_NO_BLOCK_TABLE[abs(angle)]["angle"]
+            self.__rotation_angle = GameMotion.ROTATION_NO_BLOCK_TABLE[abs(angle)]["angle"]
             self.__rotation_pwm = GameMotion.ROTATION_NO_BLOCK_PWM
             self.__rotation_time = GameMotion.ROTATION_NO_BLOCK_TABLE[abs(angle)]["time"]
-        self.__clockwise = "clockwise" if angle > 0 else "anticlockwise"
+        self.__direct_rotation = "clockwise" if angle > 0 else "anticlockwise"
         self.__adjustment_flag = adjustment_flag
         self.__motion_time = 1.1490
         self.__success_rate = 0.5
@@ -43,10 +43,10 @@ class MiddleToMiddle(GameMotion):
         """
         command_list = ""  # コマンドのリストを格納する文字列
 
-        if self.__angle != 0:  # 回頭角度が0の場合はコマンドは生成しない
+        if self.__angle != 0:  # 回頭角度が0の場合は回頭のコマンドを生成しない
             # 回頭角度が正の数の場合時計回り，負の数の場合反時計回りで回頭をセットする
-            command_list += "RT,%d,%d,%s\n" % (self.__setting_angle,
-                                               self.__rotation_pwm, self.__clockwise)
+            command_list += "RT,%d,%d,%s\n" % (self.__rotation_angle,
+                                               self.__rotation_pwm, self.__direct_rotation)
 
         # 回頭後にエッジが切り替わる場合，エッジ切り替えをセットする
         if (next_edge := self.get_next_edge(self.__angle)) != self.current_edge:

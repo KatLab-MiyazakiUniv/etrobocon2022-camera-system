@@ -46,7 +46,7 @@ class IntersectionToBlock(GameMotion):
                 first_angle)]["time"]
             self.__second_rotation_time = GameMotion.ROTATION_NO_BLOCK_TABLE[abs(
                 second_angle)]["time"]
-        self.__clockwise = "clockwise" if angle > 0 else "anticlockwise"
+        self.__direct_rotation = "clockwise" if angle > 0 else "anticlockwise"
         self.__vertical_flag = vertical_flag
         self.__diagonal_flag = diagonal_flag
         self.__motion_time = 0.7840
@@ -64,19 +64,19 @@ class IntersectionToBlock(GameMotion):
         """
         command_list = ""  # コマンドのリストを格納する文字列
 
-        if self.__first_angle != 0:  # 回頭角度が0の場合はコマンドは生成しない
+        if self.__first_angle != 0:  # 回頭角度が0の場合は回頭のコマンドを生成しない
             # 回頭角度が正の数の場合時計回り，負の数の場合反時計回りで回頭をセットする
             command_list += "RT,%d,%d,%s\n" % (self.__first_angle,
-                                               self.__rotation_pwm, self.__clockwise)
+                                               self.__rotation_pwm, self.__direct_rotation)
 
         # 縦調整動作ありの場合，縦調整をセットする
         if self.__vertical_flag:
             command_list += "DS,10,70\n"
 
-        if self.__second_angle != 0:  # 回頭角度が0の場合はコマンドは生成しない
+        if self.__second_angle != 0:  # 回頭角度が0の場合は回頭のコマンドを生成しない
             # 回頭角度が正の数の場合時計回り，負の数の場合反時計回りで回頭をセットする
             command_list += "RT,%d,%d,%s\n" % (self.__second_angle,
-                                               self.__rotation_pwm, self.__clockwise)
+                                               self.__rotation_pwm, self.__direct_rotation)
 
         # 斜め調整動作ありの場合，斜め調整をセットする
         if self.__diagonal_flag:

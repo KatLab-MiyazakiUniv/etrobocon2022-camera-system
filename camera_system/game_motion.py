@@ -41,8 +41,8 @@ class GameMotion(metaclass=ABCMeta):
         MAX_TIME: 最大計測時間
         ROTATION_BLOCK_PWM: ブロックを保持した時の回頭のPWM値
         ROTATION_NO_BLOCK_PWM: ブロックを保持していない時の回頭のPWM値
-        ROTATION_TIME_BLOCK: ブロックを保持した時の回頭のパラメータ(45度単位で0~360度)
-        ROTATION_TIME__NO_BLOCK: ブロックを保持していない時の回頭のパラメータ(45度単位で0~360度)
+        ROTATION_BLOCK_TABLE: ブロックを保持した時の回頭のパラメータ(45度単位で0~360度)
+        ROTATION_NO_BLOCK_TABLE: ブロックを保持していない時の回頭のパラメータ(45度単位で0~360度)
         VERTICAL_TIME: 縦調整の動作時間
         DIAGONAL_TIME: 斜め調整の動作時間
     """
