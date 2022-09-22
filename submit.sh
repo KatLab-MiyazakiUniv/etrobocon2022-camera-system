@@ -17,7 +17,7 @@ else
 fi
 
 # 送信データディレクトリ
-DATA_DIRECTORY="transfer_data"
+DATA_DIRECTORY="command_files"
 
 if [ -d ${DATA_DIRECTORY} ]; then
     # 送信データディレクトリを機体に送信

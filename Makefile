@@ -12,9 +12,11 @@ clean: coverage-clean
 
 run-L:
 	poetry run python camera_system --is-left True
+	bash ./submit.sh 2
 
 run-R:
 	poetry run python camera_system --is-left False
+	bash ./submit.sh 2
 
 # NOTE: tox.ini ファイルの設定に従って、全てのソースコードの静的解析を実行する
 style:
