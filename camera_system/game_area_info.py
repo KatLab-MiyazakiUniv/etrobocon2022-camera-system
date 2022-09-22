@@ -273,7 +273,7 @@ class GameAreaInfo:
         if target_node.block_id != -1:
             print("The block alredy exist on target node.")
             return
-
+        # 指定されたブロックがあるノードを取得する(処理が正常であれば要素が1つのリスト)
         on_target_block_node = [node for node in GameAreaInfo.node_list
                                 if node.block_id == target_block_id]
         if len(on_target_block_node) == 0:
