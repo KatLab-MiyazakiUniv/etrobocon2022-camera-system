@@ -33,7 +33,7 @@ class GameMotionConverter:
             is_set_motion: 設置動作か取得動作か(True:設置, False:取得)
 
         Returns:
-            GameAreaInfo: ゲーム動作
+            GameMotion: ゲーム動作
         """
         game_motion = None  # 戻り値となるゲーム動作
         have_block = is_set_motion  # ブロックを保持しているか(設置動作であるか)
