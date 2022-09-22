@@ -279,6 +279,8 @@ class GameAreaInfo:
         if len(on_target_block_node) == 0:
             print("The block does not exist on game area.")
             return
+        if len(on_target_block_node) > 1:
+            print("There are %d target blocks on game area." % (len(on_target_block_node)))
         on_target_block_node[0].block_id = -1
         target_node.block_id = target_block_id
 
