@@ -11,16 +11,16 @@ from game_motion import GameMotion
 class ReturnToBlock(GameMotion):
     """設置後復帰(→ブロック置き場)のゲーム動作クラス."""
 
-    def __init__(self, angle: int, adjustment_flag: bool, have_block: bool) -> None:
+    def __init__(self, angle: int, adjustment_flag: bool, with_block: bool) -> None:
         """ReturnToBlockのコンストラクタ.
 
         Args:
             angle: 方向転換の角度
             adjustment_flag: 調整動作の有無
-            have_block: ブロックを保持している場合True
+            with_block: ブロックを保持している場合True
 
         """
-        if have_block:  # ブロックを保持している場合
+        if with_block:  # ブロックを保持している場合
             self.__rotation_angle = GameMotion.ROTATION_BLOCK_TABLE[abs(angle)]["angle"]
             self.__rotation_pwm = GameMotion.ROTATION_BLOCK_PWM
             self.__rotation_time = GameMotion.ROTATION_BLOCK_TABLE[abs(angle)]["time"]

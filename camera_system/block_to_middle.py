@@ -11,15 +11,15 @@ from game_motion import GameMotion
 class BlockToMiddle(GameMotion):
     """ブロック置き場→中点のゲーム動作クラス."""
 
-    def __init__(self, angle: int, have_block: bool) -> None:
+    def __init__(self, angle: int, with_block: bool) -> None:
         """BlockToMiddleのコンストラクタ.
 
         Args:
             angle: 方向転換の角度
-            have_block: ブロックを保持している場合True
+            with_block: ブロックを保持している場合True
 
         """
-        if have_block:  # ブロックを保持している場合
+        if with_block:  # ブロックを保持している場合
             self.__rotation_angle = GameMotion.ROTATION_BLOCK_TABLE[abs(angle)]["angle"]
             self.__rotation_pwm = GameMotion.ROTATION_BLOCK_PWM
             self.__rotation_time = GameMotion.ROTATION_BLOCK_TABLE[abs(angle)]["time"]

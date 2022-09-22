@@ -12,15 +12,15 @@ from color_changer import Color
 class BlockToIntersection(GameMotion):
     """ブロック置き場→交点のゲーム動作クラス."""
 
-    def __init__(self, angle: int, target_color: Color, have_block: bool) -> None:
+    def __init__(self, angle: int, target_color: Color, with_block: bool) -> None:
         """BlockToIntersectionのコンストラクタ.
 
         Args:
             angle: 方向転換の角度
             target_color: 目標となる交点の色
-            have_block: ブロックを保持している場合True
+            with_block: ブロックを保持している場合True
         """
-        if have_block:  # ブロックを保持している場合
+        if with_block:  # ブロックを保持している場合
             self.__rotation_angle = GameMotion.ROTATION_BLOCK_TABLE[abs(angle)]["angle"]
             self.__rotation_pwm = GameMotion.ROTATION_BLOCK_PWM
             self.__rotation_time = GameMotion.ROTATION_BLOCK_TABLE[abs(angle)]["time"]

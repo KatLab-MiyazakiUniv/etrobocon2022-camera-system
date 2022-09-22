@@ -11,18 +11,18 @@ from game_motion import GameMotion
 class MiddleToMiddle(GameMotion):
     """中点→中点のゲーム動作クラス."""
 
-    def __init__(self, angle: int, adjustment_flag: bool, have_block: bool) -> None:
+    def __init__(self, angle: int, adjustment_flag: bool, with_block: bool) -> None:
         """MiddleToMiddleのコンストラクタ.
 
         Args:
             angle: 方向転換の角度
             adjustment_flag: 調整動作の有無
-            have_block: ブロックを保持している場合True
+            with_block: ブロックを保持している場合True
 
         """
         self.__angle = angle
         # rotation_angleは指定角度に対して実際に回頭する角度
-        if have_block:  # ブロックを保持している場合
+        if with_block:  # ブロックを保持している場合
             self.__rotation_angle = GameMotion.ROTATION_BLOCK_TABLE[abs(angle)]["angle"]
             self.__rotation_pwm = GameMotion.ROTATION_BLOCK_PWM
             self.__rotation_time = GameMotion.ROTATION_BLOCK_TABLE[abs(angle)]["time"]

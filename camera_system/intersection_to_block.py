@@ -12,14 +12,14 @@ class IntersectionToBlock(GameMotion):
     """交点→ブロック置き場のゲーム動作クラス."""
 
     def __init__(self, angle: int, vertical_flag: bool, diagonal_flag: bool,
-                 have_block: bool) -> None:
+                 with_block: bool) -> None:
         """IntersectionToBlockのコンストラクタ.
 
         Args:
             angle: 方向転換の角度
             vertical_flag: 縦調整動作の有無
             diagonal_flag: 斜め調整動作の有無
-            have_block: ブロックを保持している場合True
+            with_block: ブロックを保持している場合True
 
         """
         # 最後の45度は2回目の回頭で実行するため，angleを2つに分ける
@@ -30,7 +30,7 @@ class IntersectionToBlock(GameMotion):
             first_angle = angle - 45 if angle > 0 else angle + 45
             second_angle = 45 if angle > 0 else -45
 
-        if have_block:  # ブロックを保持している場合
+        if with_block:  # ブロックを保持している場合
             self.__first_angle = GameMotion.ROTATION_BLOCK_TABLE[abs(first_angle)]["angle"]
             self.__second_angle = GameMotion.ROTATION_BLOCK_TABLE[abs(second_angle)]["angle"]
             self.__rotation_pwm = GameMotion.ROTATION_BLOCK_PWM
