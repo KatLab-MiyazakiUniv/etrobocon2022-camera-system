@@ -4,6 +4,8 @@
 """
 import unittest
 from unittest import mock
+import os
+from contextlib import redirect_stdout
 
 from camera_system.camera_system import CameraSystem
 from game_area_info import GameAreaInfo
@@ -65,7 +67,10 @@ class TestCameraSystem(unittest.TestCase):
         GameAreaInfo.bonus_color = Color.RED
         GameAreaInfo.intersection_list = [Color.RED, Color.BLUE, Color.YELLOW, Color.GREEN]
 
-        cs.start(camera_id=0)
+        # 探索失敗のメッセージを無視するため標準出力を非表示にする
+        with redirect_stdout(open(os.devnull, 'w')) as redirect:
+            cs.start(camera_id=0)
+            redirect.close()
 
     def test_is_left_course_default_value(self):
         cs = CameraSystem(True, "127.0.0.1")

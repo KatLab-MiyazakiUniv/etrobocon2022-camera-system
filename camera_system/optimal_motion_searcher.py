@@ -6,7 +6,7 @@
 
 import numpy as np
 import copy
-import operator
+
 from typing import List, Dict
 from game_area_info import GameAreaInfo
 from node import Node, NodeType
@@ -101,10 +101,9 @@ class OptimalMotionSearcher:
 
             # 遷移できる走行体がない場合
             if open_hashs == []:
-                # # 検証後に消す
-                # print("Impossible move (%d,%d,%s) to (%d,%d)." %
-                #       (start_robot.coord.x, start_robot.coord.y, start_robot.direct.name,
-                #        goal_node.coord.x, goal_node.coord.y))
+                print("Impossible move (%d,%d,%s) to (%d,%d)." %
+                      (start_robot.coord.x, start_robot.coord.y, start_robot.direct.name,
+                       goal_node.coord.x, goal_node.coord.y))
                 # 空のCompositeGameMotionを返す
                 return CompositeGameMotion()
 

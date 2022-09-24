@@ -5,6 +5,7 @@
 
 import unittest
 import os
+from contextlib import redirect_stdout
 
 from game_motion_decider import GameMotionDecider
 from game_area_info import GameAreaInfo
@@ -66,7 +67,10 @@ class TestGameMotionDecider(unittest.TestCase):
         # 運搬動作を決定する
         game_motions = []
         for block_id in range(len(GameAreaInfo.block_color_list)):
-            game_motions += GameMotionDecider.decide(robot, block_id)
+            # 探索失敗のメッセージを無視するため標準出力を非表示にする
+            with redirect_stdout(open(os.devnull, 'w')) as redirect:
+                game_motions += GameMotionDecider.decide(robot, block_id)
+                redirect.close()
         # 探索動作は、ブロックの数 * 2(取得と設置) だけあるはず
         expected_game_motions_count = len(GameAreaInfo.block_color_list) * 2
         actual_game_motions_count = len(game_motions)
