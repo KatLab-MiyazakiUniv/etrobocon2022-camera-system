@@ -2,7 +2,8 @@
 
 # 引数チェック
 if [ $# -ne 2 ]; then
-  echo "Please input 'left' or 'right' and robot ip address."
+  echo "Please input course ('left' or 'right') and robot ip address."
+  echo "ex) $ bash plan.sh left 127.0.0.1"
   exit 1
 fi
 
