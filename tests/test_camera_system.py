@@ -20,7 +20,7 @@ class TestCameraSystem(unittest.TestCase):
     @mock.patch('client.Client.wait_for_start_signal')
     def test_start(self, capture_frame_mock, make_game_area_info_mock,
                    start_camera_calibration_mock, client_func_mock):
-        cs = CameraSystem()
+        cs = CameraSystem(True, "127.0.0.1")
         # ゲームエリア情報の初期化
         robot = Robot(Coordinate(4, 4), Direction.E, "left")
         GameAreaInfo.node_list = [
@@ -68,19 +68,19 @@ class TestCameraSystem(unittest.TestCase):
         cs.start(camera_id=0)
 
     def test_is_left_course_default_value(self):
-        cs = CameraSystem()
+        cs = CameraSystem(True, "127.0.0.1")
         expected = True
         actual = cs.is_left_course
         self.assertEqual(expected, actual)
 
     def test_is_left_course_constructor(self):
         expected = False
-        cs = CameraSystem(is_left_course=expected)
+        cs = CameraSystem(is_left_course=expected, robot_ip="127.0.0.1")
         actual = cs.is_left_course
         self.assertEqual(expected, actual)
 
     def test_is_left_course_setter_and_getter(self):
-        cs = CameraSystem()
+        cs = CameraSystem(True, "127.0.0.1")
         expected = False
         cs.is_left_course = expected
         actual = cs.is_left_course

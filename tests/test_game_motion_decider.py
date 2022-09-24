@@ -5,7 +5,6 @@
 
 import unittest
 import os
-from contextlib import redirect_stdout
 
 from game_motion_decider import GameMotionDecider
 from game_area_info import GameAreaInfo

@@ -5,7 +5,6 @@
 
 import unittest
 import os
-from contextlib import redirect_stdout
 
 from game_planner import GamePlanner
 from game_area_info import GameAreaInfo
@@ -67,8 +66,6 @@ class TestGamePlanner(unittest.TestCase):
         # ゲーム攻略を計画する
         unexpected_motion_commands = ""
         actual_motion_commands = ""
-        # with redirect_stdout(open(os.devnull, 'w')) as redirect:
-        actual_motion_commands = GamePlanner.plan()
-        # redirect.close()
+        actual_motion_commands = GamePlanner.plan(is_left_course=True)
 
         self.assertNotEqual(unexpected_motion_commands, actual_motion_commands)
