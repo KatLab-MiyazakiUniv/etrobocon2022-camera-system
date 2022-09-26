@@ -12,23 +12,31 @@ from color_changer import Color
 class BlockToIntersection(GameMotion):
     """ブロック置き場→交点のゲーム動作クラス."""
 
-    def __init__(self, angle: int, target_color: Color) -> None:
+    def __init__(self, angle: int, target_color: Color, with_block: bool) -> None:
         """BlockToIntersectionのコンストラクタ.
 
         Args:
             angle: 方向転換の角度
             target_color: 目標となる交点の色
-
+            with_block: ブロックを保持している場合True
         """
-        self.__angle = angle
+        expected_color = [Color.BLUE, Color.GREEN, Color.YELLOW, Color.RED]
+        # 交点の色以外を指定された場合エラーを出す
+        if target_color not in expected_color:
+            raise ValueError('"%s" is an Unexpected Color' % target_color.name)
+
+        if with_block:  # ブロックを保持している場合
+            self.__rotation_angle = GameMotion.ROTATION_BLOCK_TABLE[abs(angle)]["angle"]
+            self.__rotation_pwm = GameMotion.ROTATION_BLOCK_PWM
+            self.__rotation_time = GameMotion.ROTATION_BLOCK_TABLE[abs(angle)]["time"]
+        else:  # ブロックを保持していない場合
+            self.__rotation_angle = GameMotion.ROTATION_NO_BLOCK_TABLE[abs(angle)]["angle"]
+            self.__rotation_pwm = GameMotion.ROTATION_NO_BLOCK_PWM
+            self.__rotation_time = GameMotion.ROTATION_NO_BLOCK_TABLE[abs(angle)]["time"]
+        self.__direct_rotation = "clockwise" if angle > 0 else "anticlockwise"
         self.__target_color = target_color
         self.__motion_time = 1.0700
         self.__success_rate = 1.0
-
-        expected_color = [Color.BLUE, Color.GREEN, Color.YELLOW, Color.RED]
-        # 交点の色以外を指定された場合エラーを出す
-        if self.__target_color not in expected_color:
-            raise ValueError('"%s" is an Unexpected Color' % self.__target_color.name)
 
     def generate_command(self) -> str:
         """ブロック置き場→交点のゲーム動作に必要なコマンドを生成するメソッド.
@@ -38,11 +46,10 @@ class BlockToIntersection(GameMotion):
         """
         command_list = ""  # コマンドのリストを格納する文字列
 
-        if self.__angle != 0:  # 回頭角度が0の場合はコマンドは生成しない
+        if self.__rotation_angle != 0:  # 回頭角度が0の場合は回頭のコマンドを生成しない
             # 回頭角度が正の数の場合時計回り，負の数の場合反時計回りで回頭をセットする
-            clockwise = "clockwise" if self.__angle > 0 else "anticlockwise"
-            command_list += "RT,%d,%d,%s\n" % (abs(self.__angle),
-                                               GameMotion.ROTATION_PWM, clockwise)
+            command_list += "RT,%d,%d,%s\n" % (self.__rotation_angle,
+                                               self.__rotation_pwm, self.__direct_rotation)
 
         command_list += "CS,%s,70\n" % self.__target_color.name  # エッジを認識するまで直進
         command_list += "DS,42,60\n"  # 走行体がエッジに乗るまで直進
@@ -61,7 +68,7 @@ class BlockToIntersection(GameMotion):
         m_time = self.__motion_time  # m_time: 回頭や調整動作込みの動作時間
 
         # 動作時間に回頭時間を足す（成功率に変動はなし）
-        m_time += GameMotion.ROTATION_TIME[abs(self.__angle) // 45]
+        m_time += self.__rotation_time
 
         # 動作時間 * 成功率 + 最大計測時間 * 失敗率
         cost = m_time*self.__success_rate+GameMotion.MAX_TIME*(1-self.__success_rate)

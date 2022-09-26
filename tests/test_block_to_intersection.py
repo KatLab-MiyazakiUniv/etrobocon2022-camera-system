@@ -16,11 +16,12 @@ class TestBlockToIntersection(unittest.TestCase):
     def test_block_to_intersection_at_blue(self):
         angle = -180
         target_color = Color.BLUE
-        b2i = BlockToIntersection(angle, target_color)
+        have_block = True  # ブロックを保持している
+        b2i = BlockToIntersection(angle, target_color, have_block)
         b2i.current_edge = "right"  # 初期エッジを右エッジにする
 
         # コストの期待値を求める
-        motion_time = 1.0700 + GameMotion.ROTATION_TIME[abs(angle)//45]
+        motion_time = 1.0700 + GameMotion.ROTATION_BLOCK_TABLE[180]["time"]
         success_rate = 1.0
         expected_cost = motion_time*success_rate+GameMotion.MAX_TIME*(1-success_rate)
 
@@ -29,7 +30,8 @@ class TestBlockToIntersection(unittest.TestCase):
         self.assertEqual(expected_cost, actual_cost)  # コスト計算のテスト
 
         # 期待するコマンドをセット
-        expected_commands = "RT,180,100,anticlockwise,ブロック置き場→交点\n"
+        expected_commands = "RT,%d,%d,anticlockwise,ブロック置き場→交点\n" % (
+            GameMotion.ROTATION_BLOCK_TABLE[180]["angle"], GameMotion.ROTATION_BLOCK_PWM)
         expected_commands += "CS,BLUE,70\n"
         expected_commands += "DS,42,60\n"
 
@@ -43,13 +45,14 @@ class TestBlockToIntersection(unittest.TestCase):
         self.assertEqual(expected_edge, actual_edge)
 
     def test_block_to_intersection_at_green(self):
-        angle = -215
+        angle = -225
         target_color = Color.GREEN
-        b2i = BlockToIntersection(angle, target_color)
+        have_block = True  # ブロックを保持している
+        b2i = BlockToIntersection(angle, target_color, have_block)
         b2i.current_edge = "left"  # 初期エッジを左エッジにする
 
         # コストの期待値を求める
-        motion_time = 1.0700 + GameMotion.ROTATION_TIME[abs(angle)//45]
+        motion_time = 1.0700 + GameMotion.ROTATION_BLOCK_TABLE[225]["time"]
         success_rate = 1.0
         expected_cost = motion_time*success_rate+GameMotion.MAX_TIME*(1-success_rate)
 
@@ -58,7 +61,8 @@ class TestBlockToIntersection(unittest.TestCase):
         self.assertEqual(expected_cost, actual_cost)  # コスト計算のテスト
 
         # 期待するコマンドをセット
-        expected_commands = "RT,215,100,anticlockwise,ブロック置き場→交点\n"
+        expected_commands = "RT,%d,%d,anticlockwise,ブロック置き場→交点\n" % (
+            GameMotion.ROTATION_BLOCK_TABLE[225]["angle"], GameMotion.ROTATION_BLOCK_PWM)
         expected_commands += "CS,GREEN,70\n"
         expected_commands += "DS,42,60\n"
 
@@ -74,11 +78,12 @@ class TestBlockToIntersection(unittest.TestCase):
     def test_block_to_intersection_at_yellow(self):
         angle = -270
         target_color = Color.YELLOW
-        b2i = BlockToIntersection(angle, target_color)
+        have_block = False  # ブロックを保持していない
+        b2i = BlockToIntersection(angle, target_color, have_block)
         b2i.current_edge = "left"  # 初期エッジを左エッジにする
 
         # コストの期待値を求める
-        motion_time = 1.0700 + GameMotion.ROTATION_TIME[abs(angle)//45]
+        motion_time = 1.0700 + GameMotion.ROTATION_NO_BLOCK_TABLE[270]["time"]
         success_rate = 1.0
         expected_cost = motion_time*success_rate+GameMotion.MAX_TIME*(1-success_rate)
 
@@ -87,7 +92,8 @@ class TestBlockToIntersection(unittest.TestCase):
         self.assertEqual(expected_cost, actual_cost)  # コスト計算のテスト
 
         # 期待するコマンドをセット
-        expected_commands = "RT,270,100,anticlockwise,ブロック置き場→交点\n"
+        expected_commands = "RT,%d,%d,anticlockwise,ブロック置き場→交点\n" % (
+            GameMotion.ROTATION_NO_BLOCK_TABLE[270]["angle"], GameMotion.ROTATION_NO_BLOCK_PWM)
         expected_commands += "CS,YELLOW,70\n"
         expected_commands += "DS,42,60\n"
 
@@ -103,11 +109,12 @@ class TestBlockToIntersection(unittest.TestCase):
     def test_block_to_intersection_at_red(self):
         angle = -315
         target_color = Color.RED
-        b2i = BlockToIntersection(angle, target_color)
+        have_block = False  # ブロックを保持していない
+        b2i = BlockToIntersection(angle, target_color, have_block)
         b2i.current_edge = "none"  # 初期エッジを左エッジにする
 
         # コストの期待値を求める
-        motion_time = 1.0700 + GameMotion.ROTATION_TIME[abs(angle)//45]
+        motion_time = 1.0700 + GameMotion.ROTATION_NO_BLOCK_TABLE[315]["time"]
         success_rate = 1.0
         expected_cost = motion_time*success_rate+GameMotion.MAX_TIME*(1-success_rate)
 
@@ -116,7 +123,8 @@ class TestBlockToIntersection(unittest.TestCase):
         self.assertEqual(expected_cost, actual_cost)  # コスト計算のテスト
 
         # 期待するコマンドをセット
-        expected_commands = "RT,315,100,anticlockwise,ブロック置き場→交点\n"
+        expected_commands = "RT,%d,%d,anticlockwise,ブロック置き場→交点\n" % (
+            GameMotion.ROTATION_NO_BLOCK_TABLE[315]["angle"], GameMotion.ROTATION_NO_BLOCK_PWM)
         expected_commands += "CS,RED,70\n"
         expected_commands += "DS,42,60\n"
 
@@ -134,4 +142,5 @@ class TestBlockToIntersection(unittest.TestCase):
         with self.assertRaises(ValueError):
             angle = 90
             target_color = Color.BLACK
-            b2i = BlockToIntersection(angle, target_color)
+            have_block = True  # ブロックを保持している
+            b2i = BlockToIntersection(angle, target_color, have_block)

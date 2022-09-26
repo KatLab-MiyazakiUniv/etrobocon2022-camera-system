@@ -16,12 +16,13 @@ class TestMiddleToMiddle(unittest.TestCase):
         """調整動作ありのテスト."""
         angle = 45
         adjustment_flag = True
-        m2m = MiddleToMiddle(angle, adjustment_flag)
+        have_block = True  # ブロックを保持している
+        m2m = MiddleToMiddle(angle, adjustment_flag, have_block)
         m2m.current_edge = "left"  # 初期エッジを左エッジにする
 
         # コストの期待値を求める
         motion_time = 1.149 + \
-            GameMotion.ROTATION_TIME[abs(angle)//45]+GameMotion.DIAGONAL_TIME
+            GameMotion.ROTATION_BLOCK_TABLE[45]["time"]+GameMotion.DIAGONAL_TIME
         success_rate = 0.5
         expected_cost = motion_time*success_rate+GameMotion.MAX_TIME*(1-success_rate)
 
@@ -30,7 +31,8 @@ class TestMiddleToMiddle(unittest.TestCase):
         self.assertEqual(expected_cost, actual_cost)  # コスト計算のテスト
 
         # 期待するコマンドをセット
-        expected_commands = "RT,45,100,clockwise,中点→中点\n"
+        expected_commands = "RT,%d,%d,clockwise,中点→中点\n" % (
+            GameMotion.ROTATION_BLOCK_TABLE[45]["angle"], GameMotion.ROTATION_BLOCK_PWM)
         expected_commands += "DS,30,70\n"
         expected_commands += "CS,BLACK,70\n"
         expected_commands += "DS,25,70\n"
@@ -44,11 +46,12 @@ class TestMiddleToMiddle(unittest.TestCase):
         """調整動作なしのテスト."""
         angle = 90
         adjustment_flag = False
-        m2m = MiddleToMiddle(angle, adjustment_flag)
+        have_block = False  # ブロックを保持していない
+        m2m = MiddleToMiddle(angle, adjustment_flag, have_block)
         m2m.current_edge = "left"  # 初期エッジを左エッジにする
 
         # コストの期待値を求める
-        motion_time = 1.149 + GameMotion.ROTATION_TIME[abs(angle)//45]
+        motion_time = 1.149 + GameMotion.ROTATION_NO_BLOCK_TABLE[90]["time"]
         success_rate = 0.5
         expected_cost = motion_time*success_rate+GameMotion.MAX_TIME*(1-success_rate)
 
@@ -57,7 +60,8 @@ class TestMiddleToMiddle(unittest.TestCase):
         self.assertEqual(expected_cost, actual_cost)  # コスト計算のテスト
 
         # 期待するコマンドをセット
-        expected_commands = "RT,90,100,clockwise,中点→中点\n"
+        expected_commands = "RT,%d,%d,clockwise,中点→中点\n" % (
+            GameMotion.ROTATION_NO_BLOCK_TABLE[90]["angle"], GameMotion.ROTATION_NO_BLOCK_PWM)
         expected_commands += "EC,right\n"
         expected_commands += "DS,30,70\n"
         expected_commands += "CS,BLACK,70\n"
