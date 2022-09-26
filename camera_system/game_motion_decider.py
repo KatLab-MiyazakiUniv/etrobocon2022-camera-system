@@ -36,7 +36,7 @@ class GameMotionDecider:
             return []
         on_block_node = on_block_node[0]
         if on_block_node.node_type != NodeType.BLOCK:
-            print("This block is alredy transported.")
+            print("This block is already transported.")
             return []
 
         # ブロック取得動作の探索用ロボット
