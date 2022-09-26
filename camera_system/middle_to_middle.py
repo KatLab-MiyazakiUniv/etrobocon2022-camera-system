@@ -11,16 +11,16 @@ from game_motion import GameMotion
 class MiddleToMiddle(GameMotion):
     """中点→中点のゲーム動作クラス."""
 
-    def __init__(self, angle: int, adjustment_flag: bool) -> None:
+    def __init__(self, angle: int, need_adjustment: bool) -> None:
         """MiddleToMiddleのコンストラクタ.
 
         Args:
             angle: 方向転換の角度
-            adjustment_flag: 調整動作の有無
+            need_adjustment: 調整動作の有無
 
         """
         self.__angle = angle
-        self.__adjustment_flag = adjustment_flag
+        self.__need_adjustment = need_adjustment
         self.__motion_time = 1.1490
         self.__success_rate = 0.5
 
@@ -48,7 +48,7 @@ class MiddleToMiddle(GameMotion):
         command_list += "DS,25,70\n"  # 走行体がエッジに乗るまで直進
 
         # 調整動作ありの場合，斜め調整をセットする
-        if self.__adjustment_flag:
+        if self.__need_adjustment:
             command_list += "DS,20,70\n"
 
         return command_list.replace("\n", ",中点→中点\n", 1)  # 最初の行の末尾に",中点→中点"を追加する
@@ -64,7 +64,7 @@ class MiddleToMiddle(GameMotion):
         # 動作時間に回頭時間を足す（成功率に変動はなし）
         m_time += GameMotion.ROTATION_TIME[abs(self.__angle) // 45]
         # 調整動作ありの場合，斜め調整の動作時間を足す（成功率に変動はなし）
-        if self.__adjustment_flag:
+        if self.__need_adjustment:
             m_time += GameMotion.DIAGONAL_TIME
 
         # 動作時間 * 成功率 + 最大計測時間 * 失敗率

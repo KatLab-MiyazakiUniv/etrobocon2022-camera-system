@@ -11,16 +11,16 @@ from game_motion import GameMotion
 class ReturnToBlock(GameMotion):
     """設置後復帰(→ブロック置き場)のゲーム動作クラス."""
 
-    def __init__(self, angle: int, adjustment_flag: bool) -> None:
+    def __init__(self, angle: int, need_adjustment: bool) -> None:
         """ReturnToBlockのコンストラクタ.
 
         Args:
             angle: 方向転換の角度
-            adjustment_flag: 調整動作の有無
+            need_adjustment: 調整動作の有無
 
         """
         self.__angle = angle
-        self.__adjustment_flag = adjustment_flag
+        self.__need_adjustment = need_adjustment
 
     def generate_command(self) -> str:
         """設置後復帰(→ブロック置き場)のゲーム動作に必要なコマンドを生成するメソッド.
@@ -37,7 +37,7 @@ class ReturnToBlock(GameMotion):
                                                GameMotion.ROTATION_PWM, clockwise)
 
         # 調整動作ありの場合，縦調整をセットする
-        if self.__adjustment_flag:
+        if self.__need_adjustment:
             command_list += "DS,10,-70\n"
 
         command_list += "DS,100,-40\n"  # ブロック置き場まで後退
@@ -54,7 +54,7 @@ class ReturnToBlock(GameMotion):
         """
         # 調整動作ありの場合，縦調整の動作時間を足す（成功率に変動はなし）
         m_time = GameMotion.ROTATION_TIME[abs(self.__angle) // 45]
-        if self.__adjustment_flag:
+        if self.__need_adjustment:
             m_time += GameMotion.VERTICAL_TIME
 
         return m_time

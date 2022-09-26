@@ -63,7 +63,7 @@ class CameraSystem:
         # ボーナスブロック運搬のコマンドファイルをコピーする
         shutil.copyfile(bonus_command_source_path, bonus_command_file_path)
         # カラーブロック運搬のコマンドファイルを生成する
-        f = open(color_command_file_path, 'w')
+        f = open(color_command_file_path, 'w', encoding='utf-8')
         f.write(motion_commands)  # 計画したコマンドを書き込む
         f.close()
         print("Copy %s to %s\n" % (bonus_command_source_path, bonus_command_file_path))

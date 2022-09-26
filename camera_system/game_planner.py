@@ -48,6 +48,8 @@ class GamePlanner:
         bonus_color = GameAreaInfo.bonus_color.value
         course_text = "left" if is_left_course else "right"
         robot = setted_bonus_robots[course_text][bonus_color]
+        # ボーナスブロックを運搬する
+        GameAreaInfo.carry_bonus()
 
         # 全てのカラーブロックについて、運搬動作を決定する
         block_selector = BlockSelector()

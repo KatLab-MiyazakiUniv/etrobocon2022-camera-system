@@ -284,6 +284,16 @@ class GameAreaInfo:
         on_target_block_node[0].block_id = -1
         target_node.block_id = target_block_id
 
+    @staticmethod
+    def carry_bonus() -> None:
+        """ボーナスブロックを運搬する."""
+        candidate_bonus_nodes = GameAreaInfo.get_candidate_node(GameAreaInfo.bonus_color)
+        set_bonus_node = [node for node in candidate_bonus_nodes if node.coord.x == 3 or node.coord.y == 3][0]
+        if set_bonus_node.block_id != -1:
+            print("The block alredy exist on target node.")
+            return
+        # ボーナスブロックを運搬したとしてゲームエリア情報を更新する
+        set_bonus_node.block_id = 8
 
 if __name__ == "__main__":
     robo = Robot(Coordinate(1, 2), Direction.N)
