@@ -14,6 +14,7 @@ from robot import Robot, Direction
 from coordinate import Coordinate
 from color_changer import Color
 from composite_game_motion import CompositeGameMotion
+from color_changer import Color
 
 
 class TestOptimalMotionSearcher(unittest.TestCase):
@@ -21,6 +22,7 @@ class TestOptimalMotionSearcher(unittest.TestCase):
 
     def test_optiaml_motion_search_get_block(self):
         """全ブロック置き場への取得動作を探索する."""
+<<<<<<< HEAD
         # ゲームエリア情報の初期化
         robot = Robot(Coordinate(4, 4), Direction.E, "left")
         GameAreaInfo.node_list = [
@@ -63,6 +65,9 @@ class TestOptimalMotionSearcher(unittest.TestCase):
             Color.GREEN, Color.BLUE
         ]
         GameAreaInfo.bonus_color = Color.RED
+=======
+        # Lコースの交点の色をセットする
+>>>>>>> 08d31dcd566f81cc9706ae0f5b473cdd5de726df
         GameAreaInfo.intersection_list = [Color.RED, Color.BLUE, Color.YELLOW, Color.GREEN]
 
         # ブロック取得開始時の走行体の座標
@@ -88,6 +93,7 @@ class TestOptimalMotionSearcher(unittest.TestCase):
 
     def test_optiaml_motion_search_set_block(self):
         """全ブロック置き場から全ブロック設置先への設置動作を探索する."""
+<<<<<<< HEAD
         # ゲームエリア情報の初期化
         robot = Robot(Coordinate(4, 4), Direction.E, "left")
         GameAreaInfo.node_list = [
@@ -130,6 +136,9 @@ class TestOptimalMotionSearcher(unittest.TestCase):
             Color.GREEN, Color.BLUE
         ]
         GameAreaInfo.bonus_color = Color.RED
+=======
+        # Lコースの交点の色をセットする
+>>>>>>> 08d31dcd566f81cc9706ae0f5b473cdd5de726df
         GameAreaInfo.intersection_list = [Color.RED, Color.BLUE, Color.YELLOW, Color.GREEN]
 
         # ブロック取得の座標

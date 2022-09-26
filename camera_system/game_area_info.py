@@ -271,7 +271,7 @@ class GameAreaInfo:
         """
         # 移動先ノードに既にブロックがある場合
         if target_node.block_id != -1:
-            print("The block alredy exist on target node.")
+            print("The block already exist on target node.")
             return
         # 指定されたブロックがあるノードを取得する(処理が正常であれば要素が1つのリスト)
         on_target_block_node = [node for node in GameAreaInfo.node_list
@@ -291,7 +291,7 @@ class GameAreaInfo:
         set_bonus_node = [node for node in candidate_bonus_nodes
                           if node.coord.x == 3 or node.coord.y == 3][0]
         if set_bonus_node.block_id != -1:
-            print("The block alredy exist on target node.")
+            print("The block already exist on target node.")
             return
         # ボーナスブロックを運搬したとしてゲームエリア情報を更新する
         set_bonus_node.block_id = 8

@@ -72,7 +72,8 @@ class OptimalMotionSearcher:
                 # 開始時の走行体 -> 1ゲーム動作前の走行体 の動作群
                 game_motions = copy.deepcopy(min_cost_transition["game_motions"])
                 # 1ゲーム動作前の走行体 -> 探索対象の走行体 の動作
-                game_motion = game_motion_converter.convert_game_motion(current_robot, next_robot)
+                game_motion = game_motion_converter.convert_game_motion(
+                    current_robot, next_robot, is_set_motion)
                 # 開始時の走行体 -> 探索対象の走行体 の動作群
                 game_motions.append_game_motion(game_motion)
                 # 推定コスト = 開始状態からの実コスト + ゴールまでの予測コスト

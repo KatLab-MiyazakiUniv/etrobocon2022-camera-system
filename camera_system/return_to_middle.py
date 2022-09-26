@@ -11,14 +11,25 @@ from game_motion import GameMotion
 class ReturnToMiddle(GameMotion):
     """設置後復帰(→中点)のゲーム動作クラス."""
 
-    def __init__(self, angle: int) -> None:
+    def __init__(self, angle: int, with_block: bool) -> None:
         """ReturnToMiddleのコンストラクタ.
 
         Args:
             angle: 方向転換の角度
+            with_block: ブロックを保持している場合True
 
         """
         self.__angle = angle
+        # rotation_angleは指定角度に対して実際に回頭する角度
+        if with_block:  # ブロックを保持している場合
+            self.__rotation_angle = GameMotion.ROTATION_BLOCK_TABLE[abs(angle)]["angle"]
+            self.__rotation_pwm = GameMotion.ROTATION_BLOCK_PWM
+            self.__rotation_time = GameMotion.ROTATION_BLOCK_TABLE[abs(angle)]["time"]
+        else:  # ブロックを保持していない場合
+            self.__rotation_angle = GameMotion.ROTATION_NO_BLOCK_TABLE[abs(angle)]["angle"]
+            self.__rotation_pwm = GameMotion.ROTATION_NO_BLOCK_PWM
+            self.__rotation_time = GameMotion.ROTATION_NO_BLOCK_TABLE[abs(angle)]["time"]
+        self.__direct_rotation = "clockwise" if angle > 0 else "anticlockwise"
 
     def generate_command(self) -> str:
         """設置後復帰(→中点)のゲーム動作に必要なコマンドを生成するメソッド.
@@ -28,11 +39,10 @@ class ReturnToMiddle(GameMotion):
         """
         command_list = ""  # コマンドのリストを格納する文字列
 
-        if self.__angle != 0:  # 回頭角度が0の場合はコマンドは生成しない
+        if self.__angle != 0:  # 回頭角度が0の場合は回頭のコマンドを生成しない
             # 回頭角度が正の数の場合時計回り，負の数の場合反時計回りで回頭をセットする
-            clockwise = "clockwise" if self.__angle > 0 else "anticlockwise"
-            command_list += "RT,%d,%d,%s\n" % (abs(self.__angle),
-                                               GameMotion.ROTATION_PWM, clockwise)
+            command_list += "RT,%d,%d,%s\n" % (self.__rotation_angle,
+                                               self.__rotation_pwm, self.__direct_rotation)
 
         # 回頭後にエッジが切り替わる場合，エッジ切り替えをセットする
         if (next_edge := self.get_next_edge(self.__angle)) != self.current_edge:
@@ -50,4 +60,4 @@ class ReturnToMiddle(GameMotion):
         Returns:
             float: コスト
         """
-        return GameMotion.ROTATION_TIME[abs(self.__angle) // 45]  # 設置後復帰(→中点)は回頭時間だけコストとする
+        return self.__rotation_time
