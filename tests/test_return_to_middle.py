@@ -15,8 +15,7 @@ class TestReturnToMiddle(unittest.TestCase):
     def test_return_to_middle_from_block(self):
         """ブロック置き場から設置した想定のテスト."""
         angle = 45
-        have_block = True  # ブロックを保持している
-        r2m = ReturnToMiddle(angle, have_block)
+        r2m = ReturnToMiddle(angle)
         r2m.current_edge = "none"  # 初期エッジをnoneにする
 
         # コストの期待値を求める
@@ -39,8 +38,7 @@ class TestReturnToMiddle(unittest.TestCase):
     def test_return_to_middle_from_middle(self):
         """中点から設置した想定のテスト."""
         angle = 0
-        have_block = False  # ブロックを保持していない
-        r2m = ReturnToMiddle(angle, have_block)
+        r2m = ReturnToMiddle(angle)
         r2m.current_edge = "right"  # 初期エッジを右エッジにする
 
         # コストの期待値を求める

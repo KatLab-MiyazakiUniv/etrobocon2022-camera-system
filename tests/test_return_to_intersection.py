@@ -17,8 +17,7 @@ class TestReturnToIntersection(unittest.TestCase):
         """ブロック置き場から設置した想定のテスト."""
         angle = 45
         target_color = Color.GREEN
-        have_block = True  # ブロックを保持している
-        r2i = ReturnToIntersection(angle, target_color, have_block)
+        r2i = ReturnToIntersection(angle, target_color)
         r2i.current_edge = "none"  # 初期エッジをnoneにする
 
         # コストの期待値を求める
@@ -43,8 +42,7 @@ class TestReturnToIntersection(unittest.TestCase):
         """中点から設置した想定のテスト."""
         angle = 0
         target_color = Color.RED
-        have_block = False  # ブロックを保持していない
-        r2i = ReturnToIntersection(angle, target_color, have_block)
+        r2i = ReturnToIntersection(angle, target_color)
         r2i.current_edge = "left"  # 初期エッジを左エッジにする
 
         # コストの期待値を求める
@@ -67,6 +65,5 @@ class TestReturnToIntersection(unittest.TestCase):
         with self.assertRaises(ValueError):
             angle = 0
             target_color = Color.BLACK
-            have_block = True  # ブロックを保持している
-            r2i = ReturnToIntersection(angle, target_color, have_block)
+            r2i = ReturnToIntersection(angle, target_color)
             r2i.current_edge = "left"  # 初期エッジを左エッジにする
