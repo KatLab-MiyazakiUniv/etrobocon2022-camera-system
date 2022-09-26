@@ -12,6 +12,7 @@ from game_area_info import GameAreaInfo
 from node import Node
 from robot import Robot, Direction
 from coordinate import Coordinate
+from color_changer import Color
 from composite_game_motion import CompositeGameMotion
 from color_changer import Color
 
@@ -21,6 +22,48 @@ class TestOptimalMotionSearcher(unittest.TestCase):
 
     def test_optiaml_motion_search_get_block(self):
         """全ブロック置き場への取得動作を探索する."""
+        # ゲームエリア情報の初期化
+        robot = Robot(Coordinate(4, 4), Direction.E, "left")
+        GameAreaInfo.node_list = [
+            Node(-1, Coordinate(0, 0)), Node(-1, Coordinate(1, 0)),
+            Node(-1, Coordinate(2, 0)), Node(-1, Coordinate(3, 0)),
+            Node(-1, Coordinate(4, 0)), Node(-1, Coordinate(5, 0)),
+            Node(-1, Coordinate(6, 0)),
+            Node(-1, Coordinate(0, 1)), Node(0, Coordinate(1, 1)),
+            Node(-1, Coordinate(2, 1)), Node(1, Coordinate(3, 1)),
+            Node(-1, Coordinate(4, 1)), Node(2, Coordinate(5, 1)),
+            Node(-1, Coordinate(6, 1)),
+            Node(-1, Coordinate(0, 2)), Node(-1, Coordinate(1, 2)),
+            Node(-1, Coordinate(2, 2)), Node(-1, Coordinate(3, 2)),
+            Node(-1, Coordinate(4, 2)), Node(-1, Coordinate(5, 2)),
+            Node(-1, Coordinate(6, 2)),
+            Node(-1, Coordinate(0, 3)), Node(3, Coordinate(1, 3)),
+            Node(-1, Coordinate(2, 3)), Node(-1, Coordinate(3, 3)),
+            Node(-1, Coordinate(4, 3)), Node(4, Coordinate(5, 3)),
+            Node(-1, Coordinate(6, 3)),
+            Node(-1, Coordinate(0, 4)), Node(-1, Coordinate(1, 4)),
+            Node(-1, Coordinate(2, 4)), Node(-1, Coordinate(3, 4)),
+            Node(-1, Coordinate(4, 4)), Node(-1, Coordinate(5, 4)),
+            Node(-1, Coordinate(6, 4)),
+            Node(-1, Coordinate(0, 5)), Node(5, Coordinate(1, 5)),
+            Node(-1, Coordinate(2, 5)), Node(6, Coordinate(3, 5)),
+            Node(-1, Coordinate(4, 5)), Node(7, Coordinate(5, 5)),
+            Node(-1, Coordinate(6, 5)),
+            Node(-1, Coordinate(0, 6)), Node(-1, Coordinate(1, 6)),
+            Node(-1, Coordinate(2, 6)), Node(-1, Coordinate(3, 6)),
+            Node(-1, Coordinate(4, 6)), Node(-1, Coordinate(5, 6)),
+            Node(-1, Coordinate(6, 6)),
+        ]
+        GameAreaInfo.block_color_list = [
+            Color.RED, Color.RED, Color.YELLOW,
+            Color.YELLOW, Color.GREEN,
+            Color.GREEN, Color.BLUE, Color.BLUE
+        ]
+        GameAreaInfo.base_color_list = [
+            Color.RED, Color.YELLOW,
+            Color.GREEN, Color.BLUE
+        ]
+        GameAreaInfo.bonus_color = Color.RED
         # Lコースの交点の色をセットする
         GameAreaInfo.intersection_list = [Color.RED, Color.BLUE, Color.YELLOW, Color.GREEN]
 
@@ -47,6 +90,48 @@ class TestOptimalMotionSearcher(unittest.TestCase):
 
     def test_optiaml_motion_search_set_block(self):
         """全ブロック置き場から全ブロック設置先への設置動作を探索する."""
+        # ゲームエリア情報の初期化
+        robot = Robot(Coordinate(4, 4), Direction.E, "left")
+        GameAreaInfo.node_list = [
+            Node(-1, Coordinate(0, 0)), Node(-1, Coordinate(1, 0)),
+            Node(-1, Coordinate(2, 0)), Node(-1, Coordinate(3, 0)),
+            Node(-1, Coordinate(4, 0)), Node(-1, Coordinate(5, 0)),
+            Node(-1, Coordinate(6, 0)),
+            Node(-1, Coordinate(0, 1)), Node(0, Coordinate(1, 1)),
+            Node(-1, Coordinate(2, 1)), Node(1, Coordinate(3, 1)),
+            Node(-1, Coordinate(4, 1)), Node(2, Coordinate(5, 1)),
+            Node(-1, Coordinate(6, 1)),
+            Node(-1, Coordinate(0, 2)), Node(-1, Coordinate(1, 2)),
+            Node(-1, Coordinate(2, 2)), Node(-1, Coordinate(3, 2)),
+            Node(-1, Coordinate(4, 2)), Node(-1, Coordinate(5, 2)),
+            Node(-1, Coordinate(6, 2)),
+            Node(-1, Coordinate(0, 3)), Node(3, Coordinate(1, 3)),
+            Node(-1, Coordinate(2, 3)), Node(-1, Coordinate(3, 3)),
+            Node(-1, Coordinate(4, 3)), Node(4, Coordinate(5, 3)),
+            Node(-1, Coordinate(6, 3)),
+            Node(-1, Coordinate(0, 4)), Node(-1, Coordinate(1, 4)),
+            Node(-1, Coordinate(2, 4)), Node(-1, Coordinate(3, 4)),
+            Node(-1, Coordinate(4, 4)), Node(-1, Coordinate(5, 4)),
+            Node(-1, Coordinate(6, 4)),
+            Node(-1, Coordinate(0, 5)), Node(5, Coordinate(1, 5)),
+            Node(-1, Coordinate(2, 5)), Node(6, Coordinate(3, 5)),
+            Node(-1, Coordinate(4, 5)), Node(7, Coordinate(5, 5)),
+            Node(-1, Coordinate(6, 5)),
+            Node(-1, Coordinate(0, 6)), Node(-1, Coordinate(1, 6)),
+            Node(-1, Coordinate(2, 6)), Node(-1, Coordinate(3, 6)),
+            Node(-1, Coordinate(4, 6)), Node(-1, Coordinate(5, 6)),
+            Node(-1, Coordinate(6, 6)),
+        ]
+        GameAreaInfo.block_color_list = [
+            Color.RED, Color.RED, Color.YELLOW,
+            Color.YELLOW, Color.GREEN,
+            Color.GREEN, Color.BLUE, Color.BLUE
+        ]
+        GameAreaInfo.base_color_list = [
+            Color.RED, Color.YELLOW,
+            Color.GREEN, Color.BLUE
+        ]
+        GameAreaInfo.bonus_color = Color.RED
         # Lコースの交点の色をセットする
         GameAreaInfo.intersection_list = [Color.RED, Color.BLUE, Color.YELLOW, Color.GREEN]
 

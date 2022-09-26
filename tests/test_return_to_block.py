@@ -15,9 +15,8 @@ class TestReturnToBlock(unittest.TestCase):
     def test_return_to_block_from_block(self):
         """ブロック置き場から設置した想定のテスト."""
         angle = 0
-        adjustment_flag = False
-        have_block = True  # ブロックを保持している
-        r2b = ReturnToBlock(angle, adjustment_flag, have_block)
+        need_adjustment = False
+        r2b = ReturnToBlock(angle, need_adjustment)
         r2b.current_edge = "none"  # 初期エッジをnoneにする
 
         # コストの期待値を求める
@@ -41,9 +40,8 @@ class TestReturnToBlock(unittest.TestCase):
     def test_return_to_block_from_middle(self):
         """中点から設置した想定のテスト(調整動作あり)."""
         angle = 45
-        adjustment_flag = True
-        have_block = True  # ブロックを保持している
-        r2b = ReturnToBlock(angle, adjustment_flag, have_block)
+        need_adjustment = True
+        r2b = ReturnToBlock(angle, need_adjustment)
         r2b.current_edge = "right"  # 初期エッジを右エッジにする
 
         # コストの期待値を求める
@@ -72,9 +70,8 @@ class TestReturnToBlock(unittest.TestCase):
     def test_return_to_block_from_middle_no_adjustment(self):
         """中点から設置した想定のテスト(調整動作なし)."""
         angle = -45
-        adjustment_flag = False
-        have_block = False  # ブロックを保持していない
-        r2b = ReturnToBlock(angle, adjustment_flag, have_block)
+        need_adjustment = False
+        r2b = ReturnToBlock(angle, need_adjustment)
         r2b.current_edge = "right"  # 初期エッジを右エッジにする
 
         # コストの期待値を求める

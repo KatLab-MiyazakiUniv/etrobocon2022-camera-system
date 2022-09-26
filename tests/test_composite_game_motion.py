@@ -33,9 +33,9 @@ class TestCompositeGameMotion(unittest.TestCase):
         m2b = MiddleToBlock(-45, True, True)
         m2i = MiddleToIntersection(-90, Color.BLUE, False)
         m2m = MiddleToMiddle(-135, True, False)
-        r2i = ReturnToIntersection(-45, Color.YELLOW, False)
-        r2m = ReturnToMiddle(0, False)
-        r2b = ReturnToBlock(45, True, False)
+        r2i = ReturnToIntersection(-45, Color.YELLOW)
+        r2m = ReturnToMiddle(0)
+        r2b = ReturnToBlock(45, True)
 
         b2i.current_edge = "left"  # current_edgeの初期値を合わせる
         # 各ゲーム動作のインスタンスから一つずつコストを計算する

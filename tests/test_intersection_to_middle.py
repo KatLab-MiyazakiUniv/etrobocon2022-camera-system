@@ -15,9 +15,9 @@ class TestIntersectionToMiddle(unittest.TestCase):
     def test_intersection_to_middle(self):
         """調整動作ありのテスト."""
         angle = 270
-        adjustment_flag = True
+        need_adjustment = True
         have_block = True  # ブロックを保持している
-        i2m = IntersectionToMiddle(angle, adjustment_flag, have_block)
+        i2m = IntersectionToMiddle(angle, need_adjustment, have_block)
         i2m.current_edge = "right"  # 初期エッジを右エッジにする
 
         # コストの期待値を求める
@@ -46,9 +46,9 @@ class TestIntersectionToMiddle(unittest.TestCase):
     def test_intersection_to_middle_no_adjustment(self):
         """調整動作なしのテスト."""
         angle = 315
-        adjustment_flag = False
+        need_adjustment = False
         have_block = True  # ブロックを保持している
-        i2m = IntersectionToMiddle(angle, adjustment_flag, have_block)
+        i2m = IntersectionToMiddle(angle, need_adjustment, have_block)
         i2m.current_edge = "right"  # 初期エッジを右エッジにする
 
         # コストの期待値を求める
@@ -74,9 +74,9 @@ class TestIntersectionToMiddle(unittest.TestCase):
     def test_intersection_to_middle_none_to_left(self):
         """エッジがnoneからleftとなるテスト."""
         angle = -45
-        adjustment_flag = False
+        need_adjustment = False
         have_block = True  # ブロックを保持している
-        i2m = IntersectionToMiddle(angle, adjustment_flag, have_block)
+        i2m = IntersectionToMiddle(angle, need_adjustment, have_block)
         i2m.current_edge = "none"  # 初期エッジを右エッジにする
 
         # コストの期待値を求める
@@ -103,9 +103,9 @@ class TestIntersectionToMiddle(unittest.TestCase):
     def test_intersection_to_middle_none_to_right(self):
         """エッジがnoneからrightとなるテスト."""
         angle = 45
-        adjustment_flag = False
+        need_adjustment = False
         have_block = False  # ブロックを保持していない
-        i2m = IntersectionToMiddle(angle, adjustment_flag, have_block)
+        i2m = IntersectionToMiddle(angle, need_adjustment, have_block)
         i2m.current_edge = "none"  # 初期エッジを右エッジにする
 
         # コストの期待値を求める
@@ -132,9 +132,9 @@ class TestIntersectionToMiddle(unittest.TestCase):
     def test_intersection_to_middle_none_to_none(self):
         """エッジがnoneから変わらないテスト."""
         angle = 180
-        adjustment_flag = False
+        need_adjustment = False
         have_block = False  # ブロックを保持していない
-        i2m = IntersectionToMiddle(angle, adjustment_flag, have_block)
+        i2m = IntersectionToMiddle(angle, need_adjustment, have_block)
         i2m.current_edge = "none"  # 初期エッジを右エッジにする
 
         # コストの期待値を求める

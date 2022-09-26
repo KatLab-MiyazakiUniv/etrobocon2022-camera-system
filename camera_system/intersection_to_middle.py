@@ -11,12 +11,12 @@ from game_motion import GameMotion
 class IntersectionToMiddle(GameMotion):
     """交点→中点のゲーム動作クラス."""
 
-    def __init__(self, angle: int, adjustment_flag: bool, with_block: bool) -> None:
+    def __init__(self, angle: int, need_adjustment: bool, with_block: bool) -> None:
         """IntersectionToMiddleのコンストラクタ.
 
         Args:
             angle: 方向転換の角度
-            adjustment_flag: 調整動作の有無
+            need_adjustment: 調整動作の有無
             with_block: ブロックを保持している場合True
 
         """
@@ -31,7 +31,7 @@ class IntersectionToMiddle(GameMotion):
             self.__rotation_pwm = GameMotion.ROTATION_NO_BLOCK_PWM
             self.__rotation_time = GameMotion.ROTATION_NO_BLOCK_TABLE[abs(angle)]["time"]
         self.__direct_rotation = "clockwise" if angle > 0 else "anticlockwise"
-        self.__adjustment_flag = adjustment_flag
+        self.__need_adjustment = need_adjustment
         self.__motion_time = 0.5480
         self.__success_rate = 0.8
 
@@ -56,7 +56,7 @@ class IntersectionToMiddle(GameMotion):
             self.current_edge = next_edge  # 現在のエッジを更新する
 
         # 調整動作ありの場合，縦調整をセットする
-        if self.__adjustment_flag:
+        if self.__need_adjustment:
             command_list += "DS,10,70\n"
 
         command_list += "DL,80,0,60,0.1,0.08,0.08\n"  # 中点までライントレース
@@ -77,7 +77,7 @@ class IntersectionToMiddle(GameMotion):
         if self.__rotation_angle != 0:
             m_time += 0.2
         # 調整動作ありの場合，縦調整の動作時間を足す（成功率に変動はなし）
-        if self.__adjustment_flag:
+        if self.__need_adjustment:
             m_time += GameMotion.VERTICAL_TIME
 
         # 動作時間 * 成功率 + 最大計測時間 * 失敗率

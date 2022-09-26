@@ -20,8 +20,9 @@ if __name__ == '__main__':
     parser.add_argument('--is-left', type=str,
                         choices=(StrToBool.true_str_list() + StrToBool.false_str_list()),
                         required=True, help='Lコースの場合Trueに、Rコースの場合Falseを設定する')
+    parser.add_argument('--robot-ip', type=str, required=True, help='走行体のIPアドレス')
     args = parser.parse_args()
-    cs = CameraSystem(is_left_course=StrToBool.convert(args.is_left))
+    cs = CameraSystem(is_left_course=StrToBool.convert(args.is_left), robot_ip=args.robot_ip)
     print('Will Run on the %s Course.' % "Left" if args.is_left else "Right")
 
     # 計画を開始する
