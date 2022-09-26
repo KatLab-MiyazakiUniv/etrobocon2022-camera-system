@@ -135,8 +135,8 @@ class OptimalMotionSearcher:
         diagonal_distance = dy if dy < dx else dx
         # 斜めに行けない分だけ縦横に移動すると想定する
         vertical_distance = abs(dy - dx)
-        # ToDo: てきとーに設定した回頭角度ごとのコストを書き換える(ゲーム動作から取得する?)
-        rotate_costs = {0: 0, 45: 0.5, 90: 1.0, 135: 1.5, 180: 2.0}
+        # 設定した回頭角度ごとのコスト
+        rotate_costs = {0: 0, 45: 0.342, 90: 0.575, 135: 0.778, 180: 1.049}
         # ゴールノード到達時の走行体の方位を推定する
         goal_direction = start_robot.direct
         if dy > dx:

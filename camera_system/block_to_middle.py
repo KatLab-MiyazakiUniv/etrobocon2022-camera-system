@@ -40,8 +40,10 @@ class BlockToMiddle(GameMotion):
         command_list = ""  # コマンドのリストを格納する文字列
 
         if self.__rotation_angle != 0:  # 回頭角度が0の場合は回頭のコマンドを生成しない
+            command_list += "SL,100\n"
             command_list += "RT,%d,%d,%s\n" % (self.__rotation_angle,
                                                self.__rotation_pwm, self.__direct_rotation)
+            command_list += "SL,100\n"
 
         command_list += "CS,BLACK,70\n"  # エッジを認識するまで直進
         command_list += "DS,10,70\n"  # 走行体がエッジに乗るまで直進
@@ -61,6 +63,9 @@ class BlockToMiddle(GameMotion):
 
         # 動作時間に回頭時間を足す（成功率に変動はなし）
         m_time += self.__rotation_time
+        # 回頭前後のスリープ時間を足す
+        if self.__rotation_angle != 0:
+            m_time += 0.2
 
         # 動作時間 * 成功率 + 最大計測時間 * 失敗率
         cost = m_time*self.__success_rate+GameMotion.MAX_TIME*(1-self.__success_rate)

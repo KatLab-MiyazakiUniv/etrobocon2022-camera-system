@@ -22,14 +22,16 @@ class TestReturnToIntersection(unittest.TestCase):
         r2i.current_edge = "none"  # 初期エッジをnoneにする
 
         # コストの期待値を求める
-        expected_cost = GameMotion.ROTATION_BLOCK_TABLE[45]["time"]
+        expected_cost = GameMotion.ROTATION_BLOCK_TABLE[45]["time"] + 0.2
         actual_cost = r2i.get_cost()  # 実際のコスト
 
         self.assertEqual(expected_cost, actual_cost)  # コスト計算のテスト
 
         # 期待するコマンドをセット
-        expected_commands = "RT,%d,%d,clockwise,設置後復帰(→交点)\n" % (
+        expected_commands = "SL,100,設置後復帰(→交点)\n"
+        expected_commands += "RT,%d,%d,clockwise\n" % (
             GameMotion.ROTATION_BLOCK_TABLE[45]["angle"], GameMotion.ROTATION_BLOCK_PWM)
+        expected_commands += "SL,100\n"
         expected_commands += "EC,right\n"
         expected_commands += "DS,70,-40\n"
         expected_commands += "CL,GREEN,0,-40,0.1,0.08,0.08\n"

@@ -21,7 +21,8 @@ class TestMiddleToBlock(unittest.TestCase):
         m2b.current_edge = "right"  # 初期エッジを右エッジにする
 
         # コストの期待値を求める
-        motion_time = 0.6970 + GameMotion.ROTATION_BLOCK_TABLE[270]["time"]+GameMotion.VERTICAL_TIME
+        motion_time = 0.6970 + GameMotion.ROTATION_BLOCK_TABLE[270]["time"] \
+            + GameMotion.VERTICAL_TIME + 0.2
         success_rate = 1.0
         expected_cost = motion_time*success_rate+GameMotion.MAX_TIME*(1-success_rate)
 
@@ -30,8 +31,10 @@ class TestMiddleToBlock(unittest.TestCase):
         self.assertEqual(expected_cost, actual_cost)  # コスト計算のテスト
 
         # 期待するコマンドをセット
-        expected_commands = "RT,%d,%d,clockwise,中点→ブロック置き場\n" % (
+        expected_commands = "SL,100,中点→ブロック置き場\n"
+        expected_commands += "RT,%d,%d,clockwise\n" % (
             GameMotion.ROTATION_BLOCK_TABLE[270]["angle"], GameMotion.ROTATION_BLOCK_PWM)
+        expected_commands += "SL,100\n"
         expected_commands += "DS,10,70\n"
         expected_commands += "DS,90,70\n"
 
@@ -53,7 +56,7 @@ class TestMiddleToBlock(unittest.TestCase):
         m2b.current_edge = "right"  # 初期エッジを右エッジにする
 
         # コストの期待値を求める
-        motion_time = 0.6970 + GameMotion.ROTATION_NO_BLOCK_TABLE[315]["time"]
+        motion_time = 0.6970 + GameMotion.ROTATION_NO_BLOCK_TABLE[315]["time"] + 0.2
         success_rate = 1.0
         expected_cost = motion_time*success_rate+GameMotion.MAX_TIME*(1-success_rate)
 
@@ -62,8 +65,10 @@ class TestMiddleToBlock(unittest.TestCase):
         self.assertEqual(expected_cost, actual_cost)  # コスト計算のテスト
 
         # 期待するコマンドをセット
-        expected_commands = "RT,%d,%d,clockwise,中点→ブロック置き場\n" % (
-            GameMotion.ROTATION_NO_BLOCK_TABLE[315]["angle"], GameMotion.ROTATION_NO_BLOCK_PWM)
+        expected_commands = "SL,100,中点→ブロック置き場\n"
+        expected_commands += "RT,%d,%d,clockwise\n" % (
+            GameMotion.ROTATION_BLOCK_TABLE[315]["angle"], GameMotion.ROTATION_BLOCK_PWM)
+        expected_commands += "SL,100\n"
         expected_commands += "DS,90,70\n"
 
         actual_commands = m2b.generate_command()  # コマンドを生成する

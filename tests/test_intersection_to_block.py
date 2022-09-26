@@ -25,8 +25,8 @@ class TestIntersectionToBlock(unittest.TestCase):
 
         # コストの期待値を求める
         motion_time = 0.7840
-        motion_time += GameMotion.ROTATION_BLOCK_TABLE[45]["time"]
-        motion_time += GameMotion.ROTATION_BLOCK_TABLE[45]["time"]
+        motion_time += GameMotion.ROTATION_BLOCK_TABLE[45]["time"] + 0.2
+        motion_time += GameMotion.ROTATION_BLOCK_TABLE[45]["time"] + 0.2
         motion_time += GameMotion.VERTICAL_TIME
         success_rate = 1.0
         expected_cost = motion_time*success_rate+GameMotion.MAX_TIME*(1-success_rate)
@@ -36,11 +36,15 @@ class TestIntersectionToBlock(unittest.TestCase):
         self.assertEqual(expected_cost, actual_cost)  # コスト計算のテスト
 
         # 期待するコマンドをセット
-        expected_commands = "RT,%d,%d,anticlockwise,交点→ブロック置き場\n" % (
-            GameMotion.ROTATION_BLOCK_TABLE[45]["angle"], GameMotion.ROTATION_BLOCK_PWM)
-        expected_commands += "DS,10,70\n"
+        expected_commands = "SL,100,交点→ブロック置き場\n"
         expected_commands += "RT,%d,%d,anticlockwise\n" % (
             GameMotion.ROTATION_BLOCK_TABLE[45]["angle"], GameMotion.ROTATION_BLOCK_PWM)
+        expected_commands += "SL,100\n"
+        expected_commands += "DS,10,70\n"
+        expected_commands += "SL,100\n"
+        expected_commands += "RT,%d,%d,anticlockwise\n" % (
+            GameMotion.ROTATION_BLOCK_TABLE[45]["angle"], GameMotion.ROTATION_BLOCK_PWM)
+        expected_commands += "SL,100\n"
         expected_commands += "DS,150,70\n"
 
         actual_commands = i2b.generate_command()  # コマンドを生成する
@@ -65,7 +69,7 @@ class TestIntersectionToBlock(unittest.TestCase):
 
         # コストの期待値を求める
         motion_time = 0.7840
-        motion_time += GameMotion.ROTATION_BLOCK_TABLE[45]["time"]
+        motion_time += GameMotion.ROTATION_BLOCK_TABLE[45]["time"] + 0.2
         motion_time += GameMotion.DIAGONAL_TIME
         success_rate = 1.0
         expected_cost = motion_time*success_rate+GameMotion.MAX_TIME*(1-success_rate)
@@ -75,8 +79,10 @@ class TestIntersectionToBlock(unittest.TestCase):
         self.assertEqual(expected_cost, actual_cost)  # コスト計算のテスト
 
         # 期待するコマンドをセット
-        expected_commands = "RT,%d,%d,clockwise,交点→ブロック置き場\n" % (
+        expected_commands = "SL,100,交点→ブロック置き場\n"
+        expected_commands += "RT,%d,%d,clockwise\n" % (
             GameMotion.ROTATION_BLOCK_TABLE[45]["angle"], GameMotion.ROTATION_BLOCK_PWM)
+        expected_commands += "SL,100\n"
         expected_commands += "DS,20,70\n"
         expected_commands += "DS,150,70\n"
 
@@ -102,8 +108,8 @@ class TestIntersectionToBlock(unittest.TestCase):
 
         # コストの期待値を求める
         motion_time = 0.7840
-        motion_time += GameMotion.ROTATION_NO_BLOCK_TABLE[180]["time"]
-        motion_time += GameMotion.ROTATION_NO_BLOCK_TABLE[45]["time"]
+        motion_time += GameMotion.ROTATION_NO_BLOCK_TABLE[180]["time"] + 0.2
+        motion_time += GameMotion.ROTATION_NO_BLOCK_TABLE[45]["time"] + 0.2
         success_rate = 1.0
         expected_cost = motion_time*success_rate+GameMotion.MAX_TIME*(1-success_rate)
 
@@ -112,10 +118,14 @@ class TestIntersectionToBlock(unittest.TestCase):
         self.assertEqual(expected_cost, actual_cost)  # コスト計算のテスト
 
         # 期待するコマンドをセット
-        expected_commands = "RT,%d,%d,clockwise,交点→ブロック置き場\n" % (
-            GameMotion.ROTATION_NO_BLOCK_TABLE[180]["angle"], GameMotion.ROTATION_NO_BLOCK_PWM)
+        expected_commands = "SL,100,交点→ブロック置き場\n"
         expected_commands += "RT,%d,%d,clockwise\n" % (
-            GameMotion.ROTATION_NO_BLOCK_TABLE[45]["angle"], GameMotion.ROTATION_NO_BLOCK_PWM)
+            GameMotion.ROTATION_NO_BLOCK_TABLE[180]["angle"], GameMotion.ROTATION_BLOCK_PWM)
+        expected_commands += "SL,100\n"
+        expected_commands += "SL,100\n"
+        expected_commands += "RT,%d,%d,clockwise\n" % (
+            GameMotion.ROTATION_NO_BLOCK_TABLE[45]["angle"], GameMotion.ROTATION_BLOCK_PWM)
+        expected_commands += "SL,100\n"
         expected_commands += "DS,150,70\n"
 
         actual_commands = i2b.generate_command()  # コマンドを生成する

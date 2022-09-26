@@ -41,8 +41,10 @@ class ReturnToBlock(GameMotion):
 
         if self.__rotation_angle != 0:  # 回頭角度が0の場合は回頭のコマンドを生成しない
             # 回頭角度が正の数の場合時計回り，負の数の場合反時計回りで回頭をセットする
+            command_list += "SL,100\n"
             command_list += "RT,%d,%d,%s\n" % (self.__rotation_angle,
                                                self.__rotation_pwm, self.__direct_rotation)
+            command_list += "SL,100\n"
 
         # 調整動作ありの場合，縦調整をセットする
         if self.__adjustment_flag:
@@ -64,5 +66,8 @@ class ReturnToBlock(GameMotion):
         m_time = self.__rotation_time
         if self.__adjustment_flag:
             m_time += GameMotion.VERTICAL_TIME
+        # 回頭前後のスリープ時間を足す
+        if self.__rotation_angle != 0:
+            m_time += 0.2
 
         return m_time

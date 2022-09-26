@@ -47,14 +47,16 @@ class TestReturnToBlock(unittest.TestCase):
         r2b.current_edge = "right"  # 初期エッジを右エッジにする
 
         # コストの期待値を求める
-        expected_cost = GameMotion.ROTATION_BLOCK_TABLE[45]["time"]+GameMotion.VERTICAL_TIME
+        expected_cost = GameMotion.ROTATION_BLOCK_TABLE[45]["time"]+GameMotion.VERTICAL_TIME + 0.2
         actual_cost = r2b.get_cost()  # 実際のコスト
 
         self.assertEqual(expected_cost, actual_cost)  # コスト計算のテスト
 
-        # 期待するコマンドをセット
-        expected_commands = "RT,%d,%d,clockwise,設置後復帰(→ブロック置き場)\n" % (
+        # 期待するコマンドをセット]
+        expected_commands = "SL,100,設置後復帰(→ブロック置き場)\n"
+        expected_commands += "RT,%d,%d,clockwise\n" % (
             GameMotion.ROTATION_BLOCK_TABLE[45]["angle"], GameMotion.ROTATION_BLOCK_PWM)
+        expected_commands += "SL,100\n"
         expected_commands += "DS,10,-70\n"
         expected_commands += "DS,100,-40\n"
 
@@ -76,14 +78,16 @@ class TestReturnToBlock(unittest.TestCase):
         r2b.current_edge = "right"  # 初期エッジを右エッジにする
 
         # コストの期待値を求める
-        expected_cost = GameMotion.ROTATION_NO_BLOCK_TABLE[45]["time"]
+        expected_cost = GameMotion.ROTATION_NO_BLOCK_TABLE[45]["time"] + 0.2
         actual_cost = r2b.get_cost()  # 実際のコスト
 
         self.assertEqual(expected_cost, actual_cost)  # コスト計算のテスト
 
         # 期待するコマンドをセット
-        expected_commands = "RT,%d,%d,anticlockwise,設置後復帰(→ブロック置き場)\n" % (
-            GameMotion.ROTATION_NO_BLOCK_TABLE[45]["angle"], GameMotion.ROTATION_NO_BLOCK_PWM)
+        expected_commands = "SL,100,設置後復帰(→ブロック置き場)\n"
+        expected_commands += "RT,%d,%d,anticlockwise\n" % (
+            GameMotion.ROTATION_NO_BLOCK_TABLE[45]["angle"], GameMotion.ROTATION_BLOCK_PWM)
+        expected_commands += "SL,100\n"
         expected_commands += "DS,100,-40\n"
 
         actual_commands = r2b.generate_command()  # コマンドを生成する

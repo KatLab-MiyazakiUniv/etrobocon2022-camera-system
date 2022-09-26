@@ -21,7 +21,7 @@ class TestBlockToIntersection(unittest.TestCase):
         b2i.current_edge = "right"  # 初期エッジを右エッジにする
 
         # コストの期待値を求める
-        motion_time = 1.0700 + GameMotion.ROTATION_BLOCK_TABLE[180]["time"]
+        motion_time = 1.0700 + GameMotion.ROTATION_BLOCK_TABLE[180]["time"] + 0.2
         success_rate = 1.0
         expected_cost = motion_time*success_rate+GameMotion.MAX_TIME*(1-success_rate)
 
@@ -30,8 +30,10 @@ class TestBlockToIntersection(unittest.TestCase):
         self.assertEqual(expected_cost, actual_cost)  # コスト計算のテスト
 
         # 期待するコマンドをセット
-        expected_commands = "RT,%d,%d,anticlockwise,ブロック置き場→交点\n" % (
+        expected_commands = "SL,100,ブロック置き場→交点\n"
+        expected_commands += "RT,%d,%d,anticlockwise\n" % (
             GameMotion.ROTATION_BLOCK_TABLE[180]["angle"], GameMotion.ROTATION_BLOCK_PWM)
+        expected_commands += "SL,100\n"
         expected_commands += "CS,BLUE,70\n"
         expected_commands += "DS,42,60\n"
 
@@ -52,7 +54,7 @@ class TestBlockToIntersection(unittest.TestCase):
         b2i.current_edge = "left"  # 初期エッジを左エッジにする
 
         # コストの期待値を求める
-        motion_time = 1.0700 + GameMotion.ROTATION_BLOCK_TABLE[225]["time"]
+        motion_time = 1.0700 + GameMotion.ROTATION_BLOCK_TABLE[225]["time"] + 0.2
         success_rate = 1.0
         expected_cost = motion_time*success_rate+GameMotion.MAX_TIME*(1-success_rate)
 
@@ -61,8 +63,10 @@ class TestBlockToIntersection(unittest.TestCase):
         self.assertEqual(expected_cost, actual_cost)  # コスト計算のテスト
 
         # 期待するコマンドをセット
-        expected_commands = "RT,%d,%d,anticlockwise,ブロック置き場→交点\n" % (
+        expected_commands = "SL,100,ブロック置き場→交点\n"
+        expected_commands += "RT,%d,%d,anticlockwise\n" % (
             GameMotion.ROTATION_BLOCK_TABLE[225]["angle"], GameMotion.ROTATION_BLOCK_PWM)
+        expected_commands += "SL,100\n"
         expected_commands += "CS,GREEN,70\n"
         expected_commands += "DS,42,60\n"
 
@@ -83,7 +87,7 @@ class TestBlockToIntersection(unittest.TestCase):
         b2i.current_edge = "left"  # 初期エッジを左エッジにする
 
         # コストの期待値を求める
-        motion_time = 1.0700 + GameMotion.ROTATION_NO_BLOCK_TABLE[270]["time"]
+        motion_time = 1.0700 + GameMotion.ROTATION_NO_BLOCK_TABLE[270]["time"] + 0.2
         success_rate = 1.0
         expected_cost = motion_time*success_rate+GameMotion.MAX_TIME*(1-success_rate)
 
@@ -92,8 +96,10 @@ class TestBlockToIntersection(unittest.TestCase):
         self.assertEqual(expected_cost, actual_cost)  # コスト計算のテスト
 
         # 期待するコマンドをセット
-        expected_commands = "RT,%d,%d,anticlockwise,ブロック置き場→交点\n" % (
-            GameMotion.ROTATION_NO_BLOCK_TABLE[270]["angle"], GameMotion.ROTATION_NO_BLOCK_PWM)
+        expected_commands = "SL,100,ブロック置き場→交点\n"
+        expected_commands += "RT,%d,%d,anticlockwise\n" % (
+            GameMotion.ROTATION_BLOCK_TABLE[270]["angle"], GameMotion.ROTATION_BLOCK_PWM)
+        expected_commands += "SL,100\n"
         expected_commands += "CS,YELLOW,70\n"
         expected_commands += "DS,42,60\n"
 
@@ -114,7 +120,7 @@ class TestBlockToIntersection(unittest.TestCase):
         b2i.current_edge = "none"  # 初期エッジを左エッジにする
 
         # コストの期待値を求める
-        motion_time = 1.0700 + GameMotion.ROTATION_NO_BLOCK_TABLE[315]["time"]
+        motion_time = 1.0700 + GameMotion.ROTATION_NO_BLOCK_TABLE[315]["time"] + 0.2
         success_rate = 1.0
         expected_cost = motion_time*success_rate+GameMotion.MAX_TIME*(1-success_rate)
 
@@ -123,8 +129,10 @@ class TestBlockToIntersection(unittest.TestCase):
         self.assertEqual(expected_cost, actual_cost)  # コスト計算のテスト
 
         # 期待するコマンドをセット
-        expected_commands = "RT,%d,%d,anticlockwise,ブロック置き場→交点\n" % (
-            GameMotion.ROTATION_NO_BLOCK_TABLE[315]["angle"], GameMotion.ROTATION_NO_BLOCK_PWM)
+        expected_commands = "SL,100,ブロック置き場→交点\n"
+        expected_commands += "RT,%d,%d,anticlockwise\n" % (
+            GameMotion.ROTATION_NO_BLOCK_TABLE[315]["angle"], GameMotion.ROTATION_BLOCK_PWM)
+        expected_commands += "SL,100\n"
         expected_commands += "CS,RED,70\n"
         expected_commands += "DS,42,60\n"
 
