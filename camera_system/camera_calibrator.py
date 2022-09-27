@@ -51,7 +51,7 @@ class CameraCalibrator:
         self.__color_changer = ColorChanger()
         self.__coord = CameraCoordinateCalibrator(self.__calibration_img)
 
-        # ブロックの色を判定するための配列を宣言(行:各ブロック, 行：各色)
+        # ブロックの色を判定するための配列を宣言(行:各ブロック, 行:各色)
         self.count_point = np.zeros(
             CameraCalibrator.COLOR_BLOCK_NUM*CameraCalibrator.VALIDITY_COLOR_NUM
         ).reshape(CameraCalibrator.COLOR_BLOCK_NUM, CameraCalibrator.VALIDITY_COLOR_NUM)
@@ -86,7 +86,7 @@ class CameraCalibrator:
         # ブロックの色を調べる領域のピクセル数を求める
         area_pixel_sum = CameraCalibrator.SEARCH_AREA_XSIZE*CameraCalibrator.SEARCH_AREA_XSIZE
 
-        # カラーブロックの色IDを求める
+        # ブロック置き場上のカラーブロックの色IDを求める
         for i, point in enumerate(self.__coord.block_point):
             # ブロック上の領域に存在する色の種類とピクセル数を取得
             color_uniqs, color_pixel_sum = self.__color_changer.search_color(
@@ -109,14 +109,13 @@ class CameraCalibrator:
             block_color_list[max_index[0]] = max_index[1]+1  # indexと色IDを合わせるために+1
             # 認識した色をカウント
             color_count[max_index[1]] += 1
-            # 2回認識した色を候補から外す
+            # 2回認識した色を候補から外す(優先順位を小さくする)
             if color_count[max_index[1]] == 2:
-                # -1を代入して優先順位を小さくする
                 self.count_point[:, max_index[1]] = -1
             # 色の判別が終わったブロックを候補から外す
             self.count_point[max_index[0], :] = -1
 
-        # ベースサークルの色IDを求める
+        # ベースサークル上のブロックの色IDを求める
         for i, base in enumerate(self.__coord.base_circle):
             # ブロック上の領域に存在する色の種類とピクセル数を取得
             color_uniqs, color_pixel_sum = self.__color_changer.search_color(
