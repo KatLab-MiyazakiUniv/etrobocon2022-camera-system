@@ -67,5 +67,5 @@ class ReturnToIntersection(GameMotion):
         m_time = self.__rotation_time
         # 回頭している場合，回頭前後のスリープ時間を足す
         if self.__rotation_angle != 0:
-            m_time += + GameMotion.SLEEP_TIME * 2
+            m_time += GameMotion.SLEEP_TIME * 2
         return m_time

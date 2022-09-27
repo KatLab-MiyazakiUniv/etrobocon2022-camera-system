@@ -79,7 +79,7 @@ class MiddleToIntersection(GameMotion):
         m_time += self.__rotation_time
         # 回頭している場合，回頭前後のスリープ時間を足す
         if self.__rotation_angle != 0:
-            m_time += + GameMotion.SLEEP_TIME * 2
+            m_time += GameMotion.SLEEP_TIME * 2
 
         # 動作時間 * 成功率 + 最大計測時間 * 失敗率
         cost = m_time*self.__success_rate+GameMotion.MAX_TIME*(1-self.__success_rate)
