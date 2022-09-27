@@ -15,8 +15,6 @@ from camera_coordinate_calibrator import CameraCoordinateCalibrator
 from camera_interface import CameraInterface
 from game_area_info import GameAreaInfo
 
-import cv2
-
 
 class CameraCalibrator:
     """ゲームエリア認識クラス.
@@ -47,17 +45,18 @@ class CameraCalibrator:
         """
         # キャリブレーション用画像の取得
         self.__camera_interface = CameraInterface(camera_id)
-        # self.__calibration_img = self.__camera_interface.capture_frame(cali_img_save_path)
-        self.__calibration_img = cv2.imread("test_image.png")
+        self.__calibration_img = self.__camera_interface.capture_frame(cali_img_save_path)
 
         self.__color_changer = ColorChanger()
         self.__coord = CameraCoordinateCalibrator(self.__calibration_img)
 
         # ブロックの色を判定するための配列を宣言(行:各ブロック, 行：各色)
-        self.count_point = np.zeros(CameraCalibrator.COLOR_BLOCK_NUM*CameraCalibrator.VALIDITY_COLOR_NUM
-                                    ).reshape(CameraCalibrator.COLOR_BLOCK_NUM, CameraCalibrator.VALIDITY_COLOR_NUM)
-        self.count_base = np.zeros(CameraCalibrator.BASE_BLOCK_NUM*CameraCalibrator.VALIDITY_COLOR_NUM
-                                   ).reshape(CameraCalibrator.BASE_BLOCK_NUM, CameraCalibrator.VALIDITY_COLOR_NUM)
+        self.count_point = np.zeros(
+            CameraCalibrator.COLOR_BLOCK_NUM*CameraCalibrator.VALIDITY_COLOR_NUM
+        ).reshape(CameraCalibrator.COLOR_BLOCK_NUM, CameraCalibrator.VALIDITY_COLOR_NUM)
+        self.count_base = np.zeros(
+            CameraCalibrator.BASE_BLOCK_NUM*CameraCalibrator.VALIDITY_COLOR_NUM
+        ).reshape(CameraCalibrator.BASE_BLOCK_NUM, CameraCalibrator.VALIDITY_COLOR_NUM)
 
     def start_camera_calibration(self) -> None:
         """カメラキャリブレーションを行う関数."""
@@ -72,30 +71,33 @@ class CameraCalibrator:
             game_save_path (str): ゲームエリア画像保存パス
         """
         # ゲームエリア画像を取得
-        # game_area_img = self.__camera_interface.capture_frame(game_save_path)
+        game_area_img = self.__camera_interface.capture_frame(game_save_path)
 
         # 6色変換
         color_save_path = "color_" + game_save_path
-        # self.__color_changer.change_color(game_area_img, color_save_path)
-        self.__color_changer.change_color(self.__calibration_img, color_save_path)
+        self.__color_changer.change_color(game_area_img, color_save_path)
 
         # 色IDを格納する配列を宣言
         block_color_list = np.zeros(CameraCalibrator.COLOR_BLOCK_NUM)
         base_color_list = np.zeros(CameraCalibrator.BASE_BLOCK_NUM)
         bonus_color = np.zeros(CameraCalibrator.BONUS_BLOCK_NUM)
 
+        # ブロックの色を調べる領域のピクセル数を求める
+        area_pixel_sum = CameraCalibrator.SEARCH_AREA_XSIZE*CameraCalibrator.SEARCH_AREA_XSIZE
+
         # カラーブロックの色IDを求める
         for i, point in enumerate(self.__coord.block_point):
             # ブロック上の領域に存在する色の種類とピクセル数を取得
-            color_uniqs, pixel_sum = self.__color_changer.search_color(point[0],
-                                                                       point[1],
-                                                                       CameraCalibrator.SEARCH_AREA_XSIZE,
-                                                                       CameraCalibrator.SEARCH_AREA_YSIZE)
+            color_uniqs, color_pixel_sum = self.__color_changer.search_color(
+                point[0],
+                point[1],
+                CameraCalibrator.SEARCH_AREA_XSIZE,
+                CameraCalibrator.SEARCH_AREA_YSIZE)
             # 色の種類とピクセル数を配列に格納
             # 第2引数はindexと色IDを合わせるために-1
             # 第3引数は色を求める際に領域に対する割合で比較できるように頻度÷領域面積(ピクセル)
             np.put(self.count_point[i], color_uniqs-1,
-                   pixel_sum/(CameraCalibrator.SEARCH_AREA_XSIZE*CameraCalibrator.SEARCH_AREA_XSIZE))
+                   color_pixel_sum/area_pixel_sum)
         # 認識したブロックの数を把握するための配列
         color_count = np.zeros(CameraCalibrator.VALIDITY_COLOR_NUM)  # (赤、黄、緑、青)
         # 各ブロックの領域に対する色の割合が高い順に色IDを割り振る
@@ -116,13 +118,14 @@ class CameraCalibrator:
         # ベースサークルの色IDを求める
         for i, base in enumerate(self.__coord.base_circle):
             # ブロック上の領域に存在する色の種類とピクセル数を取得
-            color_uniqs, pixel_sum = self.__color_changer.search_color(base[0],
-                                                                       base[1],
-                                                                       CameraCalibrator.SEARCH_AREA_XSIZE,
-                                                                       CameraCalibrator.SEARCH_AREA_YSIZE)
+            color_uniqs, color_pixel_sum = self.__color_changer.search_color(
+                base[0],
+                base[1],
+                CameraCalibrator.SEARCH_AREA_XSIZE,
+                CameraCalibrator.SEARCH_AREA_YSIZE)
             # 色の種類とピクセル数を配列に格納
             np.put(self.count_base[i], color_uniqs-1,
-                   pixel_sum/(CameraCalibrator.SEARCH_AREA_XSIZE*CameraCalibrator.SEARCH_AREA_XSIZE))
+                   color_pixel_sum/area_pixel_sum)
         # 各ブロックの領域に対する色の割合が高い順に色IDを割り振る
         for i in range(base_color_list.shape[0]):
             # 配列の最大値のインデックスを取得
@@ -136,12 +139,13 @@ class CameraCalibrator:
 
         # ボーナスブロックの色IDを求める
         # ブロック上の領域に存在する色の種類とピクセル数を取得
-        color_uniqs, pixel_sum = self.__color_changer.search_color(self.__coord.end_point[0][0],
-                                                                   self.__coord.end_point[0][1],
-                                                                   CameraCalibrator.SEARCH_AREA_XSIZE,
-                                                                   CameraCalibrator.SEARCH_AREA_YSIZE)
-        # ボーナスブロックはピクセル数の大きい色にする(1個しかないから)
-        bonus_color = color_uniqs[np.argmax(pixel_sum)]
+        color_uniqs, color_pixel_sum = self.__color_changer.search_color(
+            self.__coord.end_point[0][0],
+            self.__coord.end_point[0][1],
+            CameraCalibrator.SEARCH_AREA_XSIZE,
+            CameraCalibrator.SEARCH_AREA_YSIZE)
+        # ボーナスブロックはピクセル数の多い色にする(1個しかないから)
+        bonus_color = color_uniqs[np.argmax(color_pixel_sum)]
 
         # ゲームエリア情報を作成
         GameAreaInfo.block_color_list = [Color(block_color) for block_color in block_color_list]

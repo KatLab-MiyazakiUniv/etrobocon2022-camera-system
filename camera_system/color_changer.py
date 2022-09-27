@@ -91,11 +91,12 @@ class ColorChanger:
 
         Returns:
             color_uniqs: 指定領域内に存在する色IDの種類
-            pixel_sum: 指定領域内の各色のピクセル数
+            color_pixel_sum: 指定領域内の各色のピクセル数
         """
         # 指定領域を配列として宣言
-        search_area = self.color_id_img[coord_y-(search_area_ysize//2):coord_y+(search_area_ysize//2)+1,
-                                        coord_x-(search_area_xsize//2):coord_x+(search_area_xsize//2)+1]
+        search_area = self.color_id_img[
+            coord_y-(search_area_ysize//2):coord_y+(search_area_ysize//2)+1,
+            coord_x-(search_area_xsize//2):coord_x+(search_area_xsize//2)+1]
         # 配列から黒と白を除去
         search_area = search_area = search_area[
             np.where((search_area != Color.BLACK.value) & (search_area != Color.WHITE.value))]
@@ -103,14 +104,14 @@ class ColorChanger:
         # もし選択した領域内に白と黒しかなかった場合は、領域内に各色(白黒以外)が同じピクセル数だけ存在することとする
         if not search_area.shape[0]:
             color_uniqs = np.array([1, 2, 3, 4])
-            pixel_sum = np.full(4, search_area_xsize*search_area_ysize//4)
-            return color_uniqs.astype(np.int64), pixel_sum.astype(np.int64)
+            color_pixel_sum = np.full(4, search_area_xsize*search_area_ysize//4)
+            return color_uniqs.astype(np.int64), color_pixel_sum.astype(np.int64)
 
         # 配列に存在する色IDの種類とピクセル数を求める
-        color_uniqs, pixel_sum = np.unique(search_area, return_counts=True)
+        color_uniqs, color_pixel_sum = np.unique(search_area, return_counts=True)
 
         # int型配列に直して返す
-        return color_uniqs.astype(np.int64), pixel_sum.astype(np.int64)
+        return color_uniqs.astype(np.int64), color_pixel_sum.astype(np.int64)
 
 
 if __name__ == "__main__":
@@ -125,11 +126,11 @@ if __name__ == "__main__":
     color_changer.change_color(game_area_img, save_path)
 
     # 指定領域内の色IDと各色のピクセル数を取得
-    color_uniqs, pixel_sum = color_changer.search_color(520, 145, 21, 21)  # base南(520, 145)
+    color_uniqs, color_pixel_sum = color_changer.search_color(520, 145, 21, 21)  # base南(520, 145)
     print("color_uniqs", color_uniqs)
-    print("pixel_sum", pixel_sum)
-    color_uniqs, pixel_sum = color_changer.search_color(0, 0, 5, 5)  # 白黒のみ検知してしまう場合
+    print("color_pixel_sum", color_pixel_sum)
+    color_uniqs, color_pixel_sum = color_changer.search_color(0, 0, 5, 5)  # 白黒のみ検知してしまう場合
     print("color_uniqs", color_uniqs)
-    print("pixel_sum", pixel_sum)
+    print("color_pixel_sum", color_pixel_sum)
 
     print("color_changer 終了")

@@ -26,12 +26,12 @@ class TestColorChanger(unittest.TestCase):
         self.assertEqual(expected_exist, actual_exist)
 
         # search_color関数のテスト
-        actual = []
         search_area_size = 21
-        actual.append(cc.search_color(422, 387, search_area_size, search_area_size))  # 領域が白のみ
+        actual_color_uniqs, actual_color_pixel_sum = cc.search_color(
+            422, 387, search_area_size, search_area_size)  # 領域が白のみ
 
         expected_color_uniqs = np.array([1, 2, 3, 4])  # 正解のカラーID
-        expected_pixel_sum = search_area_size ** 2 // 2  # 正解のカラーID
+        expected_color_pixel_sum = np.full(4, search_area_size**2//4)  # 正解のカラーID
 
-        self.assertEqual(expected_color_uniqs, actual[0])
-        self.assertEqual(expected_pixel_sum, actual[1])
+        self.assertEqual(all(expected_color_uniqs), all(actual_color_uniqs))
+        self.assertEqual(all(expected_color_pixel_sum), all(actual_color_pixel_sum))
