@@ -20,20 +20,21 @@ class CameraCalibrator:
     """ゲームエリア認識クラス.
 
     Attributes:
-        SEARCH_AREA_XSIZE (int): 最頻値を求める範囲のxサイズ(奇数)
-        SEARCH_AREA_YSIZE (int): 最頻値を求める範囲のyサイズ(奇数)
+        SEARCH_AREA_XSIZE (int): ブロックの色を求めるための領域xサイズ(奇数)
+        SEARCH_AREA_YSIZE (int): ブロックの色を求めるための領域xサイズ(奇数)
+        COLOR_BLOCK_NUM (int): カラーブロックの個数(8個)
+        BASE_BLOCK_NUM (int): ベースエリアブロックの個数(4個)
+        BONUS_BLOCK_NUM (int): ボーナスブロックの個数(1個)
+        VALIDITY_COLOR_NUM (int): カラーブロックに使用されている色の種類の数(赤、黄、緑、青の4種類)
     """
 
-    # ブロックの色を調べる領域のサイズ(奇数)
     SEARCH_AREA_XSIZE = 5
     SEARCH_AREA_YSIZE = 5
 
-    # 各ブロックの数
     COLOR_BLOCK_NUM = 8
     BASE_BLOCK_NUM = 4
     BONUS_BLOCK_NUM = 1
 
-    # ブロックに使用される色の数（赤、黄、緑、青の4種類）
     VALIDITY_COLOR_NUM = 4
 
     def __init__(self, camera_id: int, cali_img_save_path="cali_course.png") -> None:
@@ -95,7 +96,7 @@ class CameraCalibrator:
                 CameraCalibrator.SEARCH_AREA_YSIZE)
             # 色の種類とピクセル数を配列に格納
             # 第2引数はindexと色IDを合わせるために-1
-            # 第3引数は色を求める際に領域に対する割合で比較できるように頻度÷領域面積(ピクセル)
+            # 第3引数は色を求める際に領域に対する割合で比較できるように各色のピクセル数÷全体のピクセル数
             np.put(self.count_point[i], color_uniqs-1,
                    color_pixel_sum/area_pixel_sum)
         # 認識したブロックの数を把握するための配列
@@ -152,7 +153,7 @@ class CameraCalibrator:
         GameAreaInfo.base_color_list = [Color(base_color) for base_color in base_color_list]
         GameAreaInfo.bonus_color = Color(bonus_color)
 
-        # 確認のためにゲームエリア情報の出力
+        # 確認のためにゲームエリア情報を出力
         print("Color Block\n", GameAreaInfo.block_color_list)
         print("Base Block\n", GameAreaInfo.base_color_list)
         print("Bonus Block\n", GameAreaInfo.bonus_color)
