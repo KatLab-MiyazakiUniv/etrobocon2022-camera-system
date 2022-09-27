@@ -102,7 +102,8 @@ class ColorChanger:
         # 配列に存在するIDの種類と頻度を求める
         uniqs, counts = np.unique(mode_area, return_counts=True)
         # 最頻値が複数の場合小さいほうを返す
-        return int(min(uniqs[counts == np.amax(counts)]))
+        # return int(min(uniqs[counts == np.amax(counts)]))
+        return uniqs.astype(np.int64), counts.astype(np.int64)
 
 
 if __name__ == "__main__":
@@ -114,7 +115,10 @@ if __name__ == "__main__":
     # 6色変換
     color_changer.change_color(game_area_img, save_path)
     # 最頻値取得　ボーナスブロック(211,432)
-    # mode = color_changer.calculate_mode_color(211, 432, 5, 5)
-    mode = color_changer.calculate_mode_color(0, 0, 5, 5)
-    print("mode", mode)
+    # uniqs, counts = color_changer.calculate_mode_color(211, 432, 5, 5)
+    uniqs, counts = color_changer.calculate_mode_color(520, 145, 21, 21)
+    # uniqs, counts = color_changer.calculate_mode_color(0, 0, 5, 5)
+    print("uniqs", uniqs)
+    print("counts", counts)
+    print("uniqs[np.argmax(counts)]", uniqs[np.argmax(counts)])
     print("color_changer 終了")
