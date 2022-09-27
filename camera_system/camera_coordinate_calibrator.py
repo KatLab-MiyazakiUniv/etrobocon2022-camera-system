@@ -27,9 +27,13 @@ class CameraCoordinateCalibrator:
             img (cv2.Mat): 画像データ
         """
         # メンバを初期化する
-        self.__block_point = []  # ブロック置き場の座標リスト
-        self.__base_circle = []  # ベースサークルの座標リスト
-        self.__end_point = []  # 端点サークルの座標リスト
+        # self.__block_point = []  # ブロック置き場の座標リスト
+        # self.__base_circle = []  # ベースサークルの座標リスト
+        # self.__end_point = []  # 端点サークルの座標リスト
+        self.__block_point = [(82, 131), (160, 91), (227, 56), (191, 154),
+                              (314, 70), (316, 179), (382, 122), (421, 82)]  # ブロック置き場の座標リスト
+        self.__base_circle = [(357, 33), (525, 144), (89, 236), (64, 77)]  # ベースサークルの座標リスト
+        self.__end_point = [(215, 437)]  # 端点サークルの座標リスト
         self.__calibration_img = img
 
     def show_window(self) -> None:
@@ -148,7 +152,8 @@ class CameraCoordinateCalibrator:
 
 
 if __name__ == "__main__":
-    read_path = "test_image.png"
+    # read_path = "test_image.png"
+    read_path = "test_image_siso.png"
     img = cv2.imread(read_path)
     coord = CameraCoordinateCalibrator(img)
     coord.show_window()
