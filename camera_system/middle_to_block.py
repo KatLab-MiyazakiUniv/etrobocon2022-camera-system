@@ -73,7 +73,7 @@ class MiddleToBlock(GameMotion):
         m_time += self.__rotation_time
         # 回頭している場合，回頭前後のスリープ時間を足す
         if self.__rotation_angle != 0:
-            m_time += GameMotion.SLEEP_TIME * 2
+            m_time += + GameMotion.SLEEP_TIME * 2
         # 調整動作ありの場合，縦調整の動作時間を足す（成功率に変動はなし）
         if self.__need_adjustment:
             m_time += GameMotion.VERTICAL_TIME

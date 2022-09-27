@@ -25,8 +25,8 @@ class TestIntersectionToBlock(unittest.TestCase):
 
         # コストの期待値を求める
         motion_time = 0.7840
-        motion_time += GameMotion.ROTATION_BLOCK_TABLE[45]["time"] + 0.2
-        motion_time += GameMotion.ROTATION_BLOCK_TABLE[45]["time"] + 0.2
+        motion_time += GameMotion.ROTATION_BLOCK_TABLE[45]["time"] + GameMotion.SLEEP_TIME * 2
+        motion_time += GameMotion.ROTATION_BLOCK_TABLE[45]["time"] + GameMotion.SLEEP_TIME * 2
         motion_time += GameMotion.VERTICAL_TIME
         success_rate = 1.0
         expected_cost = motion_time*success_rate+GameMotion.MAX_TIME*(1-success_rate)
@@ -69,7 +69,7 @@ class TestIntersectionToBlock(unittest.TestCase):
 
         # コストの期待値を求める
         motion_time = 0.7840
-        motion_time += GameMotion.ROTATION_BLOCK_TABLE[45]["time"] + 0.2
+        motion_time += GameMotion.ROTATION_BLOCK_TABLE[45]["time"] + GameMotion.SLEEP_TIME * 2
         motion_time += GameMotion.DIAGONAL_TIME
         success_rate = 1.0
         expected_cost = motion_time*success_rate+GameMotion.MAX_TIME*(1-success_rate)
@@ -108,8 +108,8 @@ class TestIntersectionToBlock(unittest.TestCase):
 
         # コストの期待値を求める
         motion_time = 0.7840
-        motion_time += GameMotion.ROTATION_NO_BLOCK_TABLE[180]["time"] + 0.2
-        motion_time += GameMotion.ROTATION_NO_BLOCK_TABLE[45]["time"] + 0.2
+        motion_time += GameMotion.ROTATION_NO_BLOCK_TABLE[180]["time"] + GameMotion.SLEEP_TIME * 2
+        motion_time += GameMotion.ROTATION_NO_BLOCK_TABLE[45]["time"] + GameMotion.SLEEP_TIME * 2
         success_rate = 1.0
         expected_cost = motion_time*success_rate+GameMotion.MAX_TIME*(1-success_rate)
 

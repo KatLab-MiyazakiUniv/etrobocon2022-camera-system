@@ -19,7 +19,8 @@ class TestBlockToMiddle(unittest.TestCase):
         b2m.current_edge = "right"  # 初期エッジを右エッジにする
 
         # コストの期待値を求める
-        motion_time = 0.8094 + GameMotion.ROTATION_BLOCK_TABLE[45]["time"] + 0.2
+        motion_time = 0.8094 + \
+            GameMotion.ROTATION_BLOCK_TABLE[45]["time"] + GameMotion.SLEEP_TIME * 2
         success_rate = 0.9
         expected_cost = motion_time*success_rate+GameMotion.MAX_TIME*(1-success_rate)
 

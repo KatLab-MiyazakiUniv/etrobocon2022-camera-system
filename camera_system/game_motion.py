@@ -45,6 +45,7 @@ class GameMotion(metaclass=ABCMeta):
         ROTATION_NO_BLOCK_TABLE: ブロックを保持していない時の回頭のパラメータ(45度単位で0~360度)
         VERTICAL_TIME: 縦調整の動作時間
         DIAGONAL_TIME: 斜め調整の動作時間
+        SLEEP_TIME: 回頭前後のスリープ時間
     """
 
     MAX_TIME = 120

@@ -19,7 +19,7 @@ class TestReturnToMiddle(unittest.TestCase):
         r2m.current_edge = "none"  # 初期エッジをnoneにする
 
         # コストの期待値を求める
-        expected_cost = GameMotion.ROTATION_BLOCK_TABLE[45]["time"] + 0.2
+        expected_cost = GameMotion.ROTATION_BLOCK_TABLE[45]["time"] + GameMotion.SLEEP_TIME * 2
         actual_cost = r2m.get_cost()  # 実際のコスト
 
         self.assertEqual(expected_cost, actual_cost)  # コスト計算のテスト

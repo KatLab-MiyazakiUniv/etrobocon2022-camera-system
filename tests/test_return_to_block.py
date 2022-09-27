@@ -45,7 +45,8 @@ class TestReturnToBlock(unittest.TestCase):
         r2b.current_edge = "right"  # 初期エッジを右エッジにする
 
         # コストの期待値を求める
-        expected_cost = GameMotion.ROTATION_BLOCK_TABLE[45]["time"]+GameMotion.VERTICAL_TIME + 0.2
+        expected_cost = GameMotion.ROTATION_BLOCK_TABLE[45]["time"] + \
+            GameMotion.VERTICAL_TIME + GameMotion.SLEEP_TIME * 2
         actual_cost = r2b.get_cost()  # 実際のコスト
 
         self.assertEqual(expected_cost, actual_cost)  # コスト計算のテスト
@@ -75,7 +76,7 @@ class TestReturnToBlock(unittest.TestCase):
         r2b.current_edge = "right"  # 初期エッジを右エッジにする
 
         # コストの期待値を求める
-        expected_cost = GameMotion.ROTATION_BLOCK_TABLE[45]["time"] + 0.2
+        expected_cost = GameMotion.ROTATION_BLOCK_TABLE[45]["time"] + GameMotion.SLEEP_TIME * 2
         actual_cost = r2b.get_cost()  # 実際のコスト
 
         self.assertEqual(expected_cost, actual_cost)  # コスト計算のテスト
