@@ -28,8 +28,8 @@ class CameraCalibrator:
         VALIDITY_COLOR_NUM (int): カラーブロックに使用されている色の種類の数(赤、黄、緑、青の4種類)
     """
 
-    SEARCH_AREA_XSIZE = 5
-    SEARCH_AREA_YSIZE = 5
+    SEARCH_AREA_XSIZE = 21
+    SEARCH_AREA_YSIZE = 21
 
     COLOR_BLOCK_NUM = 8
     BASE_BLOCK_NUM = 4
