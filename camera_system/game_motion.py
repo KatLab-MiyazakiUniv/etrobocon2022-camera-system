@@ -45,29 +45,31 @@ class GameMotion(metaclass=ABCMeta):
         ROTATION_NO_BLOCK_TABLE: ブロックを保持していない時の回頭のパラメータ(45度単位で0~360度)
         VERTICAL_TIME: 縦調整の動作時間
         DIAGONAL_TIME: 斜め調整の動作時間
+        SLEEP_TIME: 回頭前後のスリープ時間
     """
 
     MAX_TIME = 120
-    ROTATION_BLOCK_PWM = 100
-    ROTATION_NO_BLOCK_PWM = 90
+    ROTATION_BLOCK_PWM = 70
+    ROTATION_NO_BLOCK_PWM = 70
     ROTATION_BLOCK_TABLE = {0: {"angle": 0, "time": 0},
-                            45: {"angle": 45, "time": 2},
-                            90: {"angle": 90, "time": 4},
-                            135: {"angle": 135, "time": 6},
-                            180: {"angle": 180, "time": 8},
-                            225: {"angle": 225, "time": 10},
-                            270: {"angle": 270, "time": 12},
-                            315: {"angle": 225, "time": 14}}  # ToDo: 計測したパラメータに変更する
+                            45: {"angle": 31, "time": 0.405},
+                            90: {"angle": 76, "time": 0.661},
+                            135: {"angle": 123, "time": 0.920},
+                            180: {"angle": 172, "time": 1.165},
+                            225: {"angle": 219, "time": 120},  # 失敗率の高い角度
+                            270: {"angle": 270, "time": 120},  # 想定しない角度
+                            315: {"angle": 315, "time": 120}}  # 想定しない角度
     ROTATION_NO_BLOCK_TABLE = {0: {"angle": 0, "time": 0},
-                               45: {"angle": 46, "time": 3},
-                               90: {"angle": 91, "time": 5},
-                               135: {"angle": 136, "time": 7},
-                               180: {"angle": 181, "time": 9},
-                               225: {"angle": 226, "time": 11},
-                               270: {"angle": 271, "time": 13},
-                               315: {"angle": 226, "time": 15}}  # ToDo: 計測したパラメータに変更する
+                               45: {"angle": 28, "time": 0.342},
+                               90: {"angle": 72, "time": 0.575},
+                               135: {"angle": 110, "time": 0.778},
+                               180: {"angle": 161, "time": 1.049},
+                               225: {"angle": 209, "time": 1.281},
+                               270: {"angle": 270, "time": 120},  # 想定しない角度
+                               315: {"angle": 315, "time": 120}}  # 想定しない角度
     VERTICAL_TIME = 0.2558
     DIAGONAL_TIME = 0.2620
+    SLEEP_TIME = 0.1
 
     def __eq__(self, other) -> bool:
         """オブジェクトの等価比較をする.

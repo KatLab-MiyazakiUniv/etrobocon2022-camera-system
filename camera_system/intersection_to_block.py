@@ -66,8 +66,11 @@ class IntersectionToBlock(GameMotion):
 
         if self.__first_angle != 0:  # 回頭角度が0の場合は回頭のコマンドを生成しない
             # 回頭角度が正の数の場合時計回り，負の数の場合反時計回りで回頭をセットする
+            # 回頭を安定させるために、回頭の前後にスリープを入れる
+            command_list += "SL,%d\n" % (GameMotion.SLEEP_TIME * 1000)
             command_list += "RT,%d,%d,%s\n" % (self.__first_angle,
                                                self.__rotation_pwm, self.__direct_rotation)
+            command_list += "SL,%d\n" % (GameMotion.SLEEP_TIME * 1000)
 
         # 縦調整動作ありの場合，縦調整をセットする
         if self.__vertical_flag:
@@ -75,8 +78,11 @@ class IntersectionToBlock(GameMotion):
 
         if self.__second_angle != 0:  # 回頭角度が0の場合は回頭のコマンドを生成しない
             # 回頭角度が正の数の場合時計回り，負の数の場合反時計回りで回頭をセットする
+            # 回頭を安定させるために、回頭の前後にスリープを入れる
+            command_list += "SL,%d\n" % (GameMotion.SLEEP_TIME * 1000)
             command_list += "RT,%d,%d,%s\n" % (self.__second_angle,
                                                self.__rotation_pwm, self.__direct_rotation)
+            command_list += "SL,%d\n" % (GameMotion.SLEEP_TIME * 1000)
 
         # 斜め調整動作ありの場合，斜め調整をセットする
         if self.__diagonal_flag:
@@ -100,6 +106,11 @@ class IntersectionToBlock(GameMotion):
         # 動作時間に回頭時間を足す（成功率に変動はなし）
         m_time += self.__first_rotation_time
         m_time += self.__second_rotation_time
+        # 回頭している場合，回頭前後のスリープ時間を足す
+        if self.__first_angle != 0:
+            m_time += GameMotion.SLEEP_TIME * 2
+        if self.__second_angle != 0:
+            m_time += GameMotion.SLEEP_TIME * 2
         # 調整動作ありの場合，調整の動作時間を足す（成功率に変動はなし）
         if self.__vertical_flag:  # 縦調整ありの場合
             m_time += GameMotion.VERTICAL_TIME
