@@ -2,22 +2,17 @@
 
 # 引数チェック
 if [ $# -ne 1 ]; then
-  echo "Please input 1 or 2 robot id."
+  echo "Please input robot ip address."
   exit 1
 fi
 
+cd camera_system
+
 # データ送信先機体を設定
-if [ $1 -eq 1 ]; then
-    SSH_TARGET="katlab@192.168.11.16"
-elif [ $1 -eq 2 ]; then
-    SSH_TARGET="katlab@192.168.11.17"
-else
-    echo "Missing robot id."
-    exit 1
-fi
+SSH_TARGET="katlab@"$1
 
 # 送信データディレクトリ
-DATA_DIRECTORY="transfer_data"
+DATA_DIRECTORY="datafiles"
 
 if [ -d ${DATA_DIRECTORY} ]; then
     # 送信データディレクトリを機体に送信

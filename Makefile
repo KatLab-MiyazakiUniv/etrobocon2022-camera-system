@@ -11,10 +11,10 @@ all: style test
 clean: coverage-clean
 
 run-L:
-	poetry run python camera_system --is-left True
+	poetry run python camera_system --is-left True --robot-ip $(ROBOT_IP)
 
 run-R:
-	poetry run python camera_system --is-left False
+	poetry run python camera_system --is-left False --robot-ip $(ROBOT_IP)
 
 # NOTE: tox.ini ファイルの設定に従って、全てのソースコードの静的解析を実行する
 style:

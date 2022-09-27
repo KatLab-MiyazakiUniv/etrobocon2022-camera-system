@@ -11,25 +11,18 @@ from game_motion import GameMotion
 class ReturnToBlock(GameMotion):
     """設置後復帰(→ブロック置き場)のゲーム動作クラス."""
 
-    def __init__(self, angle: int, adjustment_flag: bool, with_block: bool) -> None:
+    def __init__(self, angle: int, need_adjustment: bool) -> None:
         """ReturnToBlockのコンストラクタ.
 
         Args:
             angle: 方向転換の角度
-            adjustment_flag: 調整動作の有無
-            with_block: ブロックを保持している場合True
-
+            need_adjustment: 調整動作の有無
         """
-        if with_block:  # ブロックを保持している場合
-            self.__rotation_angle = GameMotion.ROTATION_BLOCK_TABLE[abs(angle)]["angle"]
-            self.__rotation_pwm = GameMotion.ROTATION_BLOCK_PWM
-            self.__rotation_time = GameMotion.ROTATION_BLOCK_TABLE[abs(angle)]["time"]
-        else:  # ブロックを保持していない場合
-            self.__rotation_angle = GameMotion.ROTATION_NO_BLOCK_TABLE[abs(angle)]["angle"]
-            self.__rotation_pwm = GameMotion.ROTATION_NO_BLOCK_PWM
-            self.__rotation_time = GameMotion.ROTATION_NO_BLOCK_TABLE[abs(angle)]["time"]
+        self.__rotation_angle = GameMotion.ROTATION_BLOCK_TABLE[abs(angle)]["angle"]
+        self.__rotation_pwm = GameMotion.ROTATION_BLOCK_PWM
+        self.__rotation_time = GameMotion.ROTATION_BLOCK_TABLE[abs(angle)]["time"]
         self.__direct_rotation = "clockwise" if angle > 0 else "anticlockwise"
-        self.__adjustment_flag = adjustment_flag
+        self.__need_adjustment = need_adjustment
 
     def generate_command(self) -> str:
         """設置後復帰(→ブロック置き場)のゲーム動作に必要なコマンドを生成するメソッド.
@@ -45,7 +38,7 @@ class ReturnToBlock(GameMotion):
                                                self.__rotation_pwm, self.__direct_rotation)
 
         # 調整動作ありの場合，縦調整をセットする
-        if self.__adjustment_flag:
+        if self.__need_adjustment:
             command_list += "DS,10,-70\n"
 
         command_list += "DS,100,-40\n"  # ブロック置き場まで後退
@@ -62,7 +55,7 @@ class ReturnToBlock(GameMotion):
         """
         # 調整動作ありの場合，縦調整の動作時間を足す（成功率に変動はなし）
         m_time = self.__rotation_time
-        if self.__adjustment_flag:
+        if self.__need_adjustment:
             m_time += GameMotion.VERTICAL_TIME
 
         return m_time

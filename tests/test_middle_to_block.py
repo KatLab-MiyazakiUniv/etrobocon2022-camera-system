@@ -15,9 +15,9 @@ class TestMiddleToBlock(unittest.TestCase):
     def test_midlle_to_block(self):
         """調整動作ありのテスト."""
         angle = 270
-        adjustment_flag = True
+        need_adjustment = True
         have_block = True  # ブロックを保持している
-        m2b = MiddleToBlock(angle, adjustment_flag, have_block)
+        m2b = MiddleToBlock(angle, need_adjustment, have_block)
         m2b.current_edge = "right"  # 初期エッジを右エッジにする
 
         # コストの期待値を求める
@@ -47,9 +47,9 @@ class TestMiddleToBlock(unittest.TestCase):
     def test_midlle_to_block_no_adjustment(self):
         """調整動作なしのテスト."""
         angle = 315
-        adjustment_flag = False
+        need_adjustment = False
         have_block = False  # ブロックを保持していない
-        m2b = MiddleToBlock(angle, adjustment_flag, have_block)
+        m2b = MiddleToBlock(angle, need_adjustment, have_block)
         m2b.current_edge = "right"  # 初期エッジを右エッジにする
 
         # コストの期待値を求める

@@ -16,7 +16,7 @@ class GamePlanner:
     """ゲーム攻略を計画するクラス."""
 
     @classmethod
-    def plan(cls) -> str:
+    def plan(cls, is_left_course) -> str:
         """ゲーム攻略を計画する.
 
         Returns:
@@ -24,17 +24,35 @@ class GamePlanner:
         """
         # 運搬動作を実現するゲーム動作群のリスト
         game_motions_list = []
-        # ボーナスブロック設置後の走行体を求める
-        # ToDo: ボーナスブロック運搬の調整によって走行体を書き換える必要がある
+        # 各ボーナスブロック運搬・復帰後の走行体
         setted_bonus_robots = {
-            GameAreaInfo.base_color_list[0].value: Robot(Coordinate(4, 4), Direction.E, "left"),
-            GameAreaInfo.base_color_list[1].value: Robot(Coordinate(4, 4), Direction.S, "left"),
-            GameAreaInfo.base_color_list[2].value: Robot(Coordinate(2, 4), Direction.W, "left"),
-            GameAreaInfo.base_color_list[3].value: Robot(Coordinate(4, 2), Direction.N, "left")}
-        robot = setted_bonus_robots[GameAreaInfo.bonus_color.value]
+            "left": {
+                GameAreaInfo.base_color_list[0].value:
+                    Robot(Coordinate(4, 4), Direction.E, "right"),
+                GameAreaInfo.base_color_list[1].value:
+                    Robot(Coordinate(4, 4), Direction.S, "right"),
+                GameAreaInfo.base_color_list[2].value:
+                    Robot(Coordinate(2, 4), Direction.W, "left"),
+                GameAreaInfo.base_color_list[3].value:
+                    Robot(Coordinate(4, 2), Direction.N, "right")},
+            "right": {
+                GameAreaInfo.base_color_list[0].value:
+                    Robot(Coordinate(4, 4), Direction.E, "left"),
+                GameAreaInfo.base_color_list[1].value:
+                    Robot(Coordinate(2, 4), Direction.S, "left"),
+                GameAreaInfo.base_color_list[2].value:
+                    Robot(Coordinate(2, 4), Direction.W, "right"),
+                GameAreaInfo.base_color_list[3].value:
+                    Robot(Coordinate(2, 2), Direction.N, "left")}}
+        # ボーナスブロック設置後の走行体を求める
+        bonus_color = GameAreaInfo.bonus_color.value
+        course_text = "left" if is_left_course else "right"
+        robot = setted_bonus_robots[course_text][bonus_color]
+        # ボーナスブロックを運搬する
+        GameAreaInfo.carry_bonus()
 
-        block_selector = BlockSelector()
         # 全てのカラーブロックについて、運搬動作を決定する
+        block_selector = BlockSelector()
         while GameAreaInfo.get_no_transported_block() != []:
             on_block_node = block_selector.select_block(robot)
             game_motions_list += GameMotionDecider.decide(robot, on_block_node.block_id)
@@ -61,7 +79,6 @@ if __name__ == "__main__":
     ]
     GameAreaInfo.bonus_color = Color.RED
     GameAreaInfo.intersection_list = [Color.RED, Color.BLUE, Color.YELLOW, Color.GREEN]
-    motions = []
     print("block colors", [color.value for color in GameAreaInfo.block_color_list])
     # 運搬動作を決定する
     motion_commands = GamePlanner.plan()
