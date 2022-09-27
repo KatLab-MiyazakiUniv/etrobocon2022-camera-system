@@ -4,6 +4,7 @@
 """
 
 import unittest
+import numpy as np
 import cv2
 import os
 from camera_system.color_changer import ColorChanger
@@ -24,21 +25,13 @@ class TestColorChanger(unittest.TestCase):
         actual_exist = os.path.exists(save_path)  # 画像が生成されているか確認(bool)
         self.assertEqual(expected_exist, actual_exist)
 
-        # calculate_mode_color関数のテスト(正しいカラーIDを返しているか)
+        # search_color関数のテスト
         actual = []
-        actual.append(cc.calculate_mode_color(132, 150, 5, 5))  # ブロック置き場1
-        actual.append(cc.calculate_mode_color(212, 122, 5, 5))  # ブロック置き場2
-        actual.append(cc.calculate_mode_color(273,  92, 5, 5))  # ブロック置き場3
-        actual.append(cc.calculate_mode_color(232, 178, 5, 5))  # ブロック置き場4
-        actual.append(cc.calculate_mode_color(361, 113, 5, 5))  # ブロック置き場5
-        actual.append(cc.calculate_mode_color(349, 210, 5, 5))  # ブロック置き場6
-        actual.append(cc.calculate_mode_color(412, 163, 5, 5))  # ブロック置き場7
-        actual.append(cc.calculate_mode_color(458, 133, 5, 5))  # ブロック置き場8
-        actual.append(cc.calculate_mode_color(413,  87, 5, 5))  # ベースサークル1
-        actual.append(cc.calculate_mode_color(561, 196, 5, 5))  # ベースサークル2
-        actual.append(cc.calculate_mode_color(114, 232, 5, 5))  # ベースサークル3
-        actual.append(cc.calculate_mode_color(121,  96, 5, 5))  # ベースサークル4
-        actual.append(cc.calculate_mode_color(214, 420, 5, 5))  # 端点サークル
-        expected = [4, 2, 3, 3, 4, 2, 1, 1, 3, 1, 4, 2, 3]  # 正解のカラーID
-        for i in range(13):
-            self.assertEqual(expected[i], actual[i])
+        search_area_size = 21
+        actual.append(cc.search_color(422, 387, search_area_size, search_area_size))  # 領域が白のみ
+
+        expected_color_uniqs = np.array([1, 2, 3, 4])  # 正解のカラーID
+        expected_pixel_sum = search_area_size ** 2 // 2  # 正解のカラーID
+
+        self.assertEqual(expected_color_uniqs, actual[0])
+        self.assertEqual(expected_pixel_sum, actual[1])
