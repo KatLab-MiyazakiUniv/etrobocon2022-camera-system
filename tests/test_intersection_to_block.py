@@ -25,6 +25,7 @@ class TestIntersectionToBlock(unittest.TestCase):
 
         # コストの期待値を求める
         motion_time = 0.7840
+        # 2回分の回頭のスリープ時間を足す
         motion_time += GameMotion.ROTATION_BLOCK_TABLE[45]["time"] + GameMotion.SLEEP_TIME * 2
         motion_time += GameMotion.ROTATION_BLOCK_TABLE[45]["time"] + GameMotion.SLEEP_TIME * 2
         motion_time += GameMotion.VERTICAL_TIME
