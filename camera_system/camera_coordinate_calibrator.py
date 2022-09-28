@@ -1,7 +1,7 @@
 """カメラ画像の座標取得するためのモジュール.
 
 カメラ画像を表示し、クリックした座標を保持する
-@author miyashita64 mutotaka0426 kawanoichi
+@author miyashita64 mutotaka0426 kawanoichi Takahiro55555
 @note 参考: https://techacademy.jp/magazine/51035
 @note 参考:
     - [【Python】Tkinterによる画像表示をわかりやすく解説](https://onl.bz/5Bwmt1b)
@@ -65,11 +65,11 @@ class CameraCoordinateCalibrator:
         canvas.create_image(0, 0, image=img_tk, anchor=tk.NW)
 
         # 直前の操作を取り消すためのButtonを定義する
-        reset_previous_operation = tk.Button(self.__window, text="Reset Prev")
+        reset_prev_button = tk.Button(self.__window, text="Reset Prev")
         # コールバック関数を指定する ("<Button-1>"は左クリックボタン)
-        reset_previous_operation.bind("<Button-1>", self.__reset_previous_coordinate)
+        reset_prev_button.bind("<Button-1>", self.__reset_previous_coordinate)
         # 直前の操作を取り消すButtonを配置する
-        reset_previous_operation.place(x=img_width+10, y=80, width=180, height=50)
+        reset_prev_button.place(x=img_width+10, y=80, width=180, height=50)
 
         # OK用のButtonを定義する
         ok_button = tk.Button(self.__window, text="OK")
@@ -139,7 +139,7 @@ class CameraCoordinateCalibrator:
         Args:
             event: リセットボタンのクリックイベント
         """
-        if len(self.__block_point) > 8 and len(self.__base_circle) >= 4 and len(self.__end_point) >= 1:  # noqa
+        if len(self.__block_point) >= 8 and len(self.__base_circle) >= 4 and len(self.__end_point) >= 1:  # noqa
             # ウィンドウを閉じる
             self.__window.destroy()
         else:
