@@ -127,8 +127,7 @@ class CameraCoordinateCalibrator:
             print("[Warning] 取り消すべき操作がありません")
 
     def __remove_tail_message_line(self) -> None:
-        """最終行のメッセージを削除する関数.
-        """
+        """最終行のメッセージを削除する関数."""
         # 末尾の改行文字を除いた改行文字の位置を末尾から検索する
         i = self.__message["text"][:-1].rfind('\n')
         # 最終行のメッセージを削除する
@@ -140,7 +139,7 @@ class CameraCoordinateCalibrator:
         Args:
             event: リセットボタンのクリックイベント
         """
-        if len(self.__block_point) >= 8 and len(self.__base_circle) >= 4 and len(self.__end_point) >= 1:
+        if len(self.__block_point) > 8 and len(self.__base_circle) >= 4 and len(self.__end_point) >= 1:  # noqa
             # ウィンドウを閉じる
             self.__window.destroy()
         else:
