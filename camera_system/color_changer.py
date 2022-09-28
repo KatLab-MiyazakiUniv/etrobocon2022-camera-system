@@ -90,8 +90,7 @@ class ColorChanger:
             search_area_ysize (int): 指定領域のyサイズ
 
         Returns:
-            color_uniqs: 指定領域内に存在する色IDの種類
-            color_pixel_sum: 指定領域内の各色のピクセル数
+            Tuple[int, int]: 指定領域内に存在する色IDの種類, 指定領域内の各色のピクセル数
         """
         # 指定領域を配列として宣言
         search_area = self.color_id_img[

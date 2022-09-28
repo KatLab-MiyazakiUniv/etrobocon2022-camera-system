@@ -51,11 +51,13 @@ class CameraCalibrator:
         self.__color_changer = ColorChanger()
         self.__coord = CameraCoordinateCalibrator(self.__calibration_img)
 
-        # ブロックの色を判定するための配列を宣言(行:各ブロック, 列:各色)
-        self.count_point = np.zeros(
+        # カラーブロック座標ごとの各色の割合(行:各ブロック, 列:各色)
+        self.__color_block_table = np.zeros(
             CameraCalibrator.__COLOR_BLOCK_NUM*CameraCalibrator.__VALIDITY_COLOR_NUM
         ).reshape(CameraCalibrator.__COLOR_BLOCK_NUM, CameraCalibrator.__VALIDITY_COLOR_NUM)
-        self.count_base = np.zeros(
+
+        # ベースブロック座標ごとの各色の割合(行:各ブロック, 列:各色)
+        self.__base_block_table = np.zeros(
             CameraCalibrator.__BASE_BLOCK_NUM*CameraCalibrator.__VALIDITY_COLOR_NUM
         ).reshape(CameraCalibrator.__BASE_BLOCK_NUM, CameraCalibrator.__VALIDITY_COLOR_NUM)
 
@@ -95,26 +97,29 @@ class CameraCalibrator:
                 point[1],
                 CameraCalibrator.__SEARCH_AREA_XSIZE,
                 CameraCalibrator.__SEARCH_AREA_YSIZE)
-            # 色の種類とピクセル数を配列に格納
-            # 第2引数はindexと色IDを合わせるために-1
-            # 第3引数は色を求める際に領域に対する割合で比較できるように各色のピクセル数÷全体のピクセル数
-            np.put(self.count_point[i], color_uniqs-1,
+            """
+            色の種類とピクセル数を配列に格納
+            第2引数はindexと色IDを合わせるために-1
+            第3引数は色を求める際に領域に対する割合で比較できるように各色のピクセル数÷全体のピクセル数
+            """
+            np.put(self.__color_block_table[i], color_uniqs-1,
                    color_pixel_sum/area_pixel_sum)
         # 認識したブロックの数を把握するための配列
         color_count = np.zeros(CameraCalibrator.__VALIDITY_COLOR_NUM)  # (赤、黄、緑、青)
         # 各ブロックの領域に対する色の割合が高い順に色IDを割り振る
-        for i in range(block_color_list.shape[0]):
+        for i in range(CameraCalibrator.__COLOR_BLOCK_NUM):
             # 配列の最大値のインデックスを取得
-            max_index = np.unravel_index(np.argmax(self.count_point), self.count_point.shape)
+            max_index = np.unravel_index(
+                np.argmax(self.__color_block_table), self.__color_block_table.shape)
             # ブロックに対する色IDを格納する
             block_color_list[max_index[0]] = max_index[1]+1  # indexと色IDを合わせるために+1
             # 認識した色をカウント
             color_count[max_index[1]] += 1
             # 2回認識した色を候補から外す(優先順位を小さくする)
             if color_count[max_index[1]] == 2:
-                self.count_point[:, max_index[1]] = -1
+                self.__color_block_table[:, max_index[1]] = -1
             # 色の判別が終わったブロックを候補から外す
-            self.count_point[max_index[0], :] = -1
+            self.__color_block_table[max_index[0], :] = -1
 
         # ベースサークル上のブロックの色IDを求める
         for i, base in enumerate(self.__coord.base_circle):
@@ -125,18 +130,19 @@ class CameraCalibrator:
                 CameraCalibrator.__SEARCH_AREA_XSIZE,
                 CameraCalibrator.__SEARCH_AREA_YSIZE)
             # 色の種類とピクセル数を配列に格納
-            np.put(self.count_base[i], color_uniqs-1,
+            np.put(self.__base_block_table[i], color_uniqs-1,
                    color_pixel_sum/area_pixel_sum)
         # 各ブロックの領域に対する色の割合が高い順に色IDを割り振る
-        for i in range(base_color_list.shape[0]):
+        for i in range(CameraCalibrator.__BASE_BLOCK_NUM):
             # 配列の最大値のインデックスを取得
-            max_index = np.unravel_index(np.argmax(self.count_base), self.count_base.shape)
+            max_index = np.unravel_index(
+                np.argmax(self.__base_block_table), self.__base_block_table.shape)
             # ブロックに対する色IDを格納する
             base_color_list[max_index[0]] = max_index[1]+1  # indexと色IDを合わせるために+1
             # 認識した色を候補から外す
-            self.count_base[:, max_index[1]] = -1
+            self.__base_block_table[:, max_index[1]] = -1
             # 色の判別が終わったブロックを候補から外す
-            self.count_base[max_index[0], :] = -1
+            self.__base_block_table[max_index[0], :] = -1
 
         # ボーナスブロックの色IDを求める
         # ブロック上の領域に存在する色の種類とピクセル数を取得
