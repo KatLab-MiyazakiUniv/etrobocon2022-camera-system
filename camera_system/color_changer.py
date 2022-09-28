@@ -97,11 +97,11 @@ class ColorChanger:
             coord_y-(search_area_ysize//2):coord_y+(search_area_ysize//2)+1,
             coord_x-(search_area_xsize//2):coord_x+(search_area_xsize//2)+1]
         # 配列から黒と白を除去
-        search_area = search_area = search_area[
+        search_area = search_area[
             np.where((search_area != Color.BLACK.value) & (search_area != Color.WHITE.value))]
 
         # もし選択した領域内に白と黒しかなかった場合は、領域内に各色(白黒以外)が同じピクセル数だけ存在することとする
-        if not search_area.shape[0]:
+        if search_area.size == 0:
             color_uniqs = np.array([1, 2, 3, 4])
             color_pixel_sum = np.full(4, search_area_xsize*search_area_ysize//4)
             return color_uniqs.astype(np.int64), color_pixel_sum.astype(np.int64)

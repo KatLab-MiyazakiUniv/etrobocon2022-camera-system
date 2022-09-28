@@ -93,10 +93,10 @@ class CameraCalibrator:
         for i, point in enumerate(self.__coord.block_point):
             # ブロック上の領域に存在する色の種類とピクセル数を取得
             color_uniqs, color_pixel_sum = self.__color_changer.search_color(
-                point[0],
-                point[1],
-                CameraCalibrator.__SEARCH_AREA_XSIZE,
-                CameraCalibrator.__SEARCH_AREA_YSIZE)
+                point[0],  # GUIで取得したx座標
+                point[1],  # GUIで取得したy座標
+                CameraCalibrator.__SEARCH_AREA_XSIZE,  # ブロックの色を求めるための領域xサイズ
+                CameraCalibrator.__SEARCH_AREA_YSIZE)  # ブロックの色を求めるための領域yサイズ
             """
             色の種類とピクセル数を配列に格納
             第2引数はindexと色IDを合わせるために-1
@@ -108,7 +108,7 @@ class CameraCalibrator:
         color_count = np.zeros(CameraCalibrator.__VALIDITY_COLOR_NUM)  # (赤、黄、緑、青)
         # 各ブロックの領域に対する色の割合が高い順に色IDを割り振る
         for i in range(CameraCalibrator.__COLOR_BLOCK_NUM):
-            # 配列の最大値のインデックスを取得
+            # 配列の最大値のインデックス(ブロックのインデックス,　色のインデックス)を取得
             max_index = np.unravel_index(
                 np.argmax(self.__color_block_table), self.__color_block_table.shape)
             # ブロックに対する色IDを格納する
@@ -125,16 +125,16 @@ class CameraCalibrator:
         for i, base in enumerate(self.__coord.base_circle):
             # ブロック上の領域に存在する色の種類とピクセル数を取得
             color_uniqs, color_pixel_sum = self.__color_changer.search_color(
-                base[0],
-                base[1],
-                CameraCalibrator.__SEARCH_AREA_XSIZE,
-                CameraCalibrator.__SEARCH_AREA_YSIZE)
+                base[0],  # GUIで取得したx座標
+                base[1],  # GUIで取得したy座標
+                CameraCalibrator.__SEARCH_AREA_XSIZE,  # ブロックの色を求めるための領域xサイズ
+                CameraCalibrator.__SEARCH_AREA_YSIZE)  # ブロックの色を求めるための領域yサイズ
             # 色の種類とピクセル数を配列に格納
             np.put(self.__base_block_table[i], color_uniqs-1,
                    color_pixel_sum/area_pixel_sum)
         # 各ブロックの領域に対する色の割合が高い順に色IDを割り振る
         for i in range(CameraCalibrator.__BASE_BLOCK_NUM):
-            # 配列の最大値のインデックスを取得
+            # 配列の最大値のインデックス(ブロックのインデックス,　色のインデックス)を取得
             max_index = np.unravel_index(
                 np.argmax(self.__base_block_table), self.__base_block_table.shape)
             # ブロックに対する色IDを格納する
@@ -147,10 +147,10 @@ class CameraCalibrator:
         # ボーナスブロックの色IDを求める
         # ブロック上の領域に存在する色の種類とピクセル数を取得
         color_uniqs, color_pixel_sum = self.__color_changer.search_color(
-            self.__coord.end_point[0][0],
-            self.__coord.end_point[0][1],
-            CameraCalibrator.__SEARCH_AREA_XSIZE,
-            CameraCalibrator.__SEARCH_AREA_YSIZE)
+            self.__coord.end_point[0][0],  # GUIで取得したx座標
+            self.__coord.end_point[0][1],  # GUIで取得したy座標
+            CameraCalibrator.__SEARCH_AREA_XSIZE,  # ブロックの色を求めるための領域xサイズ
+            CameraCalibrator.__SEARCH_AREA_YSIZE)  # ブロックの色を求めるための領域yサイズ
         # ボーナスブロックはピクセル数の多い色にする(1個しかないから)
         bonus_color = color_uniqs[np.argmax(color_pixel_sum)]
 
@@ -191,6 +191,6 @@ if __name__ == "__main__":
     # カメラキャリブレーションを行う
     camera_calibration.start_camera_calibration()
     # ゲームエリア情報作成を行う
-    camera_calibration.make_game_area_info()
+    camera_calibration.make_game_area_info(True)
 
     print("CameraCalibrator 終了")
