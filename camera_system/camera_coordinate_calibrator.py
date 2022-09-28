@@ -137,9 +137,9 @@ class CameraCoordinateCalibrator:
         """OKボタンで画面を閉じるためのコールバック関数.
 
         Args:
-            event: リセットボタンのクリックイベント
+            event: OKボタンのクリックイベント
         """
-        if len(self.__block_point) >= 8 and len(self.__base_circle) >= 4 and len(self.__end_point) >= 1:  # noqa
+        if len(self.__block_point) == 8 and len(self.__base_circle) == 4 and len(self.__end_point) == 1:  # noqa
             # ウィンドウを閉じる
             self.__window.destroy()
         else:
