@@ -82,9 +82,9 @@ class CameraCalibrator:
         self.__color_changer.change_color(game_area_img, color_save_path)
 
         # 色IDを格納する配列を宣言
-        block_color_list = np.zeros(CameraCalibrator.__COLOR_BLOCK_NUM)
-        base_color_list = np.zeros(CameraCalibrator.__BASE_BLOCK_NUM)
-        bonus_color = np.zeros(CameraCalibrator.__BONUS_BLOCK_NUM)
+        block_color_list = [0] * CameraCalibrator.__COLOR_BLOCK_NUM
+        base_color_list = [0] * CameraCalibrator.__BASE_BLOCK_NUM
+        bonus_color = [0] * CameraCalibrator.__BONUS_BLOCK_NUM
 
         # ブロックの色を調べる領域のピクセル数を求める
         area_pixel_sum = CameraCalibrator.__SEARCH_AREA_XSIZE*CameraCalibrator.__SEARCH_AREA_YSIZE
