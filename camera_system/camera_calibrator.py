@@ -21,7 +21,7 @@ class CameraCalibrator:
 
     Attributes:
         SEARCH_AREA_XSIZE (int): ブロックの色を求めるための領域xサイズ(奇数)
-        SEARCH_AREA_YSIZE (int): ブロックの色を求めるための領域xサイズ(奇数)
+        SEARCH_AREA_YSIZE (int): ブロックの色を求めるための領域yサイズ(奇数)
         COLOR_BLOCK_NUM (int): カラーブロックの個数(8個)
         BASE_BLOCK_NUM (int): ベースエリアブロックの個数(4個)
         BONUS_BLOCK_NUM (int): ボーナスブロックの個数(1個)
@@ -37,7 +37,7 @@ class CameraCalibrator:
 
     VALIDITY_COLOR_NUM = 4
 
-    def __init__(self, camera_id: int, cali_img_save_path="cali_course.png") -> None:
+    def __init__(self, camera_id: int, cali_img_save_path: str = "cali_course.png") -> None:
         """CameraCalibrationのコンストラクタ.
 
         Args:
@@ -64,7 +64,8 @@ class CameraCalibrator:
         # GUIから座標取得
         self.__coord.show_window()
 
-    def make_game_area_info(self, is_left_course=True, game_save_path="game_course.png") -> None:
+    def make_game_area_info(self, is_left_course: bool,
+                            game_save_path: str = "game_course.png") -> None:
         """ゲームエリア情報作成を行う関数.
 
         Args:
@@ -84,7 +85,7 @@ class CameraCalibrator:
         bonus_color = np.zeros(CameraCalibrator.BONUS_BLOCK_NUM)
 
         # ブロックの色を調べる領域のピクセル数を求める
-        area_pixel_sum = CameraCalibrator.SEARCH_AREA_XSIZE*CameraCalibrator.SEARCH_AREA_XSIZE
+        area_pixel_sum = CameraCalibrator.SEARCH_AREA_XSIZE*CameraCalibrator.SEARCH_AREA_YSIZE
 
         # ブロック置き場上のカラーブロックの色IDを求める
         for i, point in enumerate(self.__coord.block_point):
