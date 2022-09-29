@@ -11,6 +11,10 @@ from game_area_info import GameAreaInfo
 from client import Client
 from game_planner import GamePlanner
 
+# NOTE: cv2.VideoCaptureの処理時間短縮(import cv2の前に書く必要あり)
+# 参考資料: https://qiita.com/youichi_io/items/b894b85d790720ea2346
+os.environ["OPENCV_VIDEOIO_MSMF_ENABLE_HW_TRANSFORMS"] = "0"
+
 
 class CameraSystem:
     """カメラシステムクラス."""
