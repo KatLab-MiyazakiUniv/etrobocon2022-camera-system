@@ -88,7 +88,7 @@ class IntersectionToBlock(GameMotion):
         if self.__diagonal_flag:
             command_list += "DS,20,70\n"
 
-        command_list += "DS,150,70\n"
+        command_list += "DS,132,70\n"
 
         # エッジ切り替えのコマンドは生成しないが，計算上はエッジをnoneにする
         self.current_edge = "none"
