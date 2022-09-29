@@ -6,6 +6,7 @@
 import cv2
 import numpy as np
 from enum import Enum
+from typing import Tuple
 
 
 class Color(Enum):
@@ -78,43 +79,57 @@ class ColorChanger:
         # 6色画像を保存
         cv2.imwrite(save_path, self.result)
 
-    def calculate_mode_color(self, coord_x: int, coord_y: int,
-                             mode_area_xsize: int, mode_area_ysize: int) -> int:
-        """ブロック周辺の色の最頻値を求める.
+    def search_color(self, coord_x: int, coord_y: int,
+                     search_area_xsize: int, search_area_ysize: int) -> Tuple[int, int]:
+        """指定領域内の色IDと各色のピクセル数を取得する.
 
         Args:
-            coord_x (int): ブロックのx座標
-            coord_y (int): ブロックのy座標
-            mode_area_xsize (int): 最頻値を求める範囲のxサイズ
-            mode_area_ysize (int): 最頻値を求める範囲のyサイズ
+            coord_x (int): 指定領域の中心のx座標
+            coord_y (int): 指定領域の中心のy座標
+            search_area_xsize (int): 指定領域のxサイズ
+            search_area_ysize (int): 指定領域のyサイズ
+
+        Returns:
+            Tuple[int, int]: 指定領域内に存在する色IDの種類, 指定領域内の各色のピクセル数
         """
-        # 座標周辺を取り出す
-        mode_area = self.color_id_img[coord_y-(mode_area_ysize//2):coord_y+(mode_area_ysize//2)+1,
-                                      coord_x-(mode_area_xsize//2):coord_x+(mode_area_xsize//2)+1]
+        # 指定領域を配列として宣言
+        search_area = self.color_id_img[
+            coord_y-(search_area_ysize//2):coord_y+(search_area_ysize//2)+1,
+            coord_x-(search_area_xsize//2):coord_x+(search_area_xsize//2)+1]
         # 配列から黒と白を除去
-        mode_area = mode_area = mode_area[
-            np.where((mode_area != Color.BLACK.value) & (mode_area != Color.WHITE.value))]
+        search_area = search_area[
+            np.where((search_area != Color.BLACK.value) & (search_area != Color.WHITE.value))]
 
-        # もし選択した座標周辺に白と黒しかなかった場合は赤を返す
-        if not mode_area.shape[0]:
-            return Color.RED.value
+        # もし選択した領域内に白と黒しかなかった場合は、領域内に各色(白黒以外)が同じピクセル数だけ存在することとする
+        if search_area.size == 0:
+            color_uniqs = np.array([1, 2, 3, 4])
+            color_pixel_sum = np.full(4, search_area_xsize*search_area_ysize//4)
+            return color_uniqs.astype(np.int64), color_pixel_sum.astype(np.int64)
 
-        # 配列に存在するIDの種類と頻度を求める
-        uniqs, counts = np.unique(mode_area, return_counts=True)
-        # 最頻値が複数の場合小さいほうを返す
-        return int(min(uniqs[counts == np.amax(counts)]))
+        # 配列に存在する色IDの種類とピクセル数を求める
+        color_uniqs, color_pixel_sum = np.unique(search_area, return_counts=True)
+
+        # int型配列に直して返す
+        return color_uniqs.astype(np.int64), color_pixel_sum.astype(np.int64)
 
 
 if __name__ == "__main__":
     read_path = "test_image.png"
     save_path = "color_" + read_path
     game_area_img = cv2.imread(read_path)
+
     # インスタンス化
     color_changer = ColorChanger()
+
     # 6色変換
     color_changer.change_color(game_area_img, save_path)
-    # 最頻値取得　ボーナスブロック(211,432)
-    # mode = color_changer.calculate_mode_color(211, 432, 5, 5)
-    mode = color_changer.calculate_mode_color(0, 0, 5, 5)
-    print("mode", mode)
+
+    # 指定領域内の色IDと各色のピクセル数を取得
+    color_uniqs, color_pixel_sum = color_changer.search_color(520, 145, 21, 21)  # base南(520, 145)
+    print("color_uniqs", color_uniqs)
+    print("color_pixel_sum", color_pixel_sum)
+    color_uniqs, color_pixel_sum = color_changer.search_color(0, 0, 5, 5)  # 白黒のみ検知してしまう場合
+    print("color_uniqs", color_uniqs)
+    print("color_pixel_sum", color_pixel_sum)
+
     print("color_changer 終了")
