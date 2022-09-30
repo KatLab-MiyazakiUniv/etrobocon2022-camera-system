@@ -270,19 +270,19 @@ class OptimalMotionSearcher:
             target_direction = [Direction.N, Direction.S]
             if setted_robot.coord.x == 0:
                 dx = 1
-                setted_robot.direct = Direction.W
+                returned_robot.direct = Direction.W
             else:
                 dx = -1
-                setted_robot.direct = Direction.E
+                returned_robot.direct = Direction.E
         # 南北への設置の場合
         elif setted_robot.coord.y % 6 == 0:
             target_direction = [Direction.E, Direction.W]
             if setted_robot.coord.y == 0:
                 dy = 1
-                setted_robot.direct = Direction.N
+                returned_robot.direct = Direction.N
             else:
                 dy = -1
-                setted_robot.direct = Direction.S
+                returned_robot.direct = Direction.S
         # ゴール座標の値が外周でない場合
         else:
             print("Goal Node does not have coordinate for set block.")

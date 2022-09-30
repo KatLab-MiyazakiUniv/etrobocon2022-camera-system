@@ -39,12 +39,14 @@ class ReturnToBlock(GameMotion):
             command_list += "RT,%d,%d,%s\n" % (self.__rotation_angle,
                                                self.__rotation_pwm, self.__direct_rotation)
             command_list += "SL,%d\n" % (GameMotion.SLEEP_TIME * 1000)
+        command_list += "AR,50,40,アームを上げる処理(設置処理)\n"
 
         # 調整動作ありの場合，縦調整をセットする
         if self.__need_adjustment:
             command_list += "DS,10,-70\n"
 
         command_list += "DS,100,-40\n"  # ブロック置き場まで後退
+        command_list += "AF,50,40,アームを下げる処理\n"
         self.current_edge = "none"  # 計算上のエッジをnoneにする
 
         # 最初の行の末尾に",設置後復帰(→ブロック置き場)"を追加する

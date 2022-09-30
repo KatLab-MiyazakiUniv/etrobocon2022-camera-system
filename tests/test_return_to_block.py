@@ -26,7 +26,9 @@ class TestReturnToBlock(unittest.TestCase):
         self.assertEqual(expected_cost, actual_cost)  # コスト計算のテスト
 
         # 期待するコマンドをセット
-        expected_commands = "DS,100,-40,設置後復帰(→ブロック置き場)\n"
+        expected_commands = "AR,50,40,アームを上げる処理(設置処理),設置後復帰(→ブロック置き場)\n"
+        expected_commands += "DS,100,-40\n"
+        expected_commands += "AF,50,40,アームを下げる処理\n"
 
         actual_commands = r2b.generate_command()  # コマンドを生成する
 
@@ -56,8 +58,10 @@ class TestReturnToBlock(unittest.TestCase):
         expected_commands += "RT,%d,%d,clockwise\n" % (
             GameMotion.ROTATION_BLOCK_TABLE[45]["angle"], GameMotion.ROTATION_BLOCK_PWM)
         expected_commands += "SL,100\n"
+        expected_commands += "AR,50,40,アームを上げる処理(設置処理)\n"
         expected_commands += "DS,10,-70\n"
         expected_commands += "DS,100,-40\n"
+        expected_commands += "AF,50,40,アームを下げる処理\n"
 
         actual_commands = r2b.generate_command()  # コマンドを生成する
 
@@ -86,7 +90,9 @@ class TestReturnToBlock(unittest.TestCase):
         expected_commands += "RT,%d,%d,anticlockwise\n" % (
             GameMotion.ROTATION_BLOCK_TABLE[45]["angle"], GameMotion.ROTATION_BLOCK_PWM)
         expected_commands += "SL,100\n"
+        expected_commands += "AR,50,40,アームを上げる処理(設置処理)\n"
         expected_commands += "DS,100,-40\n"
+        expected_commands += "AF,50,40,アームを下げる処理\n"
 
         actual_commands = r2b.generate_command()  # コマンドを生成する
 

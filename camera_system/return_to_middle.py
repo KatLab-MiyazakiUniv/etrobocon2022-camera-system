@@ -40,12 +40,14 @@ class ReturnToMiddle(GameMotion):
             command_list += "RT,%d,%d,%s\n" % (self.__rotation_angle,
                                                self.__rotation_pwm, self.__direct_rotation)
             command_list += "SL,%d\n" % (GameMotion.SLEEP_TIME * 1000)
+        command_list += "AR,50,40,アームを上げる処理(設置処理)\n"
 
         # 回頭後にエッジが切り替わる場合，エッジ切り替えをセットする
         if (next_edge := self.get_next_edge(self.__angle)) != self.current_edge:
             command_list += "EC,%s\n" % next_edge
             self.current_edge = next_edge  # 現在のエッジを更新する
         command_list += "DS,50,-40\n"  # 黒を認識するための後退
+        command_list += "AF,50,40,アームを下げる処理\n"
         command_list += "DL,50,0,-40,0.1,0.08,0.08\n"  # 中点までライントレース
 
         # 最初の行の末尾に",設置後復帰(→中点)"を追加する
