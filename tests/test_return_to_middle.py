@@ -29,8 +29,10 @@ class TestReturnToMiddle(unittest.TestCase):
         expected_commands += "RT,%d,%d,clockwise\n" % (
             GameMotion.ROTATION_BLOCK_TABLE[45]["angle"], GameMotion.ROTATION_BLOCK_PWM)
         expected_commands += "SL,100\n"
+        expected_commands += "AR,50,40,アームを上げる処理(設置処理)\n"
         expected_commands += "EC,right\n"
         expected_commands += "DS,50,-40\n"
+        expected_commands += "AF,50,40,アームを下げる処理\n"
         expected_commands += "DL,50,0,-40,0.1,0.08,0.08\n"
 
         actual_commands = r2m.generate_command()  # コマンドを生成する
@@ -50,7 +52,9 @@ class TestReturnToMiddle(unittest.TestCase):
         self.assertEqual(expected_cost, actual_cost)  # コスト計算のテスト
 
         # 期待するコマンドをセット
-        expected_commands = "DS,50,-40,設置後復帰(→中点)\n"
+        expected_commands = "AR,50,40,アームを上げる処理(設置処理),設置後復帰(→中点)\n"
+        expected_commands += "DS,50,-40\n"
+        expected_commands += "AF,50,40,アームを下げる処理\n"
         expected_commands += "DL,50,0,-40,0.1,0.08,0.08\n"
 
         actual_commands = r2m.generate_command()  # コマンドを生成する

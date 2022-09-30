@@ -10,10 +10,10 @@ import shutil
 # 参考資料: https://qiita.com/youichi_io/items/b894b85d790720ea2346
 os.environ["OPENCV_VIDEOIO_MSMF_ENABLE_HW_TRANSFORMS"] = "0"
 
-from camera_calibrator import CameraCalibrator
-from game_area_info import GameAreaInfo
-from client import Client
-from game_planner import GamePlanner
+from camera_calibrator import CameraCalibrator  # noqa
+from game_area_info import GameAreaInfo  # noqa
+from client import Client  # noqa
+from game_planner import GamePlanner  # noqa
 
 
 class CameraSystem:
