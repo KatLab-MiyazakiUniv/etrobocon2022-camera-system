@@ -11,6 +11,8 @@ from game_motion import GameMotion
 class ReturnToMiddle(GameMotion):
     """設置後復帰(→中点)のゲーム動作クラス."""
 
+    CORRECTION_TARGET_ANGLE = 0
+
     def __init__(self, angle: int) -> None:
         """ReturnToMiddleのコンストラクタ.
 
@@ -23,6 +25,7 @@ class ReturnToMiddle(GameMotion):
         self.__rotation_angle = GameMotion.ROTATION_BLOCK_TABLE[abs(angle)]["angle"]
         self.__rotation_pwm = GameMotion.ROTATION_BLOCK_PWM
         self.__rotation_time = GameMotion.ROTATION_BLOCK_TABLE[abs(angle)]["time"]
+        self.__correction_pwm = GameMotion.CORRECTION_BLOCK_PWM
         self.__direct_rotation = "clockwise" if angle > 0 else "anticlockwise"
 
     def generate_command(self) -> str:
@@ -33,13 +36,17 @@ class ReturnToMiddle(GameMotion):
         """
         command_list = ""  # コマンドのリストを格納する文字列
 
+        command_list += "SL,%d\n" % (GameMotion.SLEEP_TIME * 1000)
         if self.__angle != 0:  # 回頭角度が0の場合は回頭のコマンドを生成しない
             # 回頭角度が正の数の場合時計回り，負の数の場合反時計回りで回頭をセットする
             # 回頭を安定させるために、回頭の前後にスリープを入れる
-            command_list += "SL,%d\n" % (GameMotion.SLEEP_TIME * 1000)
             command_list += "RT,%d,%d,%s\n" % (self.__rotation_angle,
                                                self.__rotation_pwm, self.__direct_rotation)
             command_list += "SL,%d\n" % (GameMotion.SLEEP_TIME * 1000)
+        # 角度を補正する
+        command_list += "XR,%d,%d\n" % (self.CORRECTION_TARGET_ANGLE, self.__correction_pwm)
+        command_list += "SL,%d\n" % (GameMotion.SLEEP_TIME * 1000)
+
         command_list += "AR,50,40,アームを上げる処理(設置処理)\n"
 
         # 回頭後にエッジが切り替わる場合，エッジ切り替えをセットする
