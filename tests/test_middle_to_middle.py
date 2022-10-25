@@ -36,10 +36,10 @@ class TestMiddleToMiddle(unittest.TestCase):
         expected_commands += "RT,%d,%d,clockwise\n" % (
             GameMotion.ROTATION_BLOCK_TABLE[45]["angle"], GameMotion.ROTATION_BLOCK_PWM)
         expected_commands += "SL,100\n"
-        expected_commands += "DS,30,70\n"
+        expected_commands += "DS,17,70\n"
         expected_commands += "CS,BLACK,70\n"
-        expected_commands += "DS,25,70\n"
-        expected_commands += "DS,20,70\n"
+        expected_commands += "DS,14,70\n"
+        expected_commands += "DS,13,70\n"
 
         actual_commands = m2m.generate_command()  # コマンドを生成する
 

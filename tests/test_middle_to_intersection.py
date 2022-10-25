@@ -37,7 +37,7 @@ class TestMiddleToIntersection(unittest.TestCase):
         expected_commands += "SL,100\n"
         expected_commands += "EC,right\n"
         expected_commands += "CL,BLUE,0,60,0.1,0.08,0.08\n"
-        expected_commands += "DS,20,60\n"
+        expected_commands += "DS,13,70\n"
 
         actual_commands = m2i.generate_command()  # コマンドを生成する
 
@@ -66,7 +66,7 @@ class TestMiddleToIntersection(unittest.TestCase):
             GameMotion.ROTATION_BLOCK_TABLE[270]["angle"], GameMotion.ROTATION_BLOCK_PWM)
         expected_commands += "SL,100\n"
         expected_commands += "CL,GREEN,0,60,0.1,0.08,0.08\n"
-        expected_commands += "DS,20,60\n"
+        expected_commands += "DS,13,70\n"
 
         actual_commands = m2i.generate_command()  # コマンドを生成する
 
@@ -95,7 +95,7 @@ class TestMiddleToIntersection(unittest.TestCase):
             GameMotion.ROTATION_BLOCK_TABLE[90]["angle"], GameMotion.ROTATION_BLOCK_PWM)
         expected_commands += "SL,100\n"
         expected_commands += "CL,YELLOW,0,60,0.1,0.08,0.08\n"
-        expected_commands += "DS,20,60\n"
+        expected_commands += "DS,13,70\n"
 
         actual_commands = m2i.generate_command()  # コマンドを生成する
 
