@@ -54,7 +54,7 @@ class MiddleToBlock(GameMotion):
         if self.__need_adjustment:
             command_list += "DS,10,70\n"
 
-        command_list += "DS,71,70\n"  # ブロック置き場まで直進
+        command_list += "DS,75,70\n"  # ブロック置き場まで直進
 
         # エッジ切り替えのコマンドは生成しないが，計算上はエッジをnoneにする
         self.current_edge = "none"

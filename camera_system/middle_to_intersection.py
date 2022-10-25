@@ -39,7 +39,7 @@ class MiddleToIntersection(GameMotion):
         self.__direct_rotation = "clockwise" if angle > 0 else "anticlockwise"
         self.__target_color = target_color
         self.__motion_time = 0.5560
-        self.__success_rate = 0.8
+        self.__success_rate = 1.0
 
     def generate_command(self) -> str:
         """中点→交点のゲーム動作に必要なコマンドを生成するメソッド.
@@ -63,7 +63,7 @@ class MiddleToIntersection(GameMotion):
             self.current_edge = next_edge  # 現在のエッジを更新する
 
         command_list += "CL,%s,0,60,0.1,0.08,0.08\n" % self.__target_color.name  # 指定色のノードまでライントレース
-        command_list += "DS,20,60\n"  # 交差点まで直進
+        command_list += "DS,13,70\n"  # 交差点まで直進
 
         return command_list.replace("\n", ",中点→交点\n", 1)  # 最初の行の末尾に",中点→交点"を追加する
 
