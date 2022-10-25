@@ -71,6 +71,9 @@ class GameMotion(metaclass=ABCMeta):
     DIAGONAL_TIME = 0.2620
     SLEEP_TIME = 0.1
 
+    CORRECTION_BLOCK_PWM = 60       # ブロック保持時の回頭補正に用いるPWM値 TODO: 妥当なPWM値に更新する
+    CORRECTION_NO_BLOCK_PWM = 60    # ブロック未保持時の回頭補正に用いるPWM値 TODO: 妥当なPWM値に更新する
+
     def __eq__(self, other) -> bool:
         """オブジェクトの等価比較をする.
 
