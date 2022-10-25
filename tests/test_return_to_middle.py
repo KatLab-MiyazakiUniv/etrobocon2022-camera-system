@@ -31,7 +31,7 @@ class TestReturnToMiddle(unittest.TestCase):
         expected_commands += "SL,100\n"
         expected_commands += "AR,50,40,アームを上げる処理(設置処理)\n"
         expected_commands += "EC,right\n"
-        expected_commands += "DS,50,-40\n"
+        expected_commands += "DS,29,-70\n"
         expected_commands += "AF,50,40,アームを下げる処理\n"
         expected_commands += "DL,50,0,-40,0.1,0.08,0.08\n"
 
@@ -53,7 +53,7 @@ class TestReturnToMiddle(unittest.TestCase):
 
         # 期待するコマンドをセット
         expected_commands = "AR,50,40,アームを上げる処理(設置処理),設置後復帰(→中点)\n"
-        expected_commands += "DS,50,-40\n"
+        expected_commands += "DS,29,-70\n"
         expected_commands += "AF,50,40,アームを下げる処理\n"
         expected_commands += "DL,50,0,-40,0.1,0.08,0.08\n"
 

@@ -104,7 +104,7 @@ class TestBlockToIntersection(unittest.TestCase):
             GameMotion.ROTATION_BLOCK_TABLE[270]["angle"], GameMotion.ROTATION_BLOCK_PWM)
         expected_commands += "SL,100\n"
         expected_commands += "CS,YELLOW,70\n"
-        expected_commands += "DS,42,60\n"
+        expected_commands += "DS,42,70\n"
 
         actual_commands = b2i.generate_command()  # コマンドを生成する
 

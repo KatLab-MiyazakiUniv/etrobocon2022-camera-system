@@ -46,7 +46,7 @@ class TestIntersectionToBlock(unittest.TestCase):
         expected_commands += "RT,%d,%d,anticlockwise\n" % (
             GameMotion.ROTATION_BLOCK_TABLE[45]["angle"], GameMotion.ROTATION_BLOCK_PWM)
         expected_commands += "SL,100\n"
-        expected_commands += "DS,132,70\n"
+        expected_commands += "DS,142,70\n"
 
         actual_commands = i2b.generate_command()  # コマンドを生成する
 
