@@ -46,7 +46,7 @@ class ReturnToMiddle(GameMotion):
         if (next_edge := self.get_next_edge(self.__angle)) != self.current_edge:
             command_list += "EC,%s\n" % next_edge
             self.current_edge = next_edge  # 現在のエッジを更新する
-        command_list += "DS,50,-40\n"  # 黒を認識するための後退
+        command_list += "DS,29,-70\n"  # 黒を認識するための後退
         command_list += "AF,50,40,アームを下げる処理\n"
         command_list += "DL,50,0,-40,0.1,0.08,0.08\n"  # 中点までライントレース
 

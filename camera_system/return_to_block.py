@@ -45,7 +45,7 @@ class ReturnToBlock(GameMotion):
         if self.__need_adjustment:
             command_list += "DS,10,-70\n"
 
-        command_list += "DS,100,-40\n"  # ブロック置き場まで後退
+        command_list += "DS,75,-70\n"  # ブロック置き場まで後退
         command_list += "AF,50,40,アームを下げる処理\n"
         self.current_edge = "none"  # 計算上のエッジをnoneにする
 

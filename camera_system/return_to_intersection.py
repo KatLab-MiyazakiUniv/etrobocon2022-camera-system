@@ -53,10 +53,10 @@ class ReturnToIntersection(GameMotion):
             command_list += "EC,%s\n" % next_edge
             self.current_edge = next_edge  # 現在のエッジを更新する
 
-        command_list += "DS,70,-40\n"  # 黒を認識するための後退
+        command_list += "DS,70,-70\n"  # 黒を認識するための後退
         command_list += "AF,50,40,アームを下げる処理\n"
         command_list += "CL,%s,0,-40,0.1,0.08,0.08\n" % self.__target_color.name  # 交点までライントレース
-        command_list += "DS,15,60\n"  # 走行体が交差点に乗るように調整
+        command_list += "DS,15,70\n"  # 走行体が交差点に乗るように調整
 
         return command_list.replace("\n", ",設置後復帰(→交点)\n", 1)  # 最初の行の末尾に",設置後復帰(→交点)"を追加する
 

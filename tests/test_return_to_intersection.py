@@ -33,10 +33,10 @@ class TestReturnToIntersection(unittest.TestCase):
         expected_commands += "SL,100\n"
         expected_commands += "AR,50,40,アームを上げる処理(設置処理)\n"
         expected_commands += "EC,right\n"
-        expected_commands += "DS,70,-40\n"
+        expected_commands += "DS,70,-70\n"
         expected_commands += "AF,50,40,アームを下げる処理\n"
         expected_commands += "CL,GREEN,0,-40,0.1,0.08,0.08\n"
-        expected_commands += "DS,15,60\n"
+        expected_commands += "DS,15,70\n"
 
         actual_commands = r2i.generate_command()  # コマンドを生成する
 
@@ -57,10 +57,10 @@ class TestReturnToIntersection(unittest.TestCase):
 
         # 期待するコマンドをセット
         expected_commands = "AR,50,40,アームを上げる処理(設置処理),設置後復帰(→交点)\n"
-        expected_commands += "DS,70,-40\n"
+        expected_commands += "DS,70,-70\n"
         expected_commands += "AF,50,40,アームを下げる処理\n"
         expected_commands += "CL,RED,0,-40,0.1,0.08,0.08\n"
-        expected_commands += "DS,15,60\n"
+        expected_commands += "DS,15,70\n"
 
         actual_commands = r2i.generate_command()  # コマンドを生成する
 

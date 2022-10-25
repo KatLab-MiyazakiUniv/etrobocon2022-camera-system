@@ -24,7 +24,7 @@ class TestMiddleToMiddle(unittest.TestCase):
         motion_time = 1.149 + \
             GameMotion.ROTATION_BLOCK_TABLE[45]["time"] + \
             GameMotion.DIAGONAL_TIME + GameMotion.SLEEP_TIME * 2
-        success_rate = 0.5
+        success_rate = 1.0
         expected_cost = motion_time*success_rate+GameMotion.MAX_TIME*(1-success_rate)
 
         actual_cost = m2m.get_cost()  # 実際のコスト
@@ -36,10 +36,10 @@ class TestMiddleToMiddle(unittest.TestCase):
         expected_commands += "RT,%d,%d,clockwise\n" % (
             GameMotion.ROTATION_BLOCK_TABLE[45]["angle"], GameMotion.ROTATION_BLOCK_PWM)
         expected_commands += "SL,100\n"
-        expected_commands += "DS,30,70\n"
+        expected_commands += "DS,17,70\n"
         expected_commands += "CS,BLACK,70\n"
-        expected_commands += "DS,25,70\n"
-        expected_commands += "DS,20,70\n"
+        expected_commands += "DS,14,70\n"
+        expected_commands += "DS,13,70\n"
 
         actual_commands = m2m.generate_command()  # コマンドを生成する
 
@@ -56,7 +56,7 @@ class TestMiddleToMiddle(unittest.TestCase):
         # コストの期待値を求める
         motion_time = 1.149 + \
             GameMotion.ROTATION_NO_BLOCK_TABLE[90]["time"] + GameMotion.SLEEP_TIME * 2
-        success_rate = 0.5
+        success_rate = 1.0
         expected_cost = motion_time*success_rate+GameMotion.MAX_TIME*(1-success_rate)
 
         actual_cost = m2m.get_cost()  # 実際のコスト
@@ -69,9 +69,9 @@ class TestMiddleToMiddle(unittest.TestCase):
             GameMotion.ROTATION_NO_BLOCK_TABLE[90]["angle"], GameMotion.ROTATION_BLOCK_PWM)
         expected_commands += "SL,100\n"
         expected_commands += "EC,right\n"
-        expected_commands += "DS,30,70\n"
+        expected_commands += "DS,17,70\n"
         expected_commands += "CS,BLACK,70\n"
-        expected_commands += "DS,25,70\n"
+        expected_commands += "DS,14,70\n"
 
         actual_commands = m2m.generate_command()  # コマンドを生成する
 
