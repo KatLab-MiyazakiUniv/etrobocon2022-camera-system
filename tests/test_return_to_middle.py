@@ -60,3 +60,4 @@ class TestReturnToMiddle(unittest.TestCase):
         actual_commands = r2m.generate_command()  # コマンドを生成する
 
         self.assertEqual(expected_commands, actual_commands)  # コマンド生成のテスト
+        
