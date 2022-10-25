@@ -11,15 +11,13 @@ from game_motion import GameMotion
 class BlockToMiddle(GameMotion):
     """ブロック置き場→中点のゲーム動作クラス."""
 
-    CORRECTION_TARGET_ANGLE = 90
-
-    def __init__(self, angle: int, with_block: bool) -> None:
+    def __init__(self, angle: int, with_block: bool, can_correction: bool) -> None:
         """BlockToMiddleのコンストラクタ.
 
         Args:
             angle: 方向転換の角度
             with_block: ブロックを保持している場合True
-
+            can_correction: 角度補正を行う場合True
         """
         if with_block:  # ブロックを保持している場合
             self.__rotation_angle = GameMotion.ROTATION_BLOCK_TABLE[abs(angle)]["angle"]
@@ -32,8 +30,10 @@ class BlockToMiddle(GameMotion):
             self.__rotation_time = GameMotion.ROTATION_NO_BLOCK_TABLE[abs(angle)]["time"]
             self.__correction_pwm = GameMotion.CORRECTION_NO_BLOCK_PWM
         self.__direct_rotation = "clockwise" if angle > 0 else "anticlockwise"
+        self.__can_correction = can_correction
         self.__motion_time = 0.8094
         self.__success_rate = 0.9
+        self.__correction_target_angle = 90
 
     def generate_command(self) -> str:
         """ブロック置き場→中点のゲーム動作に必要なコマンドを生成するメソッド.
@@ -43,15 +43,17 @@ class BlockToMiddle(GameMotion):
         """
         command_list = ""  # コマンドのリストを格納する文字列
 
-        command_list += "SL,%d\n" % (GameMotion.SLEEP_TIME * 1000)
+        # 回頭を安定させるために、回頭前にスリープを入れる
+        if self.__can_correction or self.__rotation_angle != 0:
+            command_list += "SL,%d\n" % (GameMotion.SLEEP_TIME * 1000)
         if self.__rotation_angle != 0:  # 回頭角度が0の場合は回頭のコマンドを生成しない
-            # 回頭を安定させるために、回頭の前後にスリープを入れる
+            # 回頭角度が正の数の場合時計回り，負の数の場合反時計回りで回頭をセットする
             command_list += "RT,%d,%d,%s\n" % (self.__rotation_angle,
                                                self.__rotation_pwm, self.__direct_rotation)
             command_list += "SL,%d\n" % (GameMotion.SLEEP_TIME * 1000)
-        # 角度を補正する
-        command_list += "XR,%d,%d\n" % (self.CORRECTION_TARGET_ANGLE, self.__correction_pwm)
-        command_list += "SL,%d\n" % (GameMotion.SLEEP_TIME * 1000)
+        if self.__can_correction:   # 直線を認識できる座標と方向であれば角度を補正する
+            command_list += "XR,%d,%d\n" % (self.__correction_target_angle, self.__correction_pwm)
+            command_list += "SL,%d\n" % (GameMotion.SLEEP_TIME * 1000)
 
         command_list += "CS,BLACK,70\n"  # エッジを認識するまで直進
         command_list += "DS,10,70\n"  # 走行体がエッジに乗るまで直進

@@ -1,10 +1,11 @@
 """動作変換モジュール.
 
 現在の走行体と次の走行体からゲーム動作を生成する
-@author mutotaka0426
+@author mutotaka0426 miyashita64
 @note 調整動作の有無の判定については https://qr.paps.jp/RFEkV を参照
 """
 
+from statistics import correlation
 from robot import Robot, Direction
 from coordinate import Coordinate
 from game_area_info import GameAreaInfo
@@ -54,6 +55,9 @@ class GameMotionConverter:
         else:
             next_robot.edge = self.__get_next_edge(angle, current_robot.edge)
 
+        # 方向転換後に角度補正が可能かを判定する
+        can_correction = self.__can_correction(current_robot.coord, next_robot.direct)
+
         # ゲーム動作を生成する
         if current_node_type == NodeType.BLOCK:  # 現在の地点がブロック置き場の場合
             if next_node_type == NodeType.INTERSECTION:  # 次の地点が交点の場合
@@ -62,10 +66,10 @@ class GameMotionConverter:
                 conv_y = (next_robot.coord.y // 2) // 2
                 target_color = GameAreaInfo.intersection_list[conv_x+conv_y*2]  # 交点の色をセットする
 
-                game_motion = BlockToIntersection(angle, target_color, with_block)
+                game_motion = BlockToIntersection(angle, target_color, with_block, can_correction)
 
             elif next_node_type == NodeType.MIDDLE:  # 次の地点が中点の場合
-                game_motion = BlockToMiddle(angle, with_block)
+                game_motion = BlockToMiddle(angle, with_block, can_correction)
 
         elif current_node_type == NodeType.INTERSECTION:  # 現在の地点が交点の場合
             if next_node_type == NodeType.BLOCK:  # 次の地点がブロック置き場の場合
@@ -85,6 +89,25 @@ class GameMotionConverter:
                                            and (clockwise_angle == 225))
                 vertical_flag = True if any(vertical_conditions) else False  # いずれかの条件を満たしたとき縦調整有
 
+                # 縦調整前に角度補正が可能かを判定する
+                in_adjustment_direct = current_robot.direct  # エッジの交差点に乗るための方向転換時の走行体の向き
+                if vertical_flag:
+                    current_direct_num = current_robot.direct.value
+                    next_direct_num = next_robot.direct.value
+                    # 方位の値の差を方位の範囲(0~7)に正規化（=next_directを0とした場合のcurent_directの値）
+                    sub_direct_num = (current_direct_num - next_direct_num +
+                                      len(Direction)) % len(Direction)
+                    if sub_direct_num == 3 and current_robot.edge == "left":
+                        in_adjustment_direct = Direction((next_direct_num + 3) % len(Direction))
+                    elif sub_direct_num == 5 and current_robot.edge == "right":
+                        in_adjustment_direct = Direction((next_direct_num + 5) % len(Direction))
+                    elif 1 <= sub_direct_num <= 3:
+                        in_adjustment_direct = Direction((current_direct_num + 1) % len(Direction))
+                    elif 6 <= sub_direct_num <= 7:
+                        in_adjustment_direct = Direction((current_direct_num + 7) % len(Direction))
+                can_adjust_correction = self.__can_correction(
+                    current_robot.coord, in_adjustment_direct)
+
                 # 斜め調整動作の有無を判定
                 diagonal_conditions = []  # 斜め調整の有無を判定する条件のリスト
                 diagonal_conditions.append(clockwise_angle == 0)
@@ -94,7 +117,8 @@ class GameMotionConverter:
                                            and (clockwise_angle == 315))
                 diagonal_flag = True if any(diagonal_conditions) else False  # いずれかの条件を満たしたとき斜め調整有
 
-                game_motion = IntersectionToBlock(angle, vertical_flag, diagonal_flag, with_block)
+                game_motion = IntersectionToBlock(angle, vertical_flag, diagonal_flag, with_block,
+                                                  can_adjust_correction, can_correction)
 
             elif next_node_type == NodeType.MIDDLE:  # 次の地点が中点の場合
                 clockwise_angle = angle % 360  # 時計回りの場合の角度に直す
@@ -108,7 +132,8 @@ class GameMotionConverter:
                                          and (clockwise_angle == 270))
                 need_adjustment = True if any(adjust_conditions) else False  # いずれかの条件を満たしたとき調整有
 
-                game_motion = IntersectionToMiddle(angle, need_adjustment, with_block)
+                game_motion = IntersectionToMiddle(
+                    angle, need_adjustment, with_block, can_correction)
 
         elif current_node_type == NodeType.MIDDLE:  # 現在の地点が中点の場合
             if next_node_type == NodeType.BLOCK:  # 次の地点がブラック置き場の場合
@@ -122,7 +147,7 @@ class GameMotionConverter:
                                          and (225 <= clockwise_angle <= 315))
                 need_adjustment = True if any(adjust_conditions) else False  # いずれかの条件を満たしたとき調整有
 
-                game_motion = MiddleToBlock(angle, need_adjustment, with_block)
+                game_motion = MiddleToBlock(angle, need_adjustment, with_block, can_correction)
 
             elif next_node_type == NodeType.INTERSECTION:  # 次の地点が交点の場合
                 # 交点座標をintersection_listの座標(2*2)に直す
@@ -130,7 +155,7 @@ class GameMotionConverter:
                 conv_y = (next_robot.coord.y // 2) // 2
                 target_color = GameAreaInfo.intersection_list[conv_x+conv_y*2]  # 交点の色をセットする
 
-                game_motion = MiddleToIntersection(angle, target_color, with_block)
+                game_motion = MiddleToIntersection(angle, target_color, with_block, can_correction)
 
             elif next_node_type == NodeType.MIDDLE:  # 次の地点が中点の場合
                 # 調整動作の有無を調べる
@@ -149,7 +174,7 @@ class GameMotionConverter:
                                              and next_robot.direct in [Direction.NW, Direction.SE])
                 need_adjustment = True if any(adjust_conditions) else False  # いずれかの条件を満たしたとき調整有
 
-                game_motion = MiddleToMiddle(angle, need_adjustment, with_block)
+                game_motion = MiddleToMiddle(angle, need_adjustment, with_block, can_correction)
 
         return game_motion  # ゲーム動作を返す
 
@@ -165,8 +190,7 @@ class GameMotionConverter:
         """
         game_motion = None  # 戻り値となるゲーム動作
 
-        # 現在の走行体と次の走行体のノードタイプを求める
-        current_node_type = self.__convert_to_node_type(current_robot.coord)
+        # 次の走行体のノードタイプを求める
         next_node_type = self.__convert_to_node_type(next_robot.coord)
 
         # 回頭角度を求める
@@ -285,3 +309,29 @@ class GameMotionConverter:
                 next_edge = "left"  # 左側に回頭する場合エッジを左にする
 
         return next_edge
+
+    def __can_correction(self, coord: Coordinate, direct: Direction) -> bool:
+        """指定座標で指定方向を向く走行体が角度補正が可能か判定する.
+
+        Args:
+            coord: 走行体の座標
+            direct: 走行体の向き
+
+        Returns:
+            bool: 走行体が角度補正可能かどうか(True: 可能/False: 不可能)
+        """
+        north_directs = [Direction.N, Direction.NE, Direction.NW]
+        east_directs = [Direction.E, Direction.NE, Direction.SE]
+        south_directs = [Direction.S, Direction.SE, Direction.SW]
+        west_directs = [Direction.W, Direction.NW, Direction.SW]
+
+        # 外周から距離1以下の座標で内側を向いていると直線が認識できない場合があるため、補正不可能とする
+        if coord.x <= 1 and direct in east_directs:
+            return False
+        if coord.x >= 5 and direct in west_directs:
+            return False
+        if coord.y <= 1 and direct in south_directs:
+            return False
+        if coord.y >= 5 and direct in north_directs:
+            return False
+        return True

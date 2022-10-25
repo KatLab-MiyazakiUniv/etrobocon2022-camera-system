@@ -12,16 +12,15 @@ from color_changer import Color
 class MiddleToIntersection(GameMotion):
     """中点→交点のゲーム動作クラス."""
 
-    CORRECTION_TARGET_ANGLE = 0
-
-    def __init__(self, angle: int, target_color: Color, with_block: bool) -> None:
+    def __init__(self, angle: int, target_color: Color,
+                 with_block: bool, can_correction: bool) -> None:
         """MiddleToIntersectionのコンストラクタ.
 
         Args:
             angle: 方向転換の角度
             target_color: 目標となる交点の色
             with_block: ブロックを保持している場合True
-
+            can_correction: 角度補正を行う場合True
         """
         expected_color = [Color.BLUE, Color.GREEN, Color.YELLOW, Color.RED]
         # 交点の色以外を指定された場合エラーを出す
@@ -42,8 +41,10 @@ class MiddleToIntersection(GameMotion):
             self.__correction_pwm = GameMotion.CORRECTION_NO_BLOCK_PWM
         self.__direct_rotation = "clockwise" if angle > 0 else "anticlockwise"
         self.__target_color = target_color
+        self.__can_correction = can_correction
         self.__motion_time = 0.5560
         self.__success_rate = 0.8
+        self.__correction_target_angle = 0
 
     def generate_command(self) -> str:
         """中点→交点のゲーム動作に必要なコマンドを生成するメソッド.
@@ -53,16 +54,18 @@ class MiddleToIntersection(GameMotion):
         """
         command_list = ""  # コマンドのリストを格納する文字列
 
-        command_list += "SL,%d\n" % (GameMotion.SLEEP_TIME * 1000)
+        # 回頭を安定させるために、回頭前にスリープを入れる
+        if self.__can_correction or self.__rotation_angle != 0:
+            command_list += "SL,%d\n" % (GameMotion.SLEEP_TIME * 1000)
         if self.__angle != 0:  # 回頭角度が0の場合は回頭のコマンドを生成しない
             # 回頭角度が正の数の場合時計回り，負の数の場合反時計回りで回頭をセットする
             # 回頭を安定させるために、回頭の前後にスリープを入れる
             command_list += "RT,%d,%d,%s\n" % (self.__rotation_angle,
                                                self.__rotation_pwm, self.__direct_rotation)
             command_list += "SL,%d\n" % (GameMotion.SLEEP_TIME * 1000)
-        # 角度を補正する
-        command_list += "XR,%d,%d\n" % (self.CORRECTION_TARGET_ANGLE, self.__correction_pwm)
-        command_list += "SL,%d\n" % (GameMotion.SLEEP_TIME * 1000)
+        if self.__can_correction:   # 直線を認識できる座標と方向であれば角度を補正する
+            command_list += "XR,%d,%d\n" % (self.__correction_target_angle, self.__correction_pwm)
+            command_list += "SL,%d\n" % (GameMotion.SLEEP_TIME * 1000)
 
         # 回頭後にエッジが切り替わる場合，エッジ切り替えをセットする
         if (next_edge := self.get_next_edge(self.__angle)) != self.current_edge:

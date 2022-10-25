@@ -11,10 +11,8 @@ from game_motion import GameMotion
 class IntersectionToBlock(GameMotion):
     """交点→ブロック置き場のゲーム動作クラス."""
 
-    CORRECTION_TARGET_ANGLE = 45
-
     def __init__(self, angle: int, vertical_flag: bool, diagonal_flag: bool,
-                 with_block: bool) -> None:
+                 with_block: bool, can_first_correction: bool, can_second_correction: bool) -> None:
         """IntersectionToBlockのコンストラクタ.
 
         Args:
@@ -22,7 +20,8 @@ class IntersectionToBlock(GameMotion):
             vertical_flag: 縦調整動作の有無
             diagonal_flag: 斜め調整動作の有無
             with_block: ブロックを保持している場合True
-
+            can_first_correction: 1回目の角度補正を行う場合True
+            can_second_correction: 2回目の角度補正を行う場合True
         """
         # 縦調整と斜め調整を両方実行することはない
         if vertical_flag and diagonal_flag:
@@ -57,8 +56,12 @@ class IntersectionToBlock(GameMotion):
         self.__direct_rotation = "clockwise" if angle > 0 else "anticlockwise"
         self.__vertical_flag = vertical_flag
         self.__diagonal_flag = diagonal_flag
+        self.__can_first_correction = can_first_correction
+        self.__can_second_correction = can_second_correction
         self.__motion_time = 0.7840
         self.__success_rate = 1.0
+        self.__correction_first_target_angle = 0
+        self.__correction_second_target_angle = 45
 
     def generate_command(self) -> str:
         """交点→ブロック置き場のゲーム動作に必要なコマンドを生成するメソッド.
@@ -68,31 +71,35 @@ class IntersectionToBlock(GameMotion):
         """
         command_list = ""  # コマンドのリストを格納する文字列
 
-        command_list += "SL,%d\n" % (GameMotion.SLEEP_TIME * 1000)
+        # 回頭を安定させるために、回頭前にスリープを入れる
+        if self.__first_angle != 0 or self.__can_first_correction:
+            command_list += "SL,%d\n" % (GameMotion.SLEEP_TIME * 1000)
         if self.__first_angle != 0:  # 回頭角度が0の場合は回頭のコマンドを生成しない
             # 回頭角度が正の数の場合時計回り，負の数の場合反時計回りで回頭をセットする
-            # 回頭を安定させるために、回頭の前後にスリープを入れる
             command_list += "RT,%d,%d,%s\n" % (self.__first_angle,
                                                self.__rotation_pwm, self.__direct_rotation)
             command_list += "SL,%d\n" % (GameMotion.SLEEP_TIME * 1000)
-            # 角度を補正する
-            command_list += "XR,%d,%d\n" % (self.CORRECTION_TARGET_ANGLE, self.__correction_pwm)
+        if self.__can_first_correction:   # 直線を認識できる座標と方向であれば角度を補正する
+            command_list += "XR,%d,%d\n" % (self.__correction_first_target_angle,
+                                            self.__correction_pwm)
             command_list += "SL,%d\n" % (GameMotion.SLEEP_TIME * 1000)
 
         # 縦調整動作ありの場合，縦調整をセットする
         if self.__vertical_flag:
             command_list += "DS,10,70\n"
 
+        # 回頭を安定させるために、回頭前にスリープを入れる
+        if self.__second_angle != 0 or self.__can_second_correction:
+            command_list += "SL,%d\n" % (GameMotion.SLEEP_TIME * 1000)
         if self.__second_angle != 0:  # 回頭角度が0の場合は回頭のコマンドを生成しない
             # 回頭角度が正の数の場合時計回り，負の数の場合反時計回りで回頭をセットする
-            # 回頭を安定させるために、回頭の前後にスリープを入れる
-            command_list += "SL,%d\n" % (GameMotion.SLEEP_TIME * 1000)
             command_list += "RT,%d,%d,%s\n" % (self.__second_angle,
                                                self.__rotation_pwm, self.__direct_rotation)
             command_list += "SL,%d\n" % (GameMotion.SLEEP_TIME * 1000)
-        # 角度を補正する
-        command_list += "XR,%d,%d\n" % (self.CORRECTION_TARGET_ANGLE, self.__correction_pwm)
-        command_list += "SL,%d\n" % (GameMotion.SLEEP_TIME * 1000)
+        if self.__can_second_correction:    # 直線を認識できる座標と方向であれば角度を補正する
+            command_list += "XR,%d,%d\n" % (self.__correction_second_target_angle,
+                                            self.__correction_pwm)
+            command_list += "SL,%d\n" % (GameMotion.SLEEP_TIME * 1000)
 
         # 斜め調整動作ありの場合，斜め調整をセットする
         if self.__diagonal_flag:
