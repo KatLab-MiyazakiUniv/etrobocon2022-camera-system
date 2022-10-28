@@ -32,8 +32,8 @@ class IntersectionToMiddle(GameMotion):
             self.__rotation_time = GameMotion.ROTATION_NO_BLOCK_TABLE[abs(angle)]["time"]
         self.__direct_rotation = "clockwise" if angle > 0 else "anticlockwise"
         self.__need_adjustment = need_adjustment
-        self.__motion_time = 0.5480
-        self.__success_rate = 0.8
+        self.__motion_time = 0.553
+        self.__success_rate = 0.94
 
     def generate_command(self) -> str:
         """交点→中点のゲーム動作に必要なコマンドを生成するメソッド.

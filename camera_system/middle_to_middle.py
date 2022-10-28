@@ -32,8 +32,8 @@ class MiddleToMiddle(GameMotion):
             self.__rotation_time = GameMotion.ROTATION_NO_BLOCK_TABLE[abs(angle)]["time"]
         self.__direct_rotation = "clockwise" if angle > 0 else "anticlockwise"
         self.__need_adjustment = need_adjustment
-        self.__motion_time = 1.1490
-        self.__success_rate = 0.5
+        self.__motion_time = 1.3415
+        self.__success_rate = 0.6
 
     def generate_command(self) -> str:
         """中点→中点のゲーム動作に必要なコマンドを生成するメソッド.

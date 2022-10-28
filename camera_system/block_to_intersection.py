@@ -35,8 +35,8 @@ class BlockToIntersection(GameMotion):
             self.__rotation_time = GameMotion.ROTATION_NO_BLOCK_TABLE[abs(angle)]["time"]
         self.__direct_rotation = "clockwise" if angle > 0 else "anticlockwise"
         self.__target_color = target_color
-        self.__motion_time = 1.0700
-        self.__success_rate = 1.0
+        self.__motion_time = 1.086
+        self.__success_rate = 0.78
 
     def generate_command(self) -> str:
         """ブロック置き場→交点のゲーム動作に必要なコマンドを生成するメソッド.
