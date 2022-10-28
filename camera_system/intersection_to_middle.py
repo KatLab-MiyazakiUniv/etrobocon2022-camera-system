@@ -2,7 +2,7 @@
 
 交点→中点のゲーム動作のコマンド生成やコスト計算をする
 パラメータは https://github.com/KatLab-MiyazakiUniv/etrobocon2022/pull/89 を参照
-@author mutotaka0426
+@author mutotaka0426 miyashita64
 """
 
 from game_motion import GameMotion

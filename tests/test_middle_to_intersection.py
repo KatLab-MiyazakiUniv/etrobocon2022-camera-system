@@ -17,7 +17,8 @@ class TestMiddleToIntersection(unittest.TestCase):
         angle = 225
         target_color = Color.BLUE
         have_block = True  # ブロックを保持している
-        m2i = MiddleToIntersection(angle, target_color, have_block)
+        can_correction = False
+        m2i = MiddleToIntersection(angle, target_color, have_block, can_correction)
         m2i.current_edge = "left"  # 初期エッジを左エッジにする
 
         # コストの期待値を求める
@@ -47,7 +48,8 @@ class TestMiddleToIntersection(unittest.TestCase):
         angle = 270
         target_color = Color.GREEN
         have_block = True  # ブロックを保持している
-        m2i = MiddleToIntersection(angle, target_color, have_block)
+        can_correction = False
+        m2i = MiddleToIntersection(angle, target_color, have_block, can_correction)
         m2i.current_edge = "left"  # 初期エッジを左エッジにする
 
         # コストの期待値を求める
@@ -76,7 +78,8 @@ class TestMiddleToIntersection(unittest.TestCase):
         angle = 90
         target_color = Color.YELLOW
         have_block = False  # ブロックを保持していない
-        m2i = MiddleToIntersection(angle, target_color, have_block)
+        can_correction = False
+        m2i = MiddleToIntersection(angle, target_color, have_block, can_correction)
         m2i.current_edge = "right"  # 初期エッジを右エッジにする
 
         # コストの期待値を求める
@@ -105,7 +108,8 @@ class TestMiddleToIntersection(unittest.TestCase):
         angle = 135
         target_color = Color.RED
         have_block = False  # ブロックを保持していない
-        m2i = MiddleToIntersection(angle, target_color, have_block)
+        can_correction = False
+        m2i = MiddleToIntersection(angle, target_color, have_block, can_correction)
         m2i.current_edge = "right"  # 初期エッジを右エッジにする
 
         # コストの期待値を求める
@@ -137,4 +141,5 @@ class TestMiddleToIntersection(unittest.TestCase):
             angle = 90
             target_color = Color.WHITE
             have_block = True  # ブロックを保持している
-            m2i = MiddleToIntersection(angle, target_color, have_block)
+            can_correction = False
+            m2i = MiddleToIntersection(angle, target_color, have_block, can_correction)

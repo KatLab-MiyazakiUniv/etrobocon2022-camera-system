@@ -20,7 +20,10 @@ class TestIntersectionToBlock(unittest.TestCase):
         vertical_flag = True
         diagonal_flag = False
         have_block = True  # ブロックを保持している
-        i2b = IntersectionToBlock(angle, vertical_flag, diagonal_flag, have_block)
+        can_first_correction = False
+        can_second_correction = False
+        i2b = IntersectionToBlock(angle, vertical_flag, diagonal_flag,
+                                  have_block, can_first_correction, can_second_correction)
         i2b.current_edge = "right"  # 初期エッジを右エッジにする
 
         # コストの期待値を求める
@@ -65,7 +68,10 @@ class TestIntersectionToBlock(unittest.TestCase):
         vertical_flag = False
         diagonal_flag = True
         have_block = True  # ブロックを保持している
-        i2b = IntersectionToBlock(angle, vertical_flag, diagonal_flag, have_block)
+        can_first_correction = False
+        can_second_correction = False
+        i2b = IntersectionToBlock(angle, vertical_flag, diagonal_flag,
+                                  have_block, can_first_correction, can_second_correction)
         i2b.current_edge = "right"  # 初期エッジを右エッジにする
 
         # コストの期待値を求める
@@ -104,7 +110,10 @@ class TestIntersectionToBlock(unittest.TestCase):
         vertical_flag = False
         diagonal_flag = False
         have_block = False  # ブロックを保持していない
-        i2b = IntersectionToBlock(angle, vertical_flag, diagonal_flag, have_block)
+        can_first_correction = False
+        can_second_correction = False
+        i2b = IntersectionToBlock(angle, vertical_flag, diagonal_flag,
+                                  have_block, can_first_correction, can_second_correction)
         i2b.current_edge = "left"  # 初期エッジを左エッジにする
 
         # コストの期待値を求める
@@ -147,7 +156,10 @@ class TestIntersectionToBlock(unittest.TestCase):
             vertical_flag = True
             diagonal_flag = True
             have_block = False  # ブロックを保持していない
-            i2b = IntersectionToBlock(angle, vertical_flag, diagonal_flag, have_block)
+            can_first_correction = False
+            can_second_correction = False
+            i2b = IntersectionToBlock(angle, vertical_flag, diagonal_flag,
+                                      have_block, can_first_correction, can_second_correction)
 
     def test_intersection_to_block_no_rotation(self):
         """回頭しない場合のテスト."""
@@ -155,7 +167,10 @@ class TestIntersectionToBlock(unittest.TestCase):
         vertical_flag = False
         diagonal_flag = True
         have_block = False  # ブロックを保持していない
-        i2b = IntersectionToBlock(angle, vertical_flag, diagonal_flag, have_block)
+        can_first_correction = False
+        can_second_correction = False
+        i2b = IntersectionToBlock(angle, vertical_flag, diagonal_flag,
+                                  have_block, can_first_correction, can_second_correction)
         i2b.current_edge = "left"  # 初期エッジを左エッジにする
 
         # コストの期待値を求める

@@ -1,6 +1,6 @@
 """ブロック置き場→交点のゲーム動作のテストコードを記述するモジュール.
 
-@author: mutotaka0426
+@author: mutotaka0426 miyashita64
 """
 
 import unittest
@@ -17,7 +17,8 @@ class TestBlockToIntersection(unittest.TestCase):
         angle = -180
         target_color = Color.BLUE
         have_block = True  # ブロックを保持している
-        b2i = BlockToIntersection(angle, target_color, have_block)
+        can_correction = False
+        b2i = BlockToIntersection(angle, target_color, have_block, can_correction)
         b2i.current_edge = "right"  # 初期エッジを右エッジにする
 
         # コストの期待値を求める
@@ -51,7 +52,8 @@ class TestBlockToIntersection(unittest.TestCase):
         angle = -225
         target_color = Color.GREEN
         have_block = True  # ブロックを保持している
-        b2i = BlockToIntersection(angle, target_color, have_block)
+        can_correction = False
+        b2i = BlockToIntersection(angle, target_color, have_block, can_correction)
         b2i.current_edge = "left"  # 初期エッジを左エッジにする
 
         # コストの期待値を求める
@@ -85,7 +87,8 @@ class TestBlockToIntersection(unittest.TestCase):
         angle = -270
         target_color = Color.YELLOW
         have_block = False  # ブロックを保持していない
-        b2i = BlockToIntersection(angle, target_color, have_block)
+        can_correction = False
+        b2i = BlockToIntersection(angle, target_color, have_block, can_correction)
         b2i.current_edge = "left"  # 初期エッジを左エッジにする
 
         # コストの期待値を求める
@@ -119,7 +122,8 @@ class TestBlockToIntersection(unittest.TestCase):
         angle = -315
         target_color = Color.RED
         have_block = False  # ブロックを保持していない
-        b2i = BlockToIntersection(angle, target_color, have_block)
+        can_correction = False
+        b2i = BlockToIntersection(angle, target_color, have_block, can_correction)
         b2i.current_edge = "none"  # 初期エッジを左エッジにする
 
         # コストの期待値を求める
@@ -155,4 +159,5 @@ class TestBlockToIntersection(unittest.TestCase):
             angle = 90
             target_color = Color.BLACK
             have_block = True  # ブロックを保持している
-            b2i = BlockToIntersection(angle, target_color, have_block)
+            can_correction = False
+            b2i = BlockToIntersection(angle, target_color, have_block, can_correction)

@@ -17,7 +17,8 @@ class TestMiddleToMiddle(unittest.TestCase):
         angle = 45
         need_adjustment = True
         have_block = True  # ブロックを保持している
-        m2m = MiddleToMiddle(angle, need_adjustment, have_block)
+        can_correction = False
+        m2m = MiddleToMiddle(angle, need_adjustment, have_block, can_correction)
         m2m.current_edge = "left"  # 初期エッジを左エッジにする
 
         # コストの期待値を求める
@@ -50,7 +51,8 @@ class TestMiddleToMiddle(unittest.TestCase):
         angle = 90
         need_adjustment = False
         have_block = False  # ブロックを保持していない
-        m2m = MiddleToMiddle(angle, need_adjustment, have_block)
+        can_correction = False
+        m2m = MiddleToMiddle(angle, need_adjustment, have_block, can_correction)
         m2m.current_edge = "left"  # 初期エッジを左エッジにする
 
         # コストの期待値を求める

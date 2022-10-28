@@ -17,7 +17,8 @@ class TestIntersectionToMiddle(unittest.TestCase):
         angle = 270
         need_adjustment = True
         have_block = True  # ブロックを保持している
-        i2m = IntersectionToMiddle(angle, need_adjustment, have_block)
+        can_correction = False
+        i2m = IntersectionToMiddle(angle, need_adjustment, have_block, can_correction)
         i2m.current_edge = "right"  # 初期エッジを右エッジにする
 
         # コストの期待値を求める
@@ -49,7 +50,8 @@ class TestIntersectionToMiddle(unittest.TestCase):
         angle = 315
         need_adjustment = False
         have_block = True  # ブロックを保持している
-        i2m = IntersectionToMiddle(angle, need_adjustment, have_block)
+        can_correction = False
+        i2m = IntersectionToMiddle(angle, need_adjustment, have_block, can_correction)
         i2m.current_edge = "right"  # 初期エッジを右エッジにする
 
         # コストの期待値を求める
@@ -78,7 +80,8 @@ class TestIntersectionToMiddle(unittest.TestCase):
         angle = -45
         need_adjustment = False
         have_block = True  # ブロックを保持している
-        i2m = IntersectionToMiddle(angle, need_adjustment, have_block)
+        can_correction = False
+        i2m = IntersectionToMiddle(angle, need_adjustment, have_block, can_correction)
         i2m.current_edge = "none"  # 初期エッジを右エッジにする
 
         # コストの期待値を求める
@@ -108,7 +111,8 @@ class TestIntersectionToMiddle(unittest.TestCase):
         angle = 45
         need_adjustment = False
         have_block = False  # ブロックを保持していない
-        i2m = IntersectionToMiddle(angle, need_adjustment, have_block)
+        can_correction = False
+        i2m = IntersectionToMiddle(angle, need_adjustment, have_block, can_correction)
         i2m.current_edge = "none"  # 初期エッジを右エッジにする
 
         # コストの期待値を求める
@@ -138,7 +142,8 @@ class TestIntersectionToMiddle(unittest.TestCase):
         angle = 180
         need_adjustment = False
         have_block = False  # ブロックを保持していない
-        i2m = IntersectionToMiddle(angle, need_adjustment, have_block)
+        can_correction = False
+        i2m = IntersectionToMiddle(angle, need_adjustment, have_block, can_correction)
         i2m.current_edge = "none"  # 初期エッジを右エッジにする
 
         # コストの期待値を求める

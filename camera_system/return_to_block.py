@@ -2,7 +2,7 @@
 
 設置後復帰(→ブロック置き場)のゲーム動作のコマンド生成やコスト計算をする
 パラメータは https://github.com/KatLab-MiyazakiUniv/etrobocon2022/pull/89 を参照
-@author mutotaka0426
+@author mutotaka0426 miyashita64
 """
 
 from game_motion import GameMotion
@@ -24,7 +24,7 @@ class ReturnToBlock(GameMotion):
         self.__correction_pwm = GameMotion.CORRECTION_BLOCK_PWM
         self.__direct_rotation = "clockwise" if angle > 0 else "anticlockwise"
         self.__need_adjustment = need_adjustment
-        self.__correction_target_angle = 90
+        self.__correction_target_angle = 0
 
     def generate_command(self) -> str:
         """設置後復帰(→ブロック置き場)のゲーム動作に必要なコマンドを生成するメソッド.

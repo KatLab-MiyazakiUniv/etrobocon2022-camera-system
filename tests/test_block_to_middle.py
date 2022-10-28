@@ -1,6 +1,6 @@
 """ブロック置き場→中点のゲーム動作のテストコードを記述するモジュール.
 
-@author: mutotaka0426
+@author: mutotaka0426 miyashita64
 """
 
 import unittest
@@ -15,7 +15,8 @@ class TestBlockToMiddle(unittest.TestCase):
     def test_block_to_middle(self):
         angle = -45
         have_block = True  # ブロックを保持している
-        b2m = BlockToMiddle(angle, have_block)
+        can_correction = False
+        b2m = BlockToMiddle(angle, have_block, can_correction)
         b2m.current_edge = "right"  # 初期エッジを右エッジにする
 
         # コストの期待値を求める

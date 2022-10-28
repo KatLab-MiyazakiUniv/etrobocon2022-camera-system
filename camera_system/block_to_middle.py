@@ -2,7 +2,7 @@
 
 ブロック置き場→中点のゲーム動作のコマンド生成やコスト計算をする
 パラメータは https://github.com/KatLab-MiyazakiUniv/etrobocon2022/pull/89 を参照
-@author mutotaka0426
+@author mutotaka0426 miyashita64
 """
 
 from game_motion import GameMotion
@@ -33,7 +33,7 @@ class BlockToMiddle(GameMotion):
         self.__can_correction = can_correction
         self.__motion_time = 0.8094
         self.__success_rate = 0.9
-        self.__correction_target_angle = 90
+        self.__correction_target_angle = 0
 
     def generate_command(self) -> str:
         """ブロック置き場→中点のゲーム動作に必要なコマンドを生成するメソッド.
