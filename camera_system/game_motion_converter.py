@@ -5,7 +5,6 @@
 @note 調整動作の有無の判定については https://qr.paps.jp/RFEkV を参照
 """
 
-from statistics import correlation
 from robot import Robot, Direction
 from coordinate import Coordinate
 from game_area_info import GameAreaInfo

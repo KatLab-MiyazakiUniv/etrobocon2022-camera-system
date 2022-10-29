@@ -1,6 +1,6 @@
 """GameMotionConverterクラスのテストコードを記述するモジュール.
 
-@author: mutotaka0426
+@author: mutotaka0426 miyashita64
 """
 import unittest
 
@@ -28,7 +28,7 @@ class TestGameMotionConverter(unittest.TestCase):
         is_set_motion = True  # 設置動作(ブロックを持っている状態）
 
         actual = game_motion_converter.convert_game_motion(current_robot, next_robot, is_set_motion)
-        expected = BlockToIntersection(-45, Color.GREEN, True)
+        expected = BlockToIntersection(-45, Color.GREEN, True, False)
 
         self.assertEqual(expected, actual)  # 期待したゲーム動作を取得しているかテスト
 
@@ -45,7 +45,7 @@ class TestGameMotionConverter(unittest.TestCase):
         is_set_motion = True  # 設置動作(ブロックを持っている状態）
 
         actual = game_motion_converter.convert_game_motion(current_robot, next_robot, is_set_motion)
-        expected = BlockToMiddle(-45, True)
+        expected = BlockToMiddle(-45, True, True)
 
         self.assertEqual(expected, actual)  # 期待したゲーム動作を取得しているかテスト
 
@@ -62,7 +62,7 @@ class TestGameMotionConverter(unittest.TestCase):
         is_set_motion = True  # 設置動作(ブロックを持っている状態）
 
         actual = game_motion_converter.convert_game_motion(current_robot, next_robot, is_set_motion)
-        expected = IntersectionToBlock(-135, False, False, True)
+        expected = IntersectionToBlock(-135, False, False, True, True, True)
 
         self.assertEqual(expected, actual)  # 期待したゲーム動作を取得しているかテスト
 
@@ -81,7 +81,7 @@ class TestGameMotionConverter(unittest.TestCase):
         is_set_motion = True  # 設置動作(ブロックを持っている状態）
 
         actual = game_motion_converter.convert_game_motion(current_robot, next_robot, is_set_motion)
-        expected = IntersectionToBlock(45, True, False, True)
+        expected = IntersectionToBlock(45, True, False, True, True, True)
 
         self.assertEqual(expected, actual)  # 期待したゲーム動作を取得しているかテスト
 
@@ -100,7 +100,7 @@ class TestGameMotionConverter(unittest.TestCase):
         is_set_motion = True  # 設置動作(ブロックを持っている状態）
 
         actual = game_motion_converter.convert_game_motion(current_robot, next_robot, is_set_motion)
-        expected = IntersectionToBlock(-45, False, True, True)
+        expected = IntersectionToBlock(-45, False, True, True, True, True)
 
         self.assertEqual(expected, actual)  # 期待したゲーム動作を取得しているかテスト
 
@@ -119,7 +119,7 @@ class TestGameMotionConverter(unittest.TestCase):
         is_set_motion = True  # 設置動作(ブロックを持っている状態）
 
         actual = game_motion_converter.convert_game_motion(current_robot, next_robot, is_set_motion)
-        expected = IntersectionToBlock(0, False, True, True)
+        expected = IntersectionToBlock(0, False, True, True, True, True)
 
         self.assertEqual(expected, actual)  # 期待したゲーム動作を取得しているかテスト
 
@@ -136,7 +136,7 @@ class TestGameMotionConverter(unittest.TestCase):
         is_set_motion = True  # 設置動作(ブロックを持っている状態）
 
         actual = game_motion_converter.convert_game_motion(current_robot, next_robot, is_set_motion)
-        expected = IntersectionToMiddle(180, False, True)
+        expected = IntersectionToMiddle(180, False, True, True)
 
         self.assertEqual(expected, actual)  # 期待したゲーム動作を取得しているかテスト
 
@@ -155,7 +155,7 @@ class TestGameMotionConverter(unittest.TestCase):
         is_set_motion = True  # 設置動作(ブロックを持っている状態）
 
         actual = game_motion_converter.convert_game_motion(current_robot, next_robot, is_set_motion)
-        expected = IntersectionToMiddle(-90, True, True)
+        expected = IntersectionToMiddle(-90, True, True, True)
 
         self.assertEqual(expected, actual)  # 期待したゲーム動作を取得しているかテスト
 
@@ -174,7 +174,7 @@ class TestGameMotionConverter(unittest.TestCase):
         is_set_motion = True  # 設置動作(ブロックを持っている状態）
 
         actual = game_motion_converter.convert_game_motion(current_robot, next_robot, is_set_motion)
-        expected = IntersectionToMiddle(45, True, True)
+        expected = IntersectionToMiddle(45, True, True, True)
 
         self.assertEqual(expected, actual)  # 期待したゲーム動作を取得しているかテスト
 
@@ -191,7 +191,7 @@ class TestGameMotionConverter(unittest.TestCase):
         is_set_motion = True  # 設置動作(ブロックを持っている状態）
 
         actual = game_motion_converter.convert_game_motion(current_robot, next_robot, is_set_motion)
-        expected = MiddleToBlock(135, False, True)
+        expected = MiddleToBlock(135, False, True, True)
 
         self.assertEqual(expected, actual)  # 期待したゲーム動作を取得しているかテスト
 
@@ -211,7 +211,7 @@ class TestGameMotionConverter(unittest.TestCase):
         is_set_motion = True  # 設置動作(ブロックを持っている状態）
 
         actual = game_motion_converter.convert_game_motion(current_robot, next_robot, is_set_motion)
-        expected = MiddleToBlock(0, True, True)
+        expected = MiddleToBlock(0, True, True, True)
 
         self.assertEqual(expected, actual)  # 期待したゲーム動作を取得しているかテスト
 
@@ -233,7 +233,7 @@ class TestGameMotionConverter(unittest.TestCase):
         GameAreaInfo.node_list[3+5*7].block_id = -1  # x+y*7
 
         actual = game_motion_converter.convert_game_motion(current_robot, next_robot, is_set_motion)
-        expected = MiddleToBlock(135, True, False)
+        expected = MiddleToBlock(135, True, False, True)
 
         self.assertEqual(expected, actual)  # 期待したゲーム動作を取得しているかテスト
 
@@ -255,7 +255,7 @@ class TestGameMotionConverter(unittest.TestCase):
         GameAreaInfo.node_list[3+5*7].block_id = -1  # x+y*7
 
         actual = game_motion_converter.convert_game_motion(current_robot, next_robot, is_set_motion)
-        expected = MiddleToBlock(-45, True, False)
+        expected = MiddleToBlock(-45, True, False, True)
 
         self.assertEqual(expected, actual)  # 期待したゲーム動作を取得しているかテスト
 
@@ -275,7 +275,7 @@ class TestGameMotionConverter(unittest.TestCase):
         GameAreaInfo.node_list[3+3*7].block_id = -1  # x+y*7
 
         actual = game_motion_converter.convert_game_motion(current_robot, next_robot, is_set_motion)
-        expected = MiddleToIntersection(-90, Color.RED, False)
+        expected = MiddleToIntersection(-90, Color.RED, False, True)
 
         self.assertEqual(expected, actual)  # 期待したゲーム動作を取得しているかテスト
 
@@ -296,7 +296,7 @@ class TestGameMotionConverter(unittest.TestCase):
         GameAreaInfo.node_list[1+3*7].block_id = -1  # x+y*7
 
         actual = game_motion_converter.convert_game_motion(current_robot, next_robot, is_set_motion)
-        expected = MiddleToMiddle(-135, False, False)
+        expected = MiddleToMiddle(-135, False, False, False)
 
         self.assertEqual(expected, actual)  # 期待したゲーム動作を取得しているかテスト
 
@@ -318,7 +318,7 @@ class TestGameMotionConverter(unittest.TestCase):
         GameAreaInfo.node_list[1+3*7].block_id = -1  # x+y*7
 
         actual = game_motion_converter.convert_game_motion(current_robot, next_robot, is_set_motion)
-        expected = MiddleToMiddle(-45, True, False)
+        expected = MiddleToMiddle(-45, True, False, True)
 
         self.assertEqual(expected, actual)  # 期待したゲーム動作を取得しているかテスト
 
@@ -340,7 +340,7 @@ class TestGameMotionConverter(unittest.TestCase):
         GameAreaInfo.node_list[1+3*7].block_id = -1  # x+y*7
 
         actual = game_motion_converter.convert_game_motion(current_robot, next_robot, is_set_motion)
-        expected = MiddleToMiddle(225, True, False)
+        expected = MiddleToMiddle(225, True, False, False)
 
         self.assertEqual(expected, actual)  # 期待したゲーム動作を取得しているかテスト
 
@@ -362,7 +362,7 @@ class TestGameMotionConverter(unittest.TestCase):
         GameAreaInfo.node_list[1+3*7].block_id = -1  # x+y*7
 
         actual = game_motion_converter.convert_game_motion(current_robot, next_robot, is_set_motion)
-        expected = MiddleToMiddle(90, True, False)
+        expected = MiddleToMiddle(90, True, False, True)
 
         self.assertEqual(expected, actual)  # 期待したゲーム動作を取得しているかテスト
 
