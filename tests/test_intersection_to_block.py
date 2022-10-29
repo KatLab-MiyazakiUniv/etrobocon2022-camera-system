@@ -1,6 +1,6 @@
 """交点→ブロック置き場のゲーム動作のテストコードを記述するモジュール.
 
-@author: mutotaka0426
+@author: mutotaka0426 miyashita64
 """
 
 import unittest
@@ -194,3 +194,147 @@ class TestIntersectionToBlock(unittest.TestCase):
         actual_edge = i2b.current_edge
 
         self.assertEqual(expected_edge, actual_edge)
+
+    def test_intersection_to_block_with_correction(self):
+        """角度補正を2回行う場合のテスト."""
+        first_angle = 180  # 1回目の回頭角度
+        second_angle = 45  # 2回目の回頭角度
+        angle = first_angle+second_angle
+        vertical_flag = False
+        diagonal_flag = False
+        have_block = False  # ブロックを保持していない
+        can_first_correction = True
+        can_second_correction = True
+        i2b = IntersectionToBlock(angle, vertical_flag, diagonal_flag,
+                                  have_block, can_first_correction, can_second_correction)
+        i2b.current_edge = "left"  # 初期エッジを左エッジにする
+
+        # コストの期待値を求める
+        motion_time = 0.7840
+        motion_time += GameMotion.ROTATION_NO_BLOCK_TABLE[180]["time"] + GameMotion.SLEEP_TIME * 2
+        motion_time += GameMotion.ROTATION_NO_BLOCK_TABLE[45]["time"] + GameMotion.SLEEP_TIME * 2
+        success_rate = 1.0
+        expected_cost = motion_time*success_rate+GameMotion.MAX_TIME*(1-success_rate)
+
+        actual_cost = i2b.get_cost()  # 実際のコスト
+
+        self.assertEqual(expected_cost, actual_cost)  # コスト計算のテスト
+
+        # 期待するコマンドをセット
+        expected_commands = "SL,100,交点→ブロック置き場\n"
+        expected_commands += "RT,%d,%d,clockwise\n" % (
+            GameMotion.ROTATION_NO_BLOCK_TABLE[180]["angle"], GameMotion.ROTATION_BLOCK_PWM)
+        expected_commands += "SL,100\n"
+        expected_commands += "XR,0,60\n"
+        expected_commands += "SL,100\n"
+        expected_commands += "SL,100\n"
+        expected_commands += "RT,%d,%d,clockwise\n" % (
+            GameMotion.ROTATION_NO_BLOCK_TABLE[45]["angle"], GameMotion.ROTATION_BLOCK_PWM)
+        expected_commands += "SL,100\n"
+        expected_commands += "XR,45,60\n"
+        expected_commands += "SL,100\n"
+        expected_commands += "DS,132,70\n"
+
+        actual_commands = i2b.generate_command()  # コマンドを生成する
+
+        self.assertEqual(expected_commands, actual_commands)  # コマンド生成のテスト
+
+        expected_edge = "none"  # generate_command()後のcurrent_edgeは"none"になる
+        actual_edge = i2b.current_edge
+
+        self.assertEqual(expected_edge, actual_edge)
+
+
+def test_intersection_to_block_only_first_correction(self):
+    """1回目のみ角度補正を行う場合のテスト."""
+    first_angle = 180  # 1回目の回頭角度
+    second_angle = 45  # 2回目の回頭角度
+    angle = first_angle+second_angle
+    vertical_flag = False
+    diagonal_flag = False
+    have_block = False  # ブロックを保持していない
+    can_first_correction = True
+    can_second_correction = False
+    i2b = IntersectionToBlock(angle, vertical_flag, diagonal_flag,
+                              have_block, can_first_correction, can_second_correction)
+    i2b.current_edge = "left"  # 初期エッジを左エッジにする
+
+    # コストの期待値を求める
+    motion_time = 0.7840
+    motion_time += GameMotion.ROTATION_NO_BLOCK_TABLE[180]["time"] + GameMotion.SLEEP_TIME * 2
+    motion_time += GameMotion.ROTATION_NO_BLOCK_TABLE[45]["time"] + GameMotion.SLEEP_TIME * 2
+    success_rate = 1.0
+    expected_cost = motion_time*success_rate+GameMotion.MAX_TIME*(1-success_rate)
+
+    actual_cost = i2b.get_cost()  # 実際のコスト
+
+    self.assertEqual(expected_cost, actual_cost)  # コスト計算のテスト
+
+    # 期待するコマンドをセット
+    expected_commands = "SL,100,交点→ブロック置き場\n"
+    expected_commands += "RT,%d,%d,clockwise\n" % (
+        GameMotion.ROTATION_NO_BLOCK_TABLE[180]["angle"], GameMotion.ROTATION_BLOCK_PWM)
+    expected_commands += "SL,100\n"
+    expected_commands += "XR,0,60\n"
+    expected_commands += "SL,100\n"
+    expected_commands += "SL,100\n"
+    expected_commands += "RT,%d,%d,clockwise\n" % (
+        GameMotion.ROTATION_NO_BLOCK_TABLE[45]["angle"], GameMotion.ROTATION_BLOCK_PWM)
+    expected_commands += "SL,100\n"
+    expected_commands += "DS,132,70\n"
+
+    actual_commands = i2b.generate_command()  # コマンドを生成する
+
+    self.assertEqual(expected_commands, actual_commands)  # コマンド生成のテスト
+
+    expected_edge = "none"  # generate_command()後のcurrent_edgeは"none"になる
+    actual_edge = i2b.current_edge
+
+    self.assertEqual(expected_edge, actual_edge)
+
+
+def test_intersection_to_block_only_second_correction(self):
+    """2回目のみ角度補正を行う場合のテスト."""
+    first_angle = 180  # 1回目の回頭角度
+    second_angle = 45  # 2回目の回頭角度
+    angle = first_angle+second_angle
+    vertical_flag = False
+    diagonal_flag = False
+    have_block = False  # ブロックを保持していない
+    can_first_correction = False
+    can_second_correction = True
+    i2b = IntersectionToBlock(angle, vertical_flag, diagonal_flag,
+                              have_block, can_first_correction, can_second_correction)
+    i2b.current_edge = "left"  # 初期エッジを左エッジにする
+
+    # コストの期待値を求める
+    motion_time = 0.7840
+    motion_time += GameMotion.ROTATION_NO_BLOCK_TABLE[180]["time"] + GameMotion.SLEEP_TIME * 2
+    motion_time += GameMotion.ROTATION_NO_BLOCK_TABLE[45]["time"] + GameMotion.SLEEP_TIME * 2
+    success_rate = 1.0
+    expected_cost = motion_time*success_rate+GameMotion.MAX_TIME*(1-success_rate)
+
+    actual_cost = i2b.get_cost()  # 実際のコスト
+
+    self.assertEqual(expected_cost, actual_cost)  # コスト計算のテスト
+
+    # 期待するコマンドをセット
+    expected_commands = "SL,100,交点→ブロック置き場\n"
+    expected_commands += "RT,%d,%d,clockwise\n" % (
+        GameMotion.ROTATION_NO_BLOCK_TABLE[180]["angle"], GameMotion.ROTATION_BLOCK_PWM)
+    expected_commands += "SL,100\n"
+    expected_commands += "RT,%d,%d,clockwise\n" % (
+        GameMotion.ROTATION_NO_BLOCK_TABLE[45]["angle"], GameMotion.ROTATION_BLOCK_PWM)
+    expected_commands += "SL,100\n"
+    expected_commands += "XR,45,60\n"
+    expected_commands += "SL,100\n"
+    expected_commands += "DS,132,70\n"
+
+    actual_commands = i2b.generate_command()  # コマンドを生成する
+
+    self.assertEqual(expected_commands, actual_commands)  # コマンド生成のテスト
+
+    expected_edge = "none"  # generate_command()後のcurrent_edgeは"none"になる
+    actual_edge = i2b.current_edge
+
+    self.assertEqual(expected_edge, actual_edge)
