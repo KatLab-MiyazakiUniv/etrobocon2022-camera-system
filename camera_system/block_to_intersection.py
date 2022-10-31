@@ -53,7 +53,7 @@ class BlockToIntersection(GameMotion):
         command_list = ""  # コマンドのリストを格納する文字列
 
         # 回頭を安定させるために、回頭前にスリープを入れる
-        if self.__can_correction or self.__rotation_angle != 0:
+        if self.__rotation_angle != 0 or self.__can_correction:
             command_list += "SL,%d\n" % (GameMotion.SLEEP_TIME * 1000)
         if self.__rotation_angle != 0:  # 回頭角度が0の場合は回頭のコマンドを生成しない
             # 回頭角度が正の数の場合時計回り，負の数の場合反時計回りで回頭をセットする
@@ -83,7 +83,8 @@ class BlockToIntersection(GameMotion):
         # 動作時間に回頭時間を足す（成功率に変動はなし）
         m_time += self.__rotation_time
         # 回頭前後のスリープ時間を足す
-        m_time += GameMotion.SLEEP_TIME * 2
+        if self.__rotation_angle != 0 or self.__can_correction:
+            m_time += GameMotion.SLEEP_TIME * 2
         # 方向転換する、かつ、角度補正する場合、スリープが1回増える
         if self.__rotation_angle != 0 and self.__can_correction:
             m_time += GameMotion.SLEEP_TIME
