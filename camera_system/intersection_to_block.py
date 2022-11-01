@@ -124,10 +124,15 @@ class IntersectionToBlock(GameMotion):
         m_time += self.__first_rotation_time
         m_time += self.__second_rotation_time
         # 回頭している場合，回頭前後のスリープ時間を足す
-        if self.__first_angle != 0:
+        if self.__first_angle != 0 or self.__can_first_correction:
             m_time += GameMotion.SLEEP_TIME * 2
-        if self.__second_angle != 0:
+        if self.__first_angle != 0 and self.__can_first_correction:
+            m_time += GameMotion.SLEEP_TIME
+        if self.__second_angle != 0 or self.__can_second_correction:
             m_time += GameMotion.SLEEP_TIME * 2
+        if self.__second_angle != 0 and self.__can_second_correction:
+            m_time += GameMotion.SLEEP_TIME
+
         # 調整動作ありの場合，調整の動作時間を足す（成功率に変動はなし）
         if self.__vertical_flag:  # 縦調整ありの場合
             m_time += GameMotion.VERTICAL_TIME

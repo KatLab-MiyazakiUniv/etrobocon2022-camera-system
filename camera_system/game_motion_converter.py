@@ -55,7 +55,7 @@ class GameMotionConverter:
             next_robot.edge = self.__get_next_edge(angle, current_robot.edge)
 
         # 方向転換後に角度補正が可能かを判定する
-        can_correction = self.__can_correction(current_robot.coord, next_robot.direct)
+        can_correction = self.__check_can_correction(current_robot.coord, next_robot.direct)
 
         # ゲーム動作を生成する
         if current_node_type == NodeType.BLOCK:  # 現在の地点がブロック置き場の場合
@@ -90,21 +90,17 @@ class GameMotionConverter:
 
                 # 縦調整前に角度補正が可能かを判定する
                 in_adjustment_direct = current_robot.direct  # エッジの交差点に乗るための方向転換時の走行体の向き
-                if vertical_flag:
-                    current_direct_num = current_robot.direct.value
-                    next_direct_num = next_robot.direct.value
-                    # 方位の値の差を方位の範囲(0~7)に正規化（=next_directを0とした場合のcurent_directの値）
-                    sub_direct_num = (current_direct_num - next_direct_num +
-                                      len(Direction)) % len(Direction)
-                    if sub_direct_num == 3 and current_robot.edge == "left":
-                        in_adjustment_direct = Direction((next_direct_num + 3) % len(Direction))
-                    elif sub_direct_num == 5 and current_robot.edge == "right":
-                        in_adjustment_direct = Direction((next_direct_num + 5) % len(Direction))
-                    elif 1 <= sub_direct_num <= 3:
-                        in_adjustment_direct = Direction((current_direct_num + 1) % len(Direction))
-                    elif 6 <= sub_direct_num <= 7:
-                        in_adjustment_direct = Direction((current_direct_num + 7) % len(Direction))
-                can_adjust_correction = self.__can_correction(
+                if angle != 0:
+                    # 縦調整前の回頭角度から方位の差分を求める
+                    before_adjustment_angle = angle - 45 if angle > 0 else angle + 45
+                    sub_direct_val = (before_adjustment_angle + 360) % 360 // 45
+                    # 現在の方位に差分を足し、方位の範囲に正規化する
+                    current_direct_val = current_robot.direct.value
+                    in_adjustment_direct_val = (
+                        current_direct_val + sub_direct_val) % len(Direction)
+                    in_adjustment_direct = Direction(in_adjustment_direct_val)
+
+                can_adjust_correction = self.__check_can_correction(
                     current_robot.coord, in_adjustment_direct)
 
                 # 斜め調整動作の有無を判定
@@ -309,7 +305,7 @@ class GameMotionConverter:
 
         return next_edge
 
-    def __can_correction(self, coord: Coordinate, direct: Direction) -> bool:
+    def __check_can_correction(self, coord: Coordinate, direct: Direction) -> bool:
         """指定座標で指定方向を向く走行体が角度補正が可能か判定する.
 
         Args:
