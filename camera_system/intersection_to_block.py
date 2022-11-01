@@ -53,8 +53,8 @@ class IntersectionToBlock(GameMotion):
         self.__direct_rotation = "clockwise" if angle > 0 else "anticlockwise"
         self.__vertical_flag = vertical_flag
         self.__diagonal_flag = diagonal_flag
-        self.__motion_time = 0.7840
-        self.__success_rate = 1.0
+        self.__motion_time = 0.8615
+        self.__success_rate = 0.9
 
     def generate_command(self) -> str:
         """交点→ブロック置き場のゲーム動作に必要なコマンドを生成するメソッド.

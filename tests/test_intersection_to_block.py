@@ -24,12 +24,12 @@ class TestIntersectionToBlock(unittest.TestCase):
         i2b.current_edge = "right"  # 初期エッジを右エッジにする
 
         # コストの期待値を求める
-        motion_time = 0.7840
+        motion_time = 0.8615
         # 2回分の回頭のスリープ時間を足す
         motion_time += GameMotion.ROTATION_BLOCK_TABLE[45]["time"] + GameMotion.SLEEP_TIME * 2
         motion_time += GameMotion.ROTATION_BLOCK_TABLE[45]["time"] + GameMotion.SLEEP_TIME * 2
         motion_time += GameMotion.VERTICAL_TIME
-        success_rate = 1.0
+        success_rate = 0.9
         expected_cost = motion_time*success_rate+GameMotion.MAX_TIME*(1-success_rate)
 
         actual_cost = i2b.get_cost()  # 実際のコスト
@@ -69,10 +69,10 @@ class TestIntersectionToBlock(unittest.TestCase):
         i2b.current_edge = "right"  # 初期エッジを右エッジにする
 
         # コストの期待値を求める
-        motion_time = 0.7840
+        motion_time = 0.8615
         motion_time += GameMotion.ROTATION_BLOCK_TABLE[45]["time"] + GameMotion.SLEEP_TIME * 2
         motion_time += GameMotion.DIAGONAL_TIME
-        success_rate = 1.0
+        success_rate = 0.9
         expected_cost = motion_time*success_rate+GameMotion.MAX_TIME*(1-success_rate)
 
         actual_cost = i2b.get_cost()  # 実際のコスト
@@ -108,10 +108,10 @@ class TestIntersectionToBlock(unittest.TestCase):
         i2b.current_edge = "left"  # 初期エッジを左エッジにする
 
         # コストの期待値を求める
-        motion_time = 0.7840
+        motion_time = 0.8615
         motion_time += GameMotion.ROTATION_NO_BLOCK_TABLE[180]["time"] + GameMotion.SLEEP_TIME * 2
         motion_time += GameMotion.ROTATION_NO_BLOCK_TABLE[45]["time"] + GameMotion.SLEEP_TIME * 2
-        success_rate = 1.0
+        success_rate = 0.9
         expected_cost = motion_time*success_rate+GameMotion.MAX_TIME*(1-success_rate)
 
         actual_cost = i2b.get_cost()  # 実際のコスト
@@ -159,8 +159,8 @@ class TestIntersectionToBlock(unittest.TestCase):
         i2b.current_edge = "left"  # 初期エッジを左エッジにする
 
         # コストの期待値を求める
-        motion_time = 0.7840 + GameMotion.DIAGONAL_TIME
-        success_rate = 1.0
+        motion_time = 0.8615 + GameMotion.DIAGONAL_TIME
+        success_rate = 0.9
         expected_cost = motion_time*success_rate+GameMotion.MAX_TIME*(1-success_rate)
 
         actual_cost = i2b.get_cost()  # 実際のコスト
