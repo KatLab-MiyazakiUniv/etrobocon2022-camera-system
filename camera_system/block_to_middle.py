@@ -17,7 +17,7 @@ class BlockToMiddle(GameMotion):
         Args:
             angle: 方向転換の角度
             with_block: ブロックを保持している場合True
-            can_correction: 角度補正を行う場合True
+            can_correction: 角度補正可能な場合True
         """
         if with_block:  # ブロックを保持している場合
             self.__rotation_angle = GameMotion.ROTATION_BLOCK_TABLE[abs(angle)]["angle"]

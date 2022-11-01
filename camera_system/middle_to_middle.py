@@ -19,7 +19,7 @@ class MiddleToMiddle(GameMotion):
             angle: 方向転換の角度
             need_adjustment: 調整動作の有無
             with_block: ブロックを保持している場合True
-            can_correction: 角度補正を行う場合True
+            can_correction: 角度補正可能な場合True
         """
         self.__angle = angle
         # rotation_angleは指定角度に対して実際に回頭する角度

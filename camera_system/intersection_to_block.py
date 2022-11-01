@@ -20,8 +20,8 @@ class IntersectionToBlock(GameMotion):
             vertical_flag: 縦調整動作の有無
             diagonal_flag: 斜め調整動作の有無
             with_block: ブロックを保持している場合True
-            can_first_correction: 1回目の角度補正を行う場合True
-            can_second_correction: 2回目の角度補正を行う場合True
+            can_first_correction:  1回目の角度補正が可能な場合True
+            can_second_correction: 2回目の角度補正が可能な場合True
         """
         # 縦調整と斜め調整を両方実行することはない
         if vertical_flag and diagonal_flag:

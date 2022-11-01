@@ -20,7 +20,7 @@ class BlockToIntersection(GameMotion):
             angle: 方向転換の角度
             target_color: 目標となる交点の色
             with_block: ブロックを保持している場合True
-            can_correction: 角度補正を行う場合True
+            can_correction: 角度補正可能な場合True
         """
         expected_color = [Color.BLUE, Color.GREEN, Color.YELLOW, Color.RED]
         # 交点の色以外を指定された場合エラーを出す
