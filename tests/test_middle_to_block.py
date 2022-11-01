@@ -93,9 +93,9 @@ class TestMiddleToBlock(unittest.TestCase):
         m2b.current_edge = "right"  # 初期エッジを右エッジにする
 
         # コストの期待値を求める
-        motion_time = 0.6970 + \
+        motion_time = 0.697 + \
             GameMotion.ROTATION_NO_BLOCK_TABLE[315]["time"] + GameMotion.SLEEP_TIME * 3
-        success_rate = 1.0
+        success_rate = 0.78
         expected_cost = motion_time*success_rate+GameMotion.MAX_TIME*(1-success_rate)
 
         actual_cost = m2b.get_cost()  # 実際のコスト
@@ -130,9 +130,9 @@ class TestMiddleToBlock(unittest.TestCase):
         m2b.current_edge = "right"  # 初期エッジを右エッジにする
 
         # コストの期待値を求める
-        motion_time = 0.6970 + \
+        motion_time = 0.697 + \
             GameMotion.ROTATION_NO_BLOCK_TABLE[0]["time"] + GameMotion.SLEEP_TIME * 2
-        success_rate = 1.0
+        success_rate = 0.78
         expected_cost = motion_time*success_rate+GameMotion.MAX_TIME*(1-success_rate)
 
         actual_cost = m2b.get_cost()  # 実際のコスト

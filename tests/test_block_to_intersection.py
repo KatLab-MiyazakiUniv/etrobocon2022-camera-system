@@ -176,9 +176,9 @@ class TestBlockToIntersection(unittest.TestCase):
         b2i.current_edge = "none"  # 初期エッジを左エッジにする
 
         # コストの期待値を求める
-        motion_time = 1.0700 + \
+        motion_time = 1.086 + \
             GameMotion.ROTATION_NO_BLOCK_TABLE[315]["time"] + GameMotion.SLEEP_TIME * 3
-        success_rate = 1.0
+        success_rate = 0.78
         expected_cost = motion_time*success_rate+GameMotion.MAX_TIME*(1-success_rate)
 
         actual_cost = b2i.get_cost()  # 実際のコスト
@@ -214,9 +214,9 @@ class TestBlockToIntersection(unittest.TestCase):
         b2i.current_edge = "none"  # 初期エッジを左エッジにする
 
         # コストの期待値を求める
-        motion_time = 1.0700 + \
+        motion_time = 1.086 + \
             GameMotion.ROTATION_NO_BLOCK_TABLE[0]["time"] + GameMotion.SLEEP_TIME * 2
-        success_rate = 1.0
+        success_rate = 0.78
         expected_cost = motion_time*success_rate+GameMotion.MAX_TIME*(1-success_rate)
 
         actual_cost = b2i.get_cost()  # 実際のコスト

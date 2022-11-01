@@ -210,10 +210,13 @@ class TestIntersectionToBlock(unittest.TestCase):
         i2b.current_edge = "left"  # 初期エッジを左エッジにする
 
         # コストの期待値を求める
-        motion_time = 0.7840
-        motion_time += GameMotion.ROTATION_NO_BLOCK_TABLE[180]["time"] + GameMotion.SLEEP_TIME * 3
-        motion_time += GameMotion.ROTATION_NO_BLOCK_TABLE[45]["time"] + GameMotion.SLEEP_TIME * 3
-        success_rate = 1.0
+        # SLEEP_TIME * 3を使うとテスト時にアンダーフロー分の誤差が出る場合ある
+        motion_time = 0.8615
+        motion_time += GameMotion.ROTATION_NO_BLOCK_TABLE[180]["time"] + GameMotion.SLEEP_TIME * 2
+        motion_time += GameMotion.SLEEP_TIME
+        motion_time += GameMotion.ROTATION_NO_BLOCK_TABLE[45]["time"] + GameMotion.SLEEP_TIME * 2
+        motion_time += GameMotion.SLEEP_TIME
+        success_rate = 0.9
         expected_cost = motion_time*success_rate+GameMotion.MAX_TIME*(1-success_rate)
 
         actual_cost = i2b.get_cost()  # 実際のコスト
@@ -260,10 +263,10 @@ def test_intersection_to_block_only_first_correction(self):
     i2b.current_edge = "left"  # 初期エッジを左エッジにする
 
     # コストの期待値を求める
-    motion_time = 0.7840
+    motion_time = 0.8615
     motion_time += GameMotion.ROTATION_NO_BLOCK_TABLE[180]["time"] + GameMotion.SLEEP_TIME * 2
     motion_time += GameMotion.ROTATION_NO_BLOCK_TABLE[45]["time"] + GameMotion.SLEEP_TIME * 2
-    success_rate = 1.0
+    success_rate = 0.9
     expected_cost = motion_time*success_rate+GameMotion.MAX_TIME*(1-success_rate)
 
     actual_cost = i2b.get_cost()  # 実際のコスト
@@ -308,10 +311,10 @@ def test_intersection_to_block_only_second_correction(self):
     i2b.current_edge = "left"  # 初期エッジを左エッジにする
 
     # コストの期待値を求める
-    motion_time = 0.7840
+    motion_time = 0.8615
     motion_time += GameMotion.ROTATION_NO_BLOCK_TABLE[180]["time"] + GameMotion.SLEEP_TIME * 2
     motion_time += GameMotion.ROTATION_NO_BLOCK_TABLE[45]["time"] + GameMotion.SLEEP_TIME * 2
-    success_rate = 1.0
+    success_rate = 0.9
     expected_cost = motion_time*success_rate+GameMotion.MAX_TIME*(1-success_rate)
 
     actual_cost = i2b.get_cost()  # 実際のコスト
