@@ -337,11 +337,11 @@ class GameMotionConverter:
         elif direct in WEST_DIRECTS:
             dx = 1
 
-        for i in range(6): # リアカメラ方向の座標について
+        for i in range(6):  # リアカメラ方向の座標について
             # 対象座標
             x = coord.x + dx * i
             y = coord.y + dy * i
-            if x < 0 or 6 < x or y < 0 or 6 < y: # 対象座標がコースに存在しない場合
+            if x < 0 or 6 < x or y < 0 or 6 < y:  # 対象座標がコースに存在しない場合
                 break
             # 四隅の座標については線が混ざるため無効とする
             if (x == 0 or x == 6) and (y == 0 or y == 6):
