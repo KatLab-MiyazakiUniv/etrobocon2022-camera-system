@@ -35,9 +35,9 @@ class MiddleToBlock(GameMotion):
         self.__direct_rotation = "clockwise" if angle > 0 else "anticlockwise"
         self.__need_adjustment = need_adjustment
         self.__can_correction = can_correction
-        self.__motion_time = 0.6970
-        self.__success_rate = 1.0
         self.__correction_target_angle = 0
+        self.__motion_time = 0.697
+        self.__success_rate = 0.78
 
     def generate_command(self) -> str:
         """中点→ブロック置き場のゲーム動作に必要なコマンドを生成するメソッド.

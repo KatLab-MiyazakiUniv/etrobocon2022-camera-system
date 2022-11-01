@@ -31,9 +31,9 @@ class BlockToMiddle(GameMotion):
             self.__correction_pwm = GameMotion.CORRECTION_NO_BLOCK_PWM
         self.__direct_rotation = "clockwise" if angle > 0 else "anticlockwise"
         self.__can_correction = can_correction
-        self.__motion_time = 0.8094
-        self.__success_rate = 0.9
         self.__correction_target_angle = 0
+        self.__motion_time = 0.8285
+        self.__success_rate = 0.62
 
     def generate_command(self) -> str:
         """ブロック置き場→中点のゲーム動作に必要なコマンドを生成するメソッド.

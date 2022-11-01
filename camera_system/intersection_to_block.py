@@ -58,10 +58,10 @@ class IntersectionToBlock(GameMotion):
         self.__diagonal_flag = diagonal_flag
         self.__can_first_correction = can_first_correction
         self.__can_second_correction = can_second_correction
-        self.__motion_time = 0.7840
-        self.__success_rate = 1.0
         self.__correction_first_target_angle = 0
         self.__correction_second_target_angle = 45
+        self.__motion_time = 0.8615
+        self.__success_rate = 0.9
 
     def generate_command(self) -> str:
         """交点→ブロック置き場のゲーム動作に必要なコマンドを生成するメソッド.
