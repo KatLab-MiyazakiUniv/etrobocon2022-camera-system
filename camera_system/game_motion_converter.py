@@ -315,18 +315,40 @@ class GameMotionConverter:
         Returns:
             bool: 走行体が角度補正可能かどうか(True: 可能/False: 不可能)
         """
-        north_directs = [Direction.N, Direction.NE, Direction.NW]
-        east_directs = [Direction.E, Direction.NE, Direction.SE]
-        south_directs = [Direction.S, Direction.SE, Direction.SW]
-        west_directs = [Direction.W, Direction.NW, Direction.SW]
+        NORTH_DIRECTS = [Direction.N, Direction.NE, Direction.NW]
+        EAST_DIRECTS = [Direction.E, Direction.NE, Direction.SE]
+        SOUTH_DIRECTS = [Direction.S, Direction.SE, Direction.SW]
+        WEST_DIRECTS = [Direction.W, Direction.NW, Direction.SW]
 
-        # 外周から距離1以下の座標で内側を向いていると直線が認識できない場合があるため、補正不可能とする
-        if coord.x <= 1 and direct in east_directs:
-            return False
-        if coord.x >= 5 and direct in west_directs:
-            return False
-        if coord.y <= 1 and direct in south_directs:
-            return False
-        if coord.y >= 5 and direct in north_directs:
-            return False
-        return True
+        LOWER_DISTANCE = 240  # カメラに写る最小距離[mm]
+        UPPER_DISTANCE = 900  # カメラに写る最大距離[mm]
+        MARGIN = 20           # 余白距離[mm](黒線幅)
+        COORD_LENGTH = 125    # 縦横の座標との距離[mm]
+
+        # リアカメラが移す座標の方向を求める
+        dx = 0
+        dy = 0
+        if direct in NORTH_DIRECTS:
+            dy = 1
+        elif direct in SOUTH_DIRECTS:
+            dy = -1
+        if direct in EAST_DIRECTS:
+            dx = -1
+        elif direct in WEST_DIRECTS:
+            dx = 1
+
+        for i in range(6): # リアカメラ方向の座標について
+            # 対象座標
+            x = coord.x + dx * i
+            y = coord.y + dy * i
+            if x < 0 or 6 < x or y < 0 or 6 < y: # 対象座標がコースに存在しない場合
+                break
+            # 四隅の座標については線が混ざるため無効とする
+            if (x == 0 or x == 6) and (y == 0 or y == 6):
+                continue
+            # 座標とのユークリッド距離を実数値で求める
+            distance = ((dx*i)**2 + (dy*i)**2) ** (0.5) * COORD_LENGTH
+            # 座標がカメラに写る範囲にあれば、線を抽出可能と判定する
+            if LOWER_DISTANCE+MARGIN < distance < UPPER_DISTANCE-MARGIN:
+                return True
+        return False
