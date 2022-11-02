@@ -337,7 +337,7 @@ class GameMotionConverter:
         elif direct in WEST_DIRECTS:
             dx = 1
 
-        for i in range(6):  # リアカメラ方向の座標について
+        for i in range(1, 6):  # リアカメラ方向の座標について
             # 対象座標
             x = coord.x + dx * i
             y = coord.y + dy * i
