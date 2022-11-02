@@ -320,12 +320,12 @@ class GameMotionConverter:
         SOUTH_DIRECTS = [Direction.S, Direction.SE, Direction.SW]
         WEST_DIRECTS = [Direction.W, Direction.NW, Direction.SW]
 
-        LOWER_DISTANCE = 240  # カメラに写る最小距離[mm]
-        UPPER_DISTANCE = 900  # カメラに写る最大距離[mm]
+        LOWER_DISTANCE = 240  # カメラが写す最小距離[mm]
+        UPPER_DISTANCE = 900  # カメラが写す最大距離[mm]
         MARGIN = 20           # 余白距離[mm](黒線幅)
-        COORD_LENGTH = 125    # 縦横の座標との距離[mm]
+        COORD_LENGTH = 125    # 隣接座標(縦横)との距離[mm]
 
-        # リアカメラが移す座標の方向を求める
+        # リアカメラが写す座標の方向を求める
         dx = 0
         dy = 0
         if direct in NORTH_DIRECTS:
@@ -345,10 +345,10 @@ class GameMotionConverter:
                 break
             # 四隅の座標については線が混ざるため無効とする
             if (x == 0 or x == 6) and (y == 0 or y == 6):
-                continue
+                break
             # 座標とのユークリッド距離を実数値で求める
             distance = ((dx*i)**2 + (dy*i)**2) ** (0.5) * COORD_LENGTH
-            # 座標がカメラに写る範囲にあれば、線を抽出可能と判定する
+            # 座標がカメラが写す範囲にあれば、線を抽出可能と判定する
             if LOWER_DISTANCE+MARGIN < distance < UPPER_DISTANCE-MARGIN:
                 return True
         return False
