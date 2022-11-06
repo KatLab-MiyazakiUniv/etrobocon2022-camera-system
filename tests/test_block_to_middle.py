@@ -69,7 +69,7 @@ class TestBlockToMiddle(unittest.TestCase):
         expected_commands += "RT,%d,%d,anticlockwise\n" % (
             GameMotion.ROTATION_BLOCK_TABLE[45]["angle"], GameMotion.ROTATION_BLOCK_PWM)
         expected_commands += "SL,100\n"
-        expected_commands += "XR,0,60\n"
+        expected_commands += "XR,0,59\n"
         expected_commands += "SL,100\n"
         expected_commands += "CS,BLACK,70\n"
         expected_commands += "DS,10,70\n"
@@ -103,7 +103,7 @@ class TestBlockToMiddle(unittest.TestCase):
 
         # 期待するコマンドをセット
         expected_commands = "SL,100,ブロック置き場→中点\n"
-        expected_commands += "XR,0,60\n"
+        expected_commands += "XR,0,59\n"
         expected_commands += "SL,100\n"
         expected_commands += "CS,BLACK,70\n"
         expected_commands += "DS,10,70\n"
