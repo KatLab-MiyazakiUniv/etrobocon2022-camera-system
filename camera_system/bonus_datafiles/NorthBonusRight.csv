@@ -48,7 +48,7 @@ RT,56,70,clockwise,右70度回頭(NからE方向に70度)
 SL,100
 DS,35,70,60mm直進
 AR,50,40
-DS,35,-70
+DS,35,-70,60mm後退
 AF,50,40
 SL,100
 RT,56,70,anticlockwise,左70度回頭(N)
