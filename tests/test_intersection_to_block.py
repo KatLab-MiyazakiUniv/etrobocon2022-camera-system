@@ -228,13 +228,13 @@ class TestIntersectionToBlock(unittest.TestCase):
         expected_commands += "RT,%d,%d,clockwise\n" % (
             GameMotion.ROTATION_NO_BLOCK_TABLE[180]["angle"], GameMotion.ROTATION_BLOCK_PWM)
         expected_commands += "SL,100\n"
-        expected_commands += "XR,0,60\n"
+        expected_commands += "XR,0,47\n"
         expected_commands += "SL,100\n"
         expected_commands += "SL,100\n"
         expected_commands += "RT,%d,%d,clockwise\n" % (
             GameMotion.ROTATION_NO_BLOCK_TABLE[45]["angle"], GameMotion.ROTATION_BLOCK_PWM)
         expected_commands += "SL,100\n"
-        expected_commands += "XR,45,60\n"
+        expected_commands += "XR,45,47\n"
         expected_commands += "SL,100\n"
         expected_commands += "DS,132,70\n"
 
@@ -278,7 +278,7 @@ def test_intersection_to_block_only_first_correction(self):
     expected_commands += "RT,%d,%d,clockwise\n" % (
         GameMotion.ROTATION_NO_BLOCK_TABLE[180]["angle"], GameMotion.ROTATION_BLOCK_PWM)
     expected_commands += "SL,100\n"
-    expected_commands += "XR,0,60\n"
+    expected_commands += "XR,0,47\n"
     expected_commands += "SL,100\n"
     expected_commands += "SL,100\n"
     expected_commands += "RT,%d,%d,clockwise\n" % (
@@ -329,7 +329,7 @@ def test_intersection_to_block_only_second_correction(self):
     expected_commands += "RT,%d,%d,clockwise\n" % (
         GameMotion.ROTATION_NO_BLOCK_TABLE[45]["angle"], GameMotion.ROTATION_BLOCK_PWM)
     expected_commands += "SL,100\n"
-    expected_commands += "XR,45,60\n"
+    expected_commands += "XR,45,47\n"
     expected_commands += "SL,100\n"
     expected_commands += "DS,132,70\n"
 

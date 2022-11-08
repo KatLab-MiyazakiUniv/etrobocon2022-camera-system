@@ -31,7 +31,7 @@ class TestReturnToIntersection(unittest.TestCase):
         expected_commands += "RT,%d,%d,clockwise\n" % (
             GameMotion.ROTATION_BLOCK_TABLE[45]["angle"], GameMotion.ROTATION_BLOCK_PWM)
         expected_commands += "SL,100\n"
-        expected_commands += "XR,0,60\n"
+        expected_commands += "XR,0,59\n"
         expected_commands += "SL,100\n"
         expected_commands += "AR,50,40,アームを上げる処理(設置処理)\n"
         expected_commands += "EC,right\n"
@@ -59,7 +59,7 @@ class TestReturnToIntersection(unittest.TestCase):
 
         # 期待するコマンドをセット
         expected_commands = "SL,100,設置後復帰(→交点)\n"
-        expected_commands += "XR,0,60\n"
+        expected_commands += "XR,0,59\n"
         expected_commands += "SL,100\n"
         expected_commands += "AR,50,40,アームを上げる処理(設置処理)\n"
         expected_commands += "DS,70,-40\n"

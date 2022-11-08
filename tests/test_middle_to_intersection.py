@@ -168,7 +168,7 @@ class TestMiddleToIntersection(unittest.TestCase):
         expected_commands += "RT,%d,%d,clockwise\n" % (
             GameMotion.ROTATION_NO_BLOCK_TABLE[135]["angle"], GameMotion.ROTATION_BLOCK_PWM)
         expected_commands += "SL,100\n"
-        expected_commands += "XR,0,60\n"
+        expected_commands += "XR,0,47\n"
         expected_commands += "SL,100\n"
         expected_commands += "EC,left\n"
         expected_commands += "CL,RED,0,60,0.1,0.08,0.08\n"
@@ -199,7 +199,7 @@ class TestMiddleToIntersection(unittest.TestCase):
 
         # 期待するコマンドをセット
         expected_commands = "SL,100,中点→交点\n"
-        expected_commands += "XR,0,60\n"
+        expected_commands += "XR,0,47\n"
         expected_commands += "SL,100\n"
         expected_commands += "CL,RED,0,60,0.1,0.08,0.08\n"
         expected_commands += "DS,20,60\n"
