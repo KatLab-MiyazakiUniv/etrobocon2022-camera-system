@@ -15,8 +15,9 @@ SSH_TARGET="katlab@"$1
 DATA_DIRECTORY="datafiles"
 
 if [ -d ${DATA_DIRECTORY} ]; then
-    # 送信データディレクトリを機体に送信
+    # 送信データディレクトリを機体に送信後，機体のデータディレクトリに権限を付与する
     scp -r ${DATA_DIRECTORY} ${SSH_TARGET}:~/work/RasPike/sdk/workspace/etrobocon2022/
+    ssh ${SSH_TARGET} "chmod 777 ~/work/RasPike/sdk/workspace/etrobocon2022/${DATA_DIRECTORY}/*"
     echo "Completed ${DATA_DIRECTORY} submission."
 else
     echo "\"${DATA_DIRECTORY}\" does not exist."
