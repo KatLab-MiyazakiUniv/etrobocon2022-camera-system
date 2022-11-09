@@ -38,7 +38,7 @@ class TestMiddleToIntersection(unittest.TestCase):
         expected_commands += "SL,100\n"
         expected_commands += "EC,right\n"
         expected_commands += "CL,BLUE,0,60,0.1,0.08,0.08\n"
-        expected_commands += "DS,12,70\n"
+        expected_commands += "DS,20,60\n"
 
         actual_commands = m2i.generate_command()  # コマンドを生成する
 
