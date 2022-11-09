@@ -65,7 +65,7 @@ class BlockToIntersection(GameMotion):
             command_list += "SL,%d\n" % (GameMotion.SLEEP_TIME * 1000)
 
         command_list += "CS,%s,70\n" % self.__target_color.name  # エッジを認識するまで直進
-        command_list += "DS,42,60\n"  # 走行体がエッジに乗るまで直進
+        command_list += "DS,12,70\n"  # 走行体がエッジに乗るまで直進
 
         # エッジ切り替えのコマンドは生成しないが，計算上はエッジをnoneにする
         self.current_edge = "none"

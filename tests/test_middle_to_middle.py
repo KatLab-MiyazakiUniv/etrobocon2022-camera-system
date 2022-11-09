@@ -40,7 +40,7 @@ class TestMiddleToMiddle(unittest.TestCase):
         expected_commands += "DS,30,70\n"
         expected_commands += "CS,BLACK,70\n"
         expected_commands += "DS,25,70\n"
-        expected_commands += "DS,20,70\n"
+        expected_commands += "DS,17,70\n"
 
         actual_commands = m2m.generate_command()  # コマンドを生成する
 
