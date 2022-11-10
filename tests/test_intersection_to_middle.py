@@ -38,7 +38,7 @@ class TestIntersectionToMiddle(unittest.TestCase):
             GameMotion.ROTATION_BLOCK_TABLE[270]["angle"], GameMotion.ROTATION_BLOCK_PWM)
         expected_commands += "SL,100\n"
         expected_commands += "EC,left\n"
-        expected_commands += "DS,10,70\n"
+        expected_commands += "DS,12,70\n"
         expected_commands += "DL,80,0,60,0.1,0.08,0.08\n"
 
         actual_commands = i2m.generate_command()  # コマンドを生成する

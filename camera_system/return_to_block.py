@@ -49,7 +49,7 @@ class ReturnToBlock(GameMotion):
 
         # 調整動作ありの場合，縦調整をセットする
         if self.__need_adjustment:
-            command_list += "DS,10,-70\n"
+            command_list += "DS,12,-70\n"
 
         command_list += "DS,100,-40\n"  # ブロック置き場まで後退
         command_list += "AF,50,40,アームを下げる処理\n"
