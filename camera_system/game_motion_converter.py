@@ -93,7 +93,7 @@ class GameMotionConverter:
                 if angle != 0:
                     # 縦調整前の回頭角度から方位の差分を求める
                     before_adjustment_angle = angle - 45 if angle > 0 else angle + 45
-                    sub_direct_val = (before_adjustment_angle + 360) % 360 // 45
+                    sub_direct_val = before_adjustment_angle // 45
                     # 現在の方位に差分を足し、方位の範囲に正規化する
                     current_direct_val = current_robot.direct.value
                     in_adjustment_direct_val = (
@@ -308,6 +308,11 @@ class GameMotionConverter:
     def __check_can_correction(self, coord: Coordinate, direct: Direction) -> bool:
         """指定座標で指定方向を向く走行体が角度補正が可能か判定する.
 
+        リアカメラが余裕を持って写す範囲(260mm~880mm)
+        - 縦を向いている場合    3座標以上(125mm*3 = 375mm)
+        - 斜めを向いている場合  2座標以上(125mm*1.414213...*2 = 353.5...mm)
+        に座標があれば、角度補正が可能とする.
+
         Args:
             coord: 走行体の座標
             direct: 走行体の向き
@@ -342,9 +347,6 @@ class GameMotionConverter:
             x = coord.x + dx * i
             y = coord.y + dy * i
             if x < 0 or 6 < x or y < 0 or 6 < y:  # 対象座標がコースに存在しない場合
-                break
-            # 四隅の座標については線が混ざるため無効とする
-            if (x == 0 or x == 6) and (y == 0 or y == 6):
                 break
             # 座標とのユークリッド距離を実数値で求める
             distance = ((dx*i)**2 + (dy*i)**2) ** (0.5) * COORD_LENGTH
