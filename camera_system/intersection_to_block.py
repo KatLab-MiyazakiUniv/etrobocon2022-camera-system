@@ -86,7 +86,7 @@ class IntersectionToBlock(GameMotion):
 
         # 縦調整動作ありの場合，縦調整をセットする
         if self.__vertical_flag:
-            command_list += "DS,12,70\n"
+            command_list += "DS,12,70,20mm直進(縦調整)\n"
 
         # 回頭を安定させるために、回頭前にスリープを入れる
         if self.__second_angle != 0 or self.__can_second_correction:
