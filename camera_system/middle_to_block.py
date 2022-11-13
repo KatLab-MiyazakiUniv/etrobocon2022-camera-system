@@ -62,7 +62,7 @@ class MiddleToBlock(GameMotion):
 
         # 調整動作ありの場合，縦調整をセットする
         if self.__need_adjustment:
-            command_list += "DS,12,70,20mm直進(縦調整)\n"
+            command_list += "DS,13,70,20mm直進(縦調整)\n"
 
         command_list += "DS,71,70\n"  # ブロック置き場まで直進
 

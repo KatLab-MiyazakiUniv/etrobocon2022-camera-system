@@ -65,7 +65,7 @@ class MiddleToMiddle(GameMotion):
             command_list += "EC,%s\n" % next_edge
             self.current_edge = next_edge  # 現在のエッジを更新する
 
-        command_list += "DS,17,70\n"  # 連続で使用する場合を考え黒線を認識しないように直進
+        command_list += "DS,19,70\n"  # 連続で使用する場合を考え黒線を認識しないように直進
         command_list += "CS,BLACK,70\n"  # エッジを認識するまで直進
         command_list += "DS,14,70\n"  # 走行体がエッジに乗るまで直進
 
