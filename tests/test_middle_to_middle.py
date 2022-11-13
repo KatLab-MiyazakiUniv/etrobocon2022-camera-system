@@ -37,10 +37,10 @@ class TestMiddleToMiddle(unittest.TestCase):
         expected_commands += "RT,%d,%d,clockwise\n" % (
             GameMotion.ROTATION_BLOCK_TABLE[45]["angle"], GameMotion.ROTATION_BLOCK_PWM)
         expected_commands += "SL,100\n"
-        expected_commands += "DS,30,70\n"
+        expected_commands += "DS,17,70\n"
         expected_commands += "CS,BLACK,70\n"
-        expected_commands += "DS,25,70\n"
-        expected_commands += "DS,20,70\n"
+        expected_commands += "DS,14,70\n"
+        expected_commands += "DS,17,70,30mm直進(斜め調整)\n"
 
         actual_commands = m2m.generate_command()  # コマンドを生成する
 
@@ -71,9 +71,9 @@ class TestMiddleToMiddle(unittest.TestCase):
             GameMotion.ROTATION_NO_BLOCK_TABLE[90]["angle"], GameMotion.ROTATION_BLOCK_PWM)
         expected_commands += "SL,100\n"
         expected_commands += "EC,right\n"
-        expected_commands += "DS,30,70\n"
+        expected_commands += "DS,17,70\n"
         expected_commands += "CS,BLACK,70\n"
-        expected_commands += "DS,25,70\n"
+        expected_commands += "DS,14,70\n"
 
         actual_commands = m2m.generate_command()  # コマンドを生成する
 
@@ -106,9 +106,9 @@ class TestMiddleToMiddle(unittest.TestCase):
         expected_commands += "XR,45,47\n"
         expected_commands += "SL,100\n"
         expected_commands += "EC,right\n"
-        expected_commands += "DS,30,70\n"
+        expected_commands += "DS,17,70\n"
         expected_commands += "CS,BLACK,70\n"
-        expected_commands += "DS,25,70\n"
+        expected_commands += "DS,14,70\n"
 
         actual_commands = m2m.generate_command()  # コマンドを生成する
 
@@ -137,9 +137,9 @@ class TestMiddleToMiddle(unittest.TestCase):
         expected_commands = "SL,100,中点→中点\n"
         expected_commands += "XR,45,47\n"
         expected_commands += "SL,100\n"
-        expected_commands += "DS,30,70\n"
+        expected_commands += "DS,17,70\n"
         expected_commands += "CS,BLACK,70\n"
-        expected_commands += "DS,25,70\n"
+        expected_commands += "DS,14,70\n"
 
         actual_commands = m2m.generate_command()  # コマンドを生成する
 

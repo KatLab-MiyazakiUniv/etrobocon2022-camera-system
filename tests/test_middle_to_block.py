@@ -36,7 +36,7 @@ class TestMiddleToBlock(unittest.TestCase):
         expected_commands += "RT,%d,%d,clockwise\n" % (
             GameMotion.ROTATION_BLOCK_TABLE[270]["angle"], GameMotion.ROTATION_BLOCK_PWM)
         expected_commands += "SL,100\n"
-        expected_commands += "DS,10,70\n"
+        expected_commands += "DS,12,70,20mm直進(縦調整)\n"
         expected_commands += "DS,71,70\n"
 
         actual_commands = m2b.generate_command()  # コマンドを生成する

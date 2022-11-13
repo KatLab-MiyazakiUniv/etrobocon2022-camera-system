@@ -64,7 +64,7 @@ class TestReturnToBlock(unittest.TestCase):
         expected_commands += "XR,0,59\n"
         expected_commands += "SL,100\n"
         expected_commands += "AR,50,40,アームを上げる処理(設置処理)\n"
-        expected_commands += "DS,10,-70\n"
+        expected_commands += "DS,12,-70,20mm後退(縦調整)\n"
         expected_commands += "DS,100,-40\n"
         expected_commands += "AF,50,40,アームを下げる処理\n"
 
