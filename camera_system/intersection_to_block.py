@@ -91,7 +91,7 @@ class IntersectionToBlock(GameMotion):
             command_list += "DS,12,70,20mm直進(縦調整)\n"
 
         # 回頭を安定させるために、回頭前にスリープを入れる
-        if (self.__second_angle != 0 or self.__can_second_correction) and not rotated:
+        if (self.__second_angle != 0 or self.__can_second_correction) and (self.__vertical_flag or not rotated):
             command_list += "SL,%d\n" % (GameMotion.SLEEP_TIME * 1000)
         if self.__second_angle != 0:  # 回頭角度が0の場合は回頭のコマンドを生成しない
             # 回頭角度が正の数の場合時計回り，負の数の場合反時計回りで回頭をセットする
