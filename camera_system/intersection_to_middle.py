@@ -67,7 +67,7 @@ class IntersectionToMiddle(GameMotion):
 
         # 調整動作ありの場合，縦調整をセットする
         if self.__need_adjustment:
-            command_list += "DS,12,70,20mm直進(縦調整)\n"
+            command_list += "DS,13,70,20mm直進(縦調整)\n"
 
         command_list += "DL,80,0,60,0.1,0.08,0.08\n"  # 中点までライントレース
 

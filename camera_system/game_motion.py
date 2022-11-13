@@ -52,26 +52,26 @@ class GameMotion(metaclass=ABCMeta):
     ROTATION_BLOCK_PWM = 70
     ROTATION_NO_BLOCK_PWM = 70
     ROTATION_BLOCK_TABLE = {0: {"angle": 0, "time": 0},
-                            45: {"angle": 31, "time": 0.405},
-                            90: {"angle": 76, "time": 0.661},
-                            135: {"angle": 123, "time": 0.920},
-                            180: {"angle": 172, "time": 1.165},
-                            225: {"angle": 219, "time": 120},  # 失敗率の高い角度
+                            45: {"angle": 35, "time": 0.405},
+                            90: {"angle": 85, "time": 0.661},
+                            135: {"angle": 132, "time": 0.920},
+                            180: {"angle": 177, "time": 1.165},
+                            225: {"angle": 225, "time": 120},  # 失敗率の高い角度
                             270: {"angle": 270, "time": 120},  # 想定しない角度
                             315: {"angle": 315, "time": 120}}  # 想定しない角度
     ROTATION_NO_BLOCK_TABLE = {0: {"angle": 0, "time": 0},
-                               45: {"angle": 28, "time": 0.342},
-                               90: {"angle": 72, "time": 0.575},
-                               135: {"angle": 110, "time": 0.778},
-                               180: {"angle": 161, "time": 1.049},
-                               225: {"angle": 209, "time": 1.281},
+                               45: {"angle": 30, "time": 0.342},
+                               90: {"angle": 78, "time": 0.575},
+                               135: {"angle": 124, "time": 0.778},
+                               180: {"angle": 170, "time": 1.049},
+                               225: {"angle": 216, "time": 1.281},
                                270: {"angle": 270, "time": 120},  # 想定しない角度
                                315: {"angle": 315, "time": 120}}  # 想定しない角度
     VERTICAL_TIME = 0.2558
     DIAGONAL_TIME = 0.2620
     SLEEP_TIME = 0.1
-    CORRECTION_BLOCK_PWM = 59       # ブロック保持時の回頭補正に用いるPWM値
-    CORRECTION_NO_BLOCK_PWM = 47    # ブロック未保持時の回頭補正に用いるPWM値
+    CORRECTION_BLOCK_PWM = 73       # ブロック保持時の回頭補正に用いるPWM値
+    CORRECTION_NO_BLOCK_PWM = 62    # ブロック未保持時の回頭補正に用いるPWM値
 
     def __eq__(self, other) -> bool:
         """オブジェクトの等価比較をする.
