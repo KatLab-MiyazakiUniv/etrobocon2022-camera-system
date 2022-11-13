@@ -71,7 +71,7 @@ class MiddleToMiddle(GameMotion):
 
         # 調整動作ありの場合，斜め調整をセットする
         if self.__need_adjustment:
-            command_list += "DS,17,70,30mm直進(縦調整)\n"
+            command_list += "DS,17,70,30mm直進(斜め調整)\n"
 
         return command_list.replace("\n", ",中点→中点\n", 1)  # 最初の行の末尾に",中点→中点"を追加する
 

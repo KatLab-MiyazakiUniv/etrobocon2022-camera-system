@@ -103,7 +103,7 @@ class IntersectionToBlock(GameMotion):
 
         # 斜め調整動作ありの場合，斜め調整をセットする
         if self.__diagonal_flag:
-            command_list += "DS,17,70\n"
+            command_list += "DS,17,70,30mm直進(斜め調整)\n"
 
         command_list += "DS,132,70\n"
 
