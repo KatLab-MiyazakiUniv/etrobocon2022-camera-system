@@ -31,7 +31,7 @@ class CameraSystem:
         self.__set_is_left_course(is_left_course)
         self.__robot_ip = robot_ip
 
-    def start(self, camera_id=1) -> None:
+    def start(self, camera_id=0) -> None:
         """ゲーム攻略を計画する."""
         # カメラキャリブレーションを開始する
         camera_calibrator = CameraCalibrator(camera_id)
