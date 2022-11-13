@@ -183,7 +183,7 @@ class TestIntersectionToBlock(unittest.TestCase):
         self.assertEqual(expected_cost, actual_cost)  # コスト計算のテスト
 
         # 期待するコマンドをセット
-        expected_commands = "DS,17,70,30mm直進(斜め調整)交点→ブロック置き場\n"
+        expected_commands = "DS,17,70,30mm直進(斜め調整),交点→ブロック置き場\n"
         expected_commands += "DS,132,70\n"
 
         actual_commands = i2b.generate_command()  # コマンドを生成する
