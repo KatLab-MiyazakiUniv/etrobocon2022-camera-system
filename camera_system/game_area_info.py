@@ -174,10 +174,10 @@ class GameAreaInfo:
             west_node = GameAreaInfo.node_list[west_coord.y*7+west_coord.x]
             # 西の座標にブロックが存在する場合
             if west_node.block_id != -1:
-                if west_coord.x > 0:
+                if west_coord.y > 0:
                     # 北西を走行禁止座標に追加
                     no_entry_coords += [Coordinate(west_coord.x, west_coord.y-1)]
-                if west_coord.x < 6:
+                if west_coord.y < 6:
                     # 南西を走行禁止座標に追加
                     no_entry_coords += [Coordinate(west_coord.x, west_coord.y+1)]
 
