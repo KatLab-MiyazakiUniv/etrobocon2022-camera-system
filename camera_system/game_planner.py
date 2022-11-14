@@ -28,11 +28,11 @@ class GamePlanner:
         setted_bonus_robots = {
             "left": {
                 GameAreaInfo.base_color_list[0].value:
-                    Robot(Coordinate(4, 4), Direction.E, "right"),
+                    Robot(Coordinate(4, 4), Direction.E, "left"),
                 GameAreaInfo.base_color_list[1].value:
                     Robot(Coordinate(4, 4), Direction.S, "right"),
                 GameAreaInfo.base_color_list[2].value:
-                    Robot(Coordinate(2, 4), Direction.W, "left"),
+                    Robot(Coordinate(2, 4), Direction.W, "right"),
                 GameAreaInfo.base_color_list[3].value:
                     Robot(Coordinate(4, 2), Direction.N, "right")},
             "right": {
