@@ -14,6 +14,7 @@ from camera_calibrator import CameraCalibrator  # noqa
 from game_area_info import GameAreaInfo  # noqa
 from client import Client  # noqa
 from game_planner import GamePlanner  # noqa
+from color_changer import Color
 
 
 class CameraSystem:
@@ -33,18 +34,32 @@ class CameraSystem:
 
     def start(self, camera_id=0) -> None:
         """ゲーム攻略を計画する."""
-        # カメラキャリブレーションを開始する
-        camera_calibrator = CameraCalibrator(camera_id)
-        # GUIから座標を取得する
-        camera_calibrator.start_camera_calibration()
+        # # カメラキャリブレーションを開始する
+        # camera_calibrator = CameraCalibrator(camera_id)
+        # # GUIから座標を取得する
+        # camera_calibrator.start_camera_calibration()
 
-        # 通信を開始する
-        client = Client(self.robot_ip, 8080)
-        # 開始合図を受け取るまで待機する
-        client.wait_for_start_signal()
+        # # 通信を開始する
+        # client = Client(self.robot_ip, 8080)
+        # # 開始合図を受け取るまで待機する
+        # client.wait_for_start_signal()
 
-        # ゲームエリア情報を作成する
-        camera_calibrator.make_game_area_info(self.__is_left_course)
+        # # ゲームエリア情報を作成する
+        # camera_calibrator.make_game_area_info(self.__is_left_course)
+
+        # ゲームエリアを初期化
+        GameAreaInfo.block_color_list = [
+            Color.RED, Color.RED, Color.YELLOW,
+            Color.YELLOW, Color.GREEN, Color.GREEN,
+            Color.BLUE, Color.BLUE
+        ]
+        GameAreaInfo.base_color_list = [
+            Color.RED, Color.YELLOW,
+            Color.GREEN, Color.BLUE
+        ]
+        GameAreaInfo.bonus_color = Color.RED
+        GameAreaInfo.intersection_list = [Color.RED, Color.BLUE, Color.YELLOW, Color.GREEN]
+
         # ゲームエリア攻略を計画する
         motion_commands = GamePlanner.plan(self.__is_left_course)
 

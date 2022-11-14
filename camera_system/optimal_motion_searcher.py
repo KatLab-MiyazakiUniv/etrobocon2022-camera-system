@@ -134,6 +134,7 @@ class OptimalMotionSearcher:
         start_robot.direct = min_cost_transition["logs"][-1].direct
         start_robot.edge = min_cost_transition["logs"][-1].edge
         # 探索した最適動作と動作完了時の走行体を返す
+        print(min_cost_transition["logs"])
         return min_cost_transition["game_motions"]
 
     @classmethod
