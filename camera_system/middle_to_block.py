@@ -65,6 +65,7 @@ class MiddleToBlock(GameMotion):
             command_list += "DS,12,70,20mm直進(縦調整)\n"
 
         command_list += "DS,71,70\n"  # ブロック置き場まで直進
+        command_list += "DS,22,70\n"  # 試走で足りなかった分を直進
 
         # エッジ切り替えのコマンドは生成しないが，計算上はエッジをnoneにする
         self.current_edge = "none"
