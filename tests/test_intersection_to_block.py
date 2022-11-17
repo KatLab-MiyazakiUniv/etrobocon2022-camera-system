@@ -50,6 +50,7 @@ class TestIntersectionToBlock(unittest.TestCase):
             GameMotion.ROTATION_BLOCK_TABLE[45]["angle"], GameMotion.ROTATION_BLOCK_PWM)
         expected_commands += "SL,100\n"
         expected_commands += "DS,132,70\n"
+        expected_commands += "DS,20,70\n"
 
         actual_commands = i2b.generate_command()  # コマンドを生成する
 
@@ -92,6 +93,7 @@ class TestIntersectionToBlock(unittest.TestCase):
         expected_commands += "SL,100\n"
         expected_commands += "DS,17,70,30mm直進(斜め調整)\n"
         expected_commands += "DS,132,70\n"
+        expected_commands += "DS,20,70\n"
 
         actual_commands = i2b.generate_command()  # コマンドを生成する
 
@@ -136,6 +138,7 @@ class TestIntersectionToBlock(unittest.TestCase):
             GameMotion.ROTATION_NO_BLOCK_TABLE[45]["angle"], GameMotion.ROTATION_BLOCK_PWM)
         expected_commands += "SL,100\n"
         expected_commands += "DS,132,70\n"
+        expected_commands += "DS,20,70\n"
 
         actual_commands = i2b.generate_command()  # コマンドを生成する
 
@@ -184,6 +187,7 @@ class TestIntersectionToBlock(unittest.TestCase):
         # 期待するコマンドをセット
         expected_commands = "DS,17,70,30mm直進(斜め調整),交点→ブロック置き場\n"
         expected_commands += "DS,132,70\n"
+        expected_commands += "DS,20,70\n"
 
         actual_commands = i2b.generate_command()  # コマンドを生成する
 
@@ -235,6 +239,7 @@ class TestIntersectionToBlock(unittest.TestCase):
         expected_commands += "XR,45,47\n"
         expected_commands += "SL,100\n"
         expected_commands += "DS,132,70\n"
+        expected_commands += "DS,20,70\n"
 
         actual_commands = i2b.generate_command()  # コマンドを生成する
 
