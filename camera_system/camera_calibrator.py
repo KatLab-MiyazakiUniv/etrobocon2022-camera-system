@@ -75,7 +75,8 @@ class CameraCalibrator:
             game_save_path (str): ゲームエリア画像保存パス
         """
         # ゲームエリア画像を取得
-        game_area_img = self.__camera_interface.capture_frame(game_save_path)
+        # game_area_img = self.__camera_interface.capture_frame(game_save_path)
+        game_area_img = cv.read("cali_course")
 
         # 6色変換
         color_save_path = "color_" + game_save_path
