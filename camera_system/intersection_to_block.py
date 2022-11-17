@@ -111,6 +111,7 @@ class IntersectionToBlock(GameMotion):
             command_list += "DS,17,70,30mm直進(斜め調整)\n"
 
         command_list += "DS,132,70\n"
+        command_list += "DS,20,70\n"    # 試走で足りなかった分
 
         # エッジ切り替えのコマンドは生成しないが，計算上はエッジをnoneにする
         self.current_edge = "none"
